@@ -1,0 +1,250 @@
+"use client";
+
+import { spotifyPlaylist } from "@/data/spotifyPlaylist";
+
+const tracks = [
+  {
+    title: "Rise",
+    artist: "Jonas Blue, Jack & Jack",
+    duration: "03:14",
+  },
+  {
+    title: "Houdini",
+    artist: "Eminem",
+    duration: "03:47",
+  },
+  {
+    title: "Youngblood",
+    artist: "5 Seconds of Summer",
+    duration: "03:23",
+  },
+  {
+    title: "Blinding Lights",
+    artist: "The Weeknd",
+    duration: "03:20",
+  },
+  {
+    title: "Starboy",
+    artist: "The Weeknd",
+    duration: "03:50",
+  },
+  {
+    title: "Lose Yourself",
+    artist: "Eminem",
+    duration: "05:26",
+  },
+  {
+    title: "As It Was",
+    artist: "Harry Styles",
+    duration: "02:47",
+  },
+  {
+    title: "Heat Waves",
+    artist: "Glass Animals",
+    duration: "03:58",
+  },
+  {
+    title: "Industry Baby",
+    artist: "Lil Nas X, Jack Harlow",
+    duration: "03:32",
+  },
+  {
+    title: "The Nights",
+    artist: "Avicii",
+    duration: "02:56",
+  },
+  {
+    title: "Wake Me Up",
+    artist: "Avicii",
+    duration: "04:07",
+  },
+  {
+    title: "Believer",
+    artist: "Imagine Dragons",
+    duration: "03:24",
+  },
+  {
+    title: "Counting Stars",
+    artist: "OneRepublic",
+    duration: "04:17",
+  },
+  {
+    title: "Save Your Tears",
+    artist: "The Weeknd",
+    duration: "03:35",
+  },
+  {
+    title: "Demons",
+    artist: "Imagine Dragons",
+    duration: "02:55",
+  },
+];
+
+export function PlaylistCard() {
+  return (
+    <section className="shell py-10 sm:py-12">
+      <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#05080c]">
+        {/* Section header */}
+        <div className="flex flex-col gap-4 border-b border-white/[0.08] px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#3b9cff] shadow-[0_0_8px_rgba(59,156,255,0.8)]" />
+
+              <h2 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
+                On repeat
+              </h2>
+            </div>
+
+            <p className="mt-1.5 text-sm text-white/40">
+              A few tracks from my playlist — opens on Spotify.
+            </p>
+          </div>
+
+          <a
+            href={spotifyPlaylist.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-[#3b9cff]/30 bg-[#3b9cff]/10 px-4 text-sm font-medium text-[#5eacff] transition-all duration-200 hover:border-[#3b9cff]/50 hover:bg-[#3b9cff]/15 hover:text-white"
+          >
+            Open on Spotify
+            <span className="ml-1.5">↗</span>
+          </a>
+        </div>
+
+        {/* Player */}
+        <div className="p-2 sm:p-3">
+          <div className="overflow-hidden rounded-xl border border-white/[0.07] bg-[#080c12]">
+            {/* Playlist hero */}
+            <div className="flex flex-col gap-6 bg-gradient-to-b from-[#111d2e] via-[#0b131f] to-[#080c12] p-5 sm:flex-row sm:items-end sm:p-6">
+              {/* Playlist cover */}
+              <div className="mx-auto shrink-0 sm:mx-0">
+                <div className="h-40 w-40 overflow-hidden rounded-lg border border-white/[0.1] bg-[#111923] shadow-2xl sm:h-48 sm:w-48">
+                  <img
+                    src={spotifyPlaylist.image}
+                    alt={`${spotifyPlaylist.name ?? "Playlist"} cover`}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* Playlist information */}
+              <div className="min-w-0 flex-1">
+                <p className="mb-2 text-xs font-medium uppercase tracking-[0.18em] text-white/35">
+                  Playlist
+                </p>
+
+                <h3 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                  {spotifyPlaylist.name ?? "CodeKarleBSDk"}
+                </h3>
+
+                <p className="mt-2 text-sm text-white/40">
+                  {spotifyPlaylist.owner ?? "Czar16"} · 100+ tracks
+                </p>
+
+                {/* Play button */}
+                <div className="mt-5 flex items-center gap-3">
+                  <a
+                    href={spotifyPlaylist.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open playlist on Spotify"
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-[#3b9cff] text-black shadow-[0_0_24px_rgba(59,156,255,0.25)] transition hover:scale-105 hover:bg-[#5eacff]"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="ml-0.5 h-4 w-4"
+                      fill="currentColor"
+                    >
+                      <path d="M8 5.14v13.72a1 1 0 0 0 1.54.84l10-6.86a1 1 0 0 0 0-1.68l-10-6.86A1 1 0 0 0 8 5.14Z" />
+                    </svg>
+                  </a>
+
+                  <span className="text-xs text-white/30">
+                    Opens in Spotify
+                  </span>
+                </div>
+              </div>
+
+              {/* Spotify icon */}
+              <div className="hidden self-start text-white/25 sm:block">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-6 w-6"
+                  fill="currentColor"
+                >
+                  <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm4.59 14.36a.75.75 0 0 1-1.03.25c-2.82-1.72-6.37-2.11-10.56-1.15a.75.75 0 1 1-.34-1.46c4.58-1.05 8.5-.6 11.67 1.34a.75.75 0 0 1 .26 1.02Zm1.38-3.07a.94.94 0 0 1-1.29.31c-3.23-1.99-8.15-2.57-11.97-1.4a.94.94 0 1 1-.55-1.8c4.36-1.32 9.78-.68 13.5 1.61a.94.94 0 0 1 .31 1.28Zm.12-3.2C14.22 7.9 8.13 7.7 4.58 8.78a1.13 1.13 0 0 1-.66-2.16c4.08-1.24 10.87-1 15.01 1.46a1.13 1.13 0 1 1-1.15 1.95Z" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Track header */}
+            <div className="grid grid-cols-[32px_1fr_60px] items-center gap-3 border-t border-white/[0.06] px-4 py-2.5 text-[10px] uppercase tracking-wider text-white/25 sm:grid-cols-[40px_1fr_80px]">
+              <span>#</span>
+              <span>Title</span>
+              <span className="text-right">Time</span>
+            </div>
+
+            {/* Scrollable track list */}
+            <div className="h-[280px] overflow-y-auto overscroll-contain scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10">
+              {tracks.map((track, index) => (
+                <a
+                  key={`${track.title}-${index}`}
+                  href={spotifyPlaylist.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group grid min-h-[58px] grid-cols-[32px_1fr_60px] items-center gap-3 border-t border-white/[0.045] px-4 transition-colors hover:bg-white/[0.035] sm:grid-cols-[40px_1fr_80px]"
+                >
+                  {/* Track number */}
+                  <span className="text-center text-xs tabular-nums text-white/25 transition-colors group-hover:text-[#5eacff]">
+                    {index + 1}
+                  </span>
+
+                  {/* Track information */}
+                  <div className="flex min-w-0 items-center gap-3">
+                    {/* Blue Spotify-style icon */}
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[#3b9cff]/15 bg-[#3b9cff]/10">
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="h-4 w-4 text-[#3b9cff]"
+                        fill="currentColor"
+                      >
+                        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm4.59 14.36a.75.75 0 0 1-1.03.25c-2.82-1.72-6.37-2.11-10.56-1.15a.75.75 0 1 1-.34-1.46c4.58-1.05 8.5-.6 11.67 1.34a.75.75 0 0 1 .26 1.02Zm1.38-3.07a.94.94 0 0 1-1.29.31c-3.23-1.99-8.15-2.57-11.97-1.4a.94.94 0 1 1-.55-1.8c4.36-1.32 9.78-.68 13.5 1.61a.94.94 0 0 1 .31 1.28Zm.12-3.2C14.22 7.9 8.13 7.7 4.58 8.78a1.13 1.13 0 0 1-.66-2.16c4.08-1.24 10.87-1 15.01 1.46a1.13 1.13 0 1 1-1.15 1.95Z" />
+                      </svg>
+                    </div>
+
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-white/85">
+                        {track.title}
+                      </p>
+
+                      <p className="truncate text-xs text-white/35">
+                        {track.artist}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Duration */}
+                  <span className="text-right text-xs tabular-nums text-white/30">
+                    {track.duration}
+                  </span>
+                </a>
+              ))}
+            </div>
+
+            {/* Full playlist link */}
+            <div className="flex items-center justify-center border-t border-white/[0.06] bg-white/[0.015] px-4 py-3">
+              <a
+                href={spotifyPlaylist.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-medium text-[#5eacff] transition-colors hover:text-white"
+              >
+                Showing 15 tracks · Open Spotify to see the full playlist →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

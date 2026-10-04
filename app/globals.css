@@ -1,26 +1,345 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------ *
+ *  Design tokens
+ *  Dark (AMOLED) is the default theme. Light mode is designed, not
+ *  inverted: it uses its own surfaces, borders and accent weight.
+ * ------------------------------------------------------------------ */
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #fafafa;
+  --bg-soft: #f4f4f5;
+  --bg-veil: rgba(250, 250, 250, 0.78);
+  --card: #ffffff;
+  --card-elevated: #ffffff;
+  --fg: #111111;
+  --fg-secondary: #52525b;
+  --fg-muted: #71717a;
+  --accent: #0b6bcb;
+  --accent-glow: #2563eb;
+  --accent-contrast: #ffffff;
+  --line: #e4e4e7;
+  --line-strong: #d4d4d8;
+  --success: #15a34a;
+  --grid-line: rgba(17, 17, 17, 0.05);
+  --sh-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 14px 34px -22px rgba(16, 24, 40, 0.22);
+  --sh-pop: 0 28px 70px -30px rgba(16, 24, 40, 0.3);
+  --sh-accent: 0 10px 30px -12px color-mix(in oklab, var(--accent-glow) 55%, transparent);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #000000;
+  --bg-soft: #05070a;
+  --card: #080c12;
+  --card-elevated: #0c111a;
+  --fg: #ffffff;
+  --fg-secondary: #a1a1aa;
+  --fg-muted: #71717a;
+  --accent: #3b9eff;
+  --accent-glow: #2563eb;
+  --accent-contrast: #04121f;
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.18);
+  --success: #22c55e;
+  --grid-line: rgba(255, 255, 255, 0.045);
+  --sh-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 18px 40px -30px rgba(0, 0, 0, 0.9);
+  --sh-pop: 0 30px 80px -40px rgba(0, 0, 0, 1);
+  --sh-accent: 0 10px 34px -14px color-mix(in oklab, var(--accent-glow) 70%, transparent);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-card: var(--card);
+  --color-elevated: var(--card-elevated);
+  --color-fg: var(--fg);
+  --color-fg-secondary: var(--fg-secondary);
+  --color-fg-muted: var(--fg-muted);
+  --color-accent: var(--accent);
+  --color-accent-glow: var(--accent-glow);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-success: var(--success);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-hand: var(--font-hand), "Segoe Script", cursive;
+
+  --radius-card: 14px;
+  --radius-control: 9px;
+
+  --shadow-card: var(--sh-card);
+  --shadow-pop: var(--sh-pop);
+  --shadow-accent: var(--sh-accent);
+
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ------------------------------------------------------------------ *
+ *  Base
+ * ------------------------------------------------------------------ */
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 92px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+    font-variant-ligatures: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 32%, transparent);
+    color: var(--fg);
+  }
+
+  /* Subtle scrollbar that matches the surface language. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ------------------------------------------------------------------ *
+ *  Components
+ * ------------------------------------------------------------------ */
+
+@layer components {
+  .shell {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 1480px;
+    padding-inline: 20px;
+  }
+
+  @media (min-width: 640px) {
+    .shell {
+      padding-inline: 28px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .shell {
+      padding-inline: 40px;
+    }
+  }
+
+  .card {
+    background-color: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    box-shadow: var(--sh-card);
+  }
+
+  .card-elevated {
+    background-color: var(--card-elevated);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    box-shadow: var(--sh-card);
+  }
+
+  .hairline {
+    border-color: var(--line);
+  }
+
+  /* Eyebrow: "● Section" */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  .eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 18%, transparent);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 26px;
+    padding-inline: 9px;
+    border-radius: 7px;
+    border: 1px solid var(--line);
+    background-color: color-mix(in oklab, var(--card-elevated) 70%, transparent);
+    color: var(--fg-secondary);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 38px;
+    padding-inline: 15px;
+    border-radius: var(--radius-control);
+    border: 1px solid var(--line);
+    background-color: color-mix(in oklab, var(--card-elevated) 82%, transparent);
+    color: var(--fg);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    transition:
+      transform 0.22s var(--ease-premium),
+      background-color 0.22s var(--ease-premium),
+      border-color 0.22s var(--ease-premium),
+      box-shadow 0.22s var(--ease-premium),
+      color 0.22s var(--ease-premium);
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+    border-color: var(--line-strong);
+    background-color: var(--card-elevated);
+  }
+
+  .btn-primary {
+    background-color: var(--accent);
+    border-color: transparent;
+    color: var(--accent-contrast);
+    box-shadow: var(--sh-accent);
+  }
+
+  .btn-primary:hover {
+    background-color: color-mix(in oklab, var(--accent) 88%, white);
+    border-color: transparent;
+    box-shadow: 0 14px 40px -14px color-mix(in oklab, var(--accent-glow) 85%, transparent);
+  }
+
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-control);
+    border: 1px solid transparent;
+    color: var(--fg-secondary);
+    transition:
+      color 0.2s var(--ease-premium),
+      background-color 0.2s var(--ease-premium),
+      border-color 0.2s var(--ease-premium),
+      transform 0.2s var(--ease-premium);
+  }
+
+  .icon-btn:hover {
+    color: var(--fg);
+    background-color: color-mix(in oklab, var(--fg) 6%, transparent);
+    border-color: var(--line);
+  }
+
+  /* Theme switch cross-fade, scoped so hover transitions stay snappy. */
+  html[data-theme-anim] body,
+  html[data-theme-anim] .t-surface {
+    transition:
+      background-color 0.4s var(--ease-premium),
+      border-color 0.4s var(--ease-premium),
+      color 0.4s var(--ease-premium);
+  }
+}
+
+@layer utilities {
+  .text-gradient-name {
+    background-image: linear-gradient(
+      100deg,
+      var(--accent) 0%,
+      color-mix(in oklab, var(--accent) 55%, #a855f7) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 68px 68px;
+    background-position: center top;
+  }
+
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 100%);
+  }
+
+  .mask-fade-radial {
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 10%, transparent 78%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 10%, transparent 78%);
+  }
+
+  .noise-overlay::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
+  }
 }
