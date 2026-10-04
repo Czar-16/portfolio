@@ -33,15 +33,9 @@ export const contact = {
     "Have an interesting project, opportunity, or just want to talk engineering?",
 } as const;
 
-/**
- * Resume is intentionally honest: no PDF was provided, so nothing is
- * fabricated. Drop the real file at `public/resume.pdf` and flip
- * `available` to `true` to light up the download buttons.
- */
 export const resume = {
-  href: "/resume.pdf",
-  available: false,
-  note: "Add your resume PDF at public/resume.pdf, then set resume.available to true.",
+  href: "https://drive.google.com/file/d/1YCWD6quRauQiCt6l5_O6FiBZG5Efjix3/view?usp=sharing",
+  available: true,
 } as const;
 
 export type NavItem = { label: string; href: string };

@@ -117,7 +117,9 @@ export function Navbar() {
           <span className="mx-1 h-5 w-px bg-line" aria-hidden="true" />
 
           <a
-            href={resume.available ? resume.href : "/resume"}
+            href={resume.href}
+            target="_blank"
+            rel="noopener noreferrer"
             className="btn btn-primary h-9 px-4 text-xs font-medium"
           >
             <DownloadIcon size={13} />
@@ -201,7 +203,9 @@ export function Navbar() {
                   <LinkedinIcon size={17} />
                 </a>
                 <a
-                  href={resume.available ? resume.href : "/resume"}
+                  href={resume.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={closeMenu}
                   className="btn btn-primary ml-auto h-9 px-4 text-xs"
                 >

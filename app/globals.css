@@ -10,24 +10,24 @@
 [data-theme="light"] {
   color-scheme: light;
 
-  --bg: #fafafa;
-  --bg-soft: #f4f4f5;
-  --bg-veil: rgba(250, 250, 250, 0.78);
+  --bg: #f5f7fa;
+  --bg-soft: #eef2f8;
+  --bg-veil: rgba(244, 247, 251, 0.82);
   --card: #ffffff;
-  --card-elevated: #ffffff;
-  --fg: #111111;
-  --fg-secondary: #52525b;
-  --fg-muted: #71717a;
+  --card-elevated: #f8fafc;
+  --fg: #0f172a;
+  --fg-secondary: #475569;
+  --fg-muted: #94a3b8;
   --accent: #0b6bcb;
   --accent-glow: #2563eb;
   --accent-contrast: #ffffff;
-  --line: #e4e4e7;
-  --line-strong: #d4d4d8;
-  --success: #15a34a;
-  --grid-line: rgba(17, 17, 17, 0.05);
-  --sh-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 14px 34px -22px rgba(16, 24, 40, 0.22);
-  --sh-pop: 0 28px 70px -30px rgba(16, 24, 40, 0.3);
-  --sh-accent: 0 10px 30px -12px color-mix(in oklab, var(--accent-glow) 55%, transparent);
+  --line: #e2e8f0;
+  --line-strong: #cbd5e1;
+  --success: #16a34a;
+  --grid-line: rgba(15, 23, 42, 0.035);
+  --sh-card: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 24px -12px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.02);
+  --sh-pop: 0 12px 40px -12px rgba(15, 23, 42, 0.18), 0 4px 16px -4px rgba(15, 23, 42, 0.08);
+  --sh-accent: 0 8px 24px -8px color-mix(in oklab, var(--accent-glow) 40%, transparent);
 }
 
 [data-theme="dark"] {

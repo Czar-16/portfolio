@@ -14,7 +14,7 @@ import { socials } from "@/data/site";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-// change this if you rename the banner file
+// Change this if you rename the banner file
 const BANNER = "/banner/hero.png";
 const AVATAR = "/profile/profile.jpg";
 
@@ -23,7 +23,7 @@ const ghostBtn =
 
 export function Hero() {
   return (
-    <section className="relative w-full overflow-hidden border-b border-white/10">
+    <section className="relative mx-auto w-[calc(100%-24px)] max-w-[2100px] overflow-hidden rounded-[32px] border border-white/10">
       {/* Banner */}
       <div className="absolute inset-0">
         <Image
@@ -31,9 +31,10 @@ export function Hero() {
           alt=""
           fill
           priority
-          sizes="100vw"
+          sizes="(max-width: 1480px) calc(100vw - 24px), 1480px"
           className="object-cover object-[50%_30%]"
         />
+
         <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
         <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/40 to-transparent" />
         <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-black/30 to-transparent" />
@@ -48,17 +49,19 @@ export function Hero() {
         aria-hidden="true"
       >
         <span className="absolute -top-16 right-24 h-px w-28 -rotate-[35deg] bg-gradient-to-r from-transparent to-white/70" />
+
         <div className="-rotate-[8deg] text-right">
           <p className="font-hand text-[30px] leading-snug text-white/90">
             Turning ideas
             <br />
             into products.
           </p>
+
           <p className="mt-1 font-hand text-[28px] text-white/90">// Czar-16</p>
         </div>
       </motion.div>
 
-      {/* Content: height follows screen width so the artwork keeps its shape */}
+      {/* Content */}
       <div className="shell relative flex min-h-[640px] items-end pb-10 pt-32 lg:h-[min(50vw,860px)] lg:pb-12">
         <div className="flex w-full flex-col gap-6 md:flex-row md:items-start md:gap-10">
           {/* Avatar */}
@@ -80,6 +83,7 @@ export function Hero() {
 
           {/* Text + actions */}
           <div className="flex w-full max-w-[760px] flex-col">
+            {/* Availability */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -87,11 +91,13 @@ export function Hero() {
               className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-black/50 px-3.5 py-1.5 backdrop-blur-md"
             >
               <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-success shadow-[0_0_8px_rgba(34,197,94,0.7)]" />
+
               <span className="text-xs font-medium text-white/90 md:text-sm">
                 Open to Software Engineering opportunities
               </span>
             </motion.div>
 
+            {/* Name */}
             <motion.h1
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -101,6 +107,7 @@ export function Hero() {
               Anoop <span className="text-gradient-name">Jha</span>
             </motion.h1>
 
+            {/* Description */}
             <motion.p
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -111,6 +118,7 @@ export function Hero() {
               Next.js, and scalable backend systems.
             </motion.p>
 
+            {/* Currently Building */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -120,6 +128,7 @@ export function Hero() {
               <CurrentlyBuildingCard />
             </motion.div>
 
+            {/* Actions */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -130,16 +139,20 @@ export function Hero() {
                 href="/projects"
                 className="inline-flex h-11 items-center gap-2 rounded-lg bg-accent px-6 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(59,158,255,0.4)] transition-all hover:bg-accent/90 md:h-12 md:text-base"
               >
-                View Projects <ArrowRightIcon size={16} />
+                View Projects
+                <ArrowRightIcon size={16} />
               </Link>
+
               <a
                 href={socials.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={ghostBtn}
               >
-                <GithubIcon size={18} /> GitHub
+                <GithubIcon size={18} />
+                GitHub
               </a>
+
               <a
                 href={socials.x}
                 target="_blank"
@@ -149,13 +162,15 @@ export function Hero() {
               >
                 <XIcon size={18} />
               </a>
+
               <a
                 href={socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={ghostBtn}
               >
-                <LinkedinIcon size={18} /> LinkedIn
+                <LinkedinIcon size={18} />
+                LinkedIn
               </a>
             </motion.div>
           </div>
