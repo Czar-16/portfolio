@@ -1,17 +1,20 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { projects } from "@/data/projects";
-import { GithubIcon, ExternalIcon } from "@/components/icons";
+import { GithubIcon, ExternalIcon, ArrowRightIcon } from "@/components/icons";
 
 export function FeaturedProjects() {
+  const featured = projects.slice(0, 6);
+
   return (
     <section id="projects" className="py-20">
       <div className="shell">
         <h2 className="text-3xl font-bold mb-12">Featured Projects</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {projects.map((project) => {
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {featured.map((project) => {
             const liveLink =
               project.links.find((l) => l.label === "Live")?.href ||
               project.links[0]?.href;
@@ -20,36 +23,37 @@ export function FeaturedProjects() {
             )?.href;
 
             return (
-              <Reveal key={project.name} className="h-full">
-                <div className="card overflow-hidden group h-full flex flex-col">
-                  {/* Image */}
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/40 border-b border-white/5">
+              <Reveal key={project.slug} className="h-full">
+                <div className="card group flex h-full flex-col overflow-hidden">
+                  <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/5 bg-black/40">
                     <Image
                       src={project.image}
                       alt={project.imageAlt}
                       fill
-                      sizes="(min-width: 768px) 50vw, 100vw"
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                       className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                     />
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent" />
                   </div>
 
-                  {/* Content */}
-                  <div className="p-6 flex flex-col justify-between flex-1">
+                  <div className="flex flex-1 flex-col justify-between p-6">
                     <div>
                       <h3 className="text-xl font-bold">{project.name}</h3>
-                      <p className="text-fg-secondary mt-2 text-sm">
+                      <p className="mt-2 text-sm text-fg-secondary">
                         {project.description}
                       </p>
-                      <div className="flex flex-wrap gap-2 mt-4">
-                        {project.tech.map((t) => (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {project.tech.slice(0, 4).map((t) => (
                           <span key={t} className="badge">
                             {t}
                           </span>
                         ))}
+                        {project.tech.length > 4 && (
+                          <span className="badge text-fg-muted">+{project.tech.length - 4}</span>
+                        )}
                       </div>
                     </div>
-                    <div className="flex gap-3 mt-6">
+                    <div className="mt-6 flex gap-3">
                       {liveLink && (
                         <a
                           href={liveLink}
@@ -77,6 +81,34 @@ export function FeaturedProjects() {
             );
           })}
         </div>
+
+        {projects.length > 6 && (
+          <div className="mt-10">
+            <Link
+              href="/projects"
+              className="group relative flex items-center justify-between overflow-hidden rounded-[14px] border border-line bg-card px-6 py-6 shadow-card transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-pop md:px-8 md:py-7"
+            >
+              <div
+                className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-accent/10 blur-3xl"
+                aria-hidden="true"
+              />
+              <div className="relative flex flex-col gap-1">
+                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-fg-muted">
+                  Keep exploring
+                </p>
+                <p className="text-lg font-semibold tracking-tight text-fg md:text-xl">
+                  {projects.length - 6} more project{projects.length - 6 > 1 ? "s" : ""} waiting — the best one&apos;s probably in there
+                </p>
+                <p className="text-sm text-fg-secondary">
+                  All builds, experiments and shipped things live on the projects page.
+                </p>
+              </div>
+              <span className="relative ml-4 inline-flex shrink-0 items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(59,158,255,0.35)] transition-colors group-hover:bg-accent/90">
+                See more projects <ArrowRightIcon size={15} />
+              </span>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

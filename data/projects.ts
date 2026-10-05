@@ -10,7 +10,6 @@ export type Project = {
   period: string;
   role: string;
   status: "Live" | "In progress" | "Shipped";
-  flagship?: boolean;
   tech: string[];
   highlights: string[];
   links: ProjectLink[];
@@ -29,7 +28,6 @@ export const projects: Project[] = [
     period: "2026",
     role: "Design, build, ship",
     status: "Live",
-    flagship: true,
     tech: [
       "Next.js",
       "TypeScript",
@@ -168,129 +166,91 @@ export const projects: Project[] = [
       },
     ],
   },
-  // test
-
   {
     slug: "test",
     name: "test",
-    tagline: "Grab the original Pinterest image, not the cached preview.",
-    description:
-      "Pinterest high-resolution image downloader with secure server-side image handling.",
-    image: "/projects/purepin.png",
+    tagline:
+      "Wallet primitives: balances, transfers and webhook-driven top-ups.",
+    description: "Digital wallet application inspired by Paytm and PhonePe.",
+    image: "/projects/payloop.png",
     imageAlt:
-      "PurePin downloader interface showing a resolved original-resolution image",
+      "Payloop wallet dashboard showing balance, transactions and transfer actions",
     period: "2026",
     role: "Design, build, ship",
-    status: "Live",
-    tech: [
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "Shadcn UI",
-      "Zod",
-      "Vercel Analytics",
-    ],
+    status: "In progress",
+    tech: ["Next.js", "PostgreSQL", "Prisma", "Authentication", "Webhooks"],
     highlights: [
-      "Pinterest CDN handling",
-      "Original image resolution",
-      "Server-side proxy",
-      "CORS handling",
-      "Blob downloads",
-      "Production deployment",
+      "Wallet architecture",
+      "Balance management",
+      "Transactions",
+      "Authentication",
+      "Webhook workflows",
     ],
     links: [
-      { label: "Live", href: "https://purepin.vercel.app", external: true },
       {
         label: "GitHub",
-        href: "https://github.com/Czar-16/PurePin",
+        href: "https://github.com/Czar-16/payloop",
         external: true,
       },
     ],
   },
-
   {
-    slug: "test",
-    name: "test",
-    tagline: "Grab the original Pinterest image, not the cached preview.",
-    description:
-      "Pinterest high-resolution image downloader with secure server-side image handling.",
-    image: "/projects/purepin.png",
+    slug: "test2",
+    name: "test2",
+    tagline:
+      "Wallet primitives: balances, transfers and webhook-driven top-ups.",
+    description: "Digital wallet application inspired by Paytm and PhonePe.",
+    image: "/projects/payloop.png",
     imageAlt:
-      "PurePin downloader interface showing a resolved original-resolution image",
+      "Payloop wallet dashboard showing balance, transactions and transfer actions",
     period: "2026",
     role: "Design, build, ship",
-    status: "Live",
-    tech: [
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "Shadcn UI",
-      "Zod",
-      "Vercel Analytics",
-    ],
+    status: "In progress",
+    tech: ["Next.js", "PostgreSQL", "Prisma", "Authentication", "Webhooks"],
     highlights: [
-      "Pinterest CDN handling",
-      "Original image resolution",
-      "Server-side proxy",
-      "CORS handling",
-      "Blob downloads",
-      "Production deployment",
+      "Wallet architecture",
+      "Balance management",
+      "Transactions",
+      "Authentication",
+      "Webhook workflows",
     ],
     links: [
-      { label: "Live", href: "https://purepin.vercel.app", external: true },
       {
         label: "GitHub",
-        href: "https://github.com/Czar-16/PurePin",
+        href: "https://github.com/Czar-16/payloop",
         external: true,
       },
     ],
   },
-
   {
-    slug: "test",
-    name: "test",
-    tagline: "Grab the original Pinterest image, not the cached preview.",
-    description:
-      "Pinterest high-resolution image downloader with secure server-side image handling.",
-    image: "/projects/purepin.png",
+    slug: "test3",
+    name: "test3",
+    tagline:
+      "Wallet primitives: balances, transfers and webhook-driven top-ups.",
+    description: "Digital wallet application inspired by Paytm and PhonePe.",
+    image: "/projects/payloop.png",
     imageAlt:
-      "PurePin downloader interface showing a resolved original-resolution image",
+      "Payloop wallet dashboard showing balance, transactions and transfer actions",
     period: "2026",
     role: "Design, build, ship",
-    status: "Live",
-    tech: [
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "Shadcn UI",
-      "Zod",
-      "Vercel Analytics",
-    ],
+    status: "In progress",
+    tech: ["Next.js", "PostgreSQL", "Prisma", "Authentication", "Webhooks"],
     highlights: [
-      "Pinterest CDN handling",
-      "Original image resolution",
-      "Server-side proxy",
-      "CORS handling",
-      "Blob downloads",
-      "Production deployment",
+      "Wallet architecture",
+      "Balance management",
+      "Transactions",
+      "Authentication",
+      "Webhook workflows",
     ],
     links: [
-      { label: "Live", href: "https://purepin.vercel.app", external: true },
       {
         label: "GitHub",
-        href: "https://github.com/Czar-16/PurePin",
+        href: "https://github.com/Czar-16/payloop",
         external: true,
       },
     ],
   },
 ];
-
-export const flagshipProject =
-  projects.find((project) => project.flagship) ?? projects[0];
-
-export const supportingProjects = projects.filter(
-  (project) => !project.flagship,
-);
 
 export function getProject(slug: string): Project | undefined {
   return projects.find((project) => project.slug === slug);

@@ -1,10 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  flagshipProject,
-  supportingProjects,
-  type Project,
-} from "@/data/projects";
+import { projects, type Project } from "@/data/projects";
 import { Reveal, StaggerChildren, StaggerItem } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { GithubIcon, ExternalIcon, ArrowRightIcon } from "@/components/icons";
@@ -46,60 +42,23 @@ function ProjectLinks({ project }: { project: Project }) {
   );
 }
 
-function ProjectCard({
-  project,
-  featured = false,
-}: {
-  project: Project;
-  featured?: boolean;
-}) {
-  const visibleTech = project.tech.slice(0, featured ? 5 : 4);
-  const hiddenTech = project.tech.length - visibleTech.length;
-
+function ProjectCard({ project }: { project: Project }) {
   return (
-    <article
-      className={`group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-line-strong hover:shadow-pop ${
-        featured ? "lg:flex-row" : ""
-      }`}
-    >
-      {/* Media */}
-      <div
-        className={`relative aspect-video shrink-0 overflow-hidden ${
-          featured ? "lg:aspect-auto lg:min-h-[420px] lg:w-[56%]" : ""
-        }`}
-      >
+    <article className="group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-line-strong hover:shadow-pop">
+      <div className="relative aspect-video shrink-0 overflow-hidden">
         <Image
           src={project.image}
           alt={project.imageAlt}
           fill
-          priority={featured}
-          sizes={
-            featured
-              ? "(min-width: 1024px) 56vw, 100vw"
-              : "(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
-          }
+          sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
           className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
         />
-        {project.flagship && (
-          <span className="absolute left-4 top-4 rounded-md border border-accent/40 bg-black/65 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-accent backdrop-blur-sm">
-            Flagship
-          </span>
-        )}
       </div>
 
-      {/* Content */}
-      <div
-        className={`flex flex-1 flex-col gap-4 p-6 ${
-          featured ? "lg:w-[44%] lg:p-10" : ""
-        }`}
-      >
+      <div className="flex flex-1 flex-col gap-4 p-6">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2.5">
-            <h2
-              className={`font-semibold tracking-tight text-fg ${
-                featured ? "text-2xl lg:text-3xl" : "text-lg"
-              }`}
-            >
+            <h2 className="text-lg font-semibold tracking-tight text-fg">
               {project.name}
             </h2>
             <span
@@ -117,43 +76,19 @@ function ProjectCard({
           </p>
         </div>
 
-        <p
-          className={`text-fg-secondary ${
-            featured
-              ? "text-[15px] leading-relaxed"
-              : "line-clamp-3 text-[13px] leading-relaxed"
-          }`}
-        >
+        <p className="line-clamp-3 text-[13px] leading-relaxed text-fg-secondary">
           {project.description}
         </p>
 
-        {featured && (
-          <ul className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
-            {project.highlights.slice(0, 4).map((highlight) => (
-              <li
-                key={highlight}
-                className="flex items-start gap-2 text-[13px] leading-snug text-fg-secondary"
-              >
-                <span
-                  className="mt-[6px] h-1 w-1 shrink-0 rounded-full bg-accent"
-                  aria-hidden="true"
-                />
-                {highlight}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {/* Bottom block: always aligned across cards */}
         <div className="mt-auto flex flex-col gap-4 pt-2">
           <div className="flex flex-wrap gap-1.5">
-            {visibleTech.map((tech) => (
+            {project.tech.slice(0, 4).map((tech) => (
               <span key={tech} className="badge">
                 {tech}
               </span>
             ))}
-            {hiddenTech > 0 && (
-              <span className="badge text-fg-muted">+{hiddenTech}</span>
+            {project.tech.length > 4 && (
+              <span className="badge text-fg-muted">+{project.tech.length - 4}</span>
             )}
           </div>
 
@@ -253,14 +188,8 @@ export default function ProjectsPage() {
         subtitle="Selected products I've designed, built and shipped."
       />
 
-      {/* Flagship */}
-      <Reveal className="mt-12">
-        <ProjectCard project={flagshipProject} featured />
-      </Reveal>
-
-      {/* Supporting projects */}
-      <StaggerChildren className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {supportingProjects.map((project) => (
+      <StaggerChildren className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {projects.map((project) => (
           <StaggerItem key={project.slug} className="h-full">
             <ProjectCard project={project} />
           </StaggerItem>
