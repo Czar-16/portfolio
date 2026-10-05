@@ -91,12 +91,12 @@ export function PlaylistCard() {
               <span className="h-1.5 w-1.5 rounded-full bg-[#3b9cff] shadow-[0_0_8px_rgba(59,156,255,0.8)]" />
 
               <h2 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
-                On repeat
+                The soundtrack behind the things I build.
               </h2>
             </div>
 
             <p className="mt-1.5 text-sm text-white/40">
-              A few tracks from my playlist — opens on Spotify.
+              Listen to the full playlist → Tune in → opens on Spotify.
             </p>
           </div>
 
@@ -106,7 +106,7 @@ export function PlaylistCard() {
             rel="noopener noreferrer"
             className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-[#3b9cff]/30 bg-[#3b9cff]/10 px-4 text-sm font-medium text-[#5eacff] transition-all duration-200 hover:border-[#3b9cff]/50 hover:bg-[#3b9cff]/15 hover:text-white"
           >
-            Open on Spotify
+            Deploy the vibes
             <span className="ml-1.5">↗</span>
           </a>
         </div>
@@ -177,60 +177,6 @@ export function PlaylistCard() {
               </div>
             </div>
 
-            {/* Track header */}
-            <div className="grid grid-cols-[32px_1fr_60px] items-center gap-3 border-t border-white/[0.06] px-4 py-2.5 text-[10px] uppercase tracking-wider text-white/25 sm:grid-cols-[40px_1fr_80px]">
-              <span>#</span>
-              <span>Title</span>
-              <span className="text-right">Time</span>
-            </div>
-
-            {/* Scrollable track list */}
-            <div className="h-[280px] overflow-y-auto overscroll-contain scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10">
-              {tracks.map((track, index) => (
-                <a
-                  key={`${track.title}-${index}`}
-                  href={spotifyPlaylist.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group grid min-h-[58px] grid-cols-[32px_1fr_60px] items-center gap-3 border-t border-white/[0.045] px-4 transition-colors hover:bg-white/[0.035] sm:grid-cols-[40px_1fr_80px]"
-                >
-                  {/* Track number */}
-                  <span className="text-center text-xs tabular-nums text-white/25 transition-colors group-hover:text-[#5eacff]">
-                    {index + 1}
-                  </span>
-
-                  {/* Track information */}
-                  <div className="flex min-w-0 items-center gap-3">
-                    {/* Blue Spotify-style icon */}
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[#3b9cff]/15 bg-[#3b9cff]/10">
-                      <svg
-                        viewBox="0 0 24 24"
-                        className="h-4 w-4 text-[#3b9cff]"
-                        fill="currentColor"
-                      >
-                        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm4.59 14.36a.75.75 0 0 1-1.03.25c-2.82-1.72-6.37-2.11-10.56-1.15a.75.75 0 1 1-.34-1.46c4.58-1.05 8.5-.6 11.67 1.34a.75.75 0 0 1 .26 1.02Zm1.38-3.07a.94.94 0 0 1-1.29.31c-3.23-1.99-8.15-2.57-11.97-1.4a.94.94 0 1 1-.55-1.8c4.36-1.32 9.78-.68 13.5 1.61a.94.94 0 0 1 .31 1.28Zm.12-3.2C14.22 7.9 8.13 7.7 4.58 8.78a1.13 1.13 0 0 1-.66-2.16c4.08-1.24 10.87-1 15.01 1.46a1.13 1.13 0 1 1-1.15 1.95Z" />
-                      </svg>
-                    </div>
-
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-white/85">
-                        {track.title}
-                      </p>
-
-                      <p className="truncate text-xs text-white/35">
-                        {track.artist}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Duration */}
-                  <span className="text-right text-xs tabular-nums text-white/30">
-                    {track.duration}
-                  </span>
-                </a>
-              ))}
-            </div>
-
             {/* Full playlist link */}
             <div className="flex items-center justify-center border-t border-white/[0.06] bg-white/[0.015] px-4 py-3">
               <a
@@ -239,7 +185,7 @@ export function PlaylistCard() {
                 rel="noopener noreferrer"
                 className="text-xs font-medium text-[#5eacff] transition-colors hover:text-white"
               >
-                Showing 15 tracks · Open Spotify to see the full playlist →
+                Hear what fuels the code →
               </a>
             </div>
           </div>
