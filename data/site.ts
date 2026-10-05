@@ -46,7 +46,7 @@ export const navItems: NavItem[] = [
   { label: "Stack", href: "/stack" },
   { label: "Movies", href: "/movies" },
   { label: "Quotes", href: "/quotes" },
-  { label: "Achievements", href: "/achievements" },
+
   { label: "About", href: "/about" },
 ];
 

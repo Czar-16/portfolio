@@ -1,25 +1,8 @@
 "use client";
 
 import { stack } from "@/data/stack";
-
 import { techIcons } from "@/data/tech-icons";
-import {
-  TrophyIcon,
-  StarIcon,
-  MedalIcon,
-  RankIcon,
-  CertificateIcon,
-} from "@/components/icons";
 import { GitHubActivity } from "@/components/github-activity";
-import Link from "next/link";
-
-const iconMap = {
-  problems: TrophyIcon,
-  rating: StarIcon,
-  contest: MedalIcon,
-  rank: RankIcon,
-  certificate: CertificateIcon,
-};
 
 function TechIcon({ name }: { name: string }) {
   const icon = techIcons[name];
@@ -39,20 +22,23 @@ function TechIcon({ name }: { name: string }) {
 export function DashboardSection() {
   return (
     <section className="py-20 bg-bg-soft">
-      <div className="shell grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="card p-6">
-          <h3 className="font-semibold mb-6">Tech Stack</h3>
-          <div className="space-y-5">
+      <div className="shell grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="card p-7 lg:p-8">
+          <h3 className="text-lg font-semibold">Tech Stack</h3>
+          <p className="mt-1 text-sm text-fg-secondary">
+            Languages, frameworks and tools I use to ship products.
+          </p>
+          <div className="mt-7 space-y-6">
             {stack.map((label) => (
               <div key={label.id}>
-                <p className="text-xs text-fg-muted uppercase tracking-wider mb-2">
+                <p className="text-xs font-medium uppercase tracking-wider text-fg-muted">
                   {label.label}
                 </p>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="mt-2.5 flex flex-wrap gap-2">
                   {label.items.map((item) => (
                     <span
                       key={item}
-                      className="badge inline-flex items-center gap-1.5"
+                      className="badge inline-flex items-center gap-1.5 px-3 py-1.5"
                     >
                       <TechIcon name={item} />
                       {item}
@@ -64,7 +50,7 @@ export function DashboardSection() {
           </div>
         </div>
 
-        <div className="card p-5">
+        <div className="card p-6 lg:p-7">
           <GitHubActivity />
         </div>
       </div>
