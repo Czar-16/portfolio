@@ -27,7 +27,11 @@ function Art({ children }: { children: React.ReactNode }) {
   const active = inView && visible && !reduce;
   const mask = "radial-gradient(ellipse at center, black 30%, transparent 75%)";
   return (
-    <div ref={ref} data-art-active={active} className="artwork relative mb-5 h-44 shrink-0 overflow-hidden rounded-2xl border border-accent/15 bg-accent/5">
+    <div
+      ref={ref}
+      data-art-active={active}
+      className="artwork relative mb-5 h-44 shrink-0 overflow-hidden rounded-2xl border border-accent/15 bg-accent/5"
+    >
       <div
         aria-hidden
         className="absolute inset-0 text-fg-muted opacity-25"
@@ -198,7 +202,7 @@ function AppDemoArt() {
         >
           <span
             data-ripple
-            className="absolute inset-0 rounded-md bg-white opacity-0"
+            className="absolute inset-0 rounded-md bg-sky-500 opacity-0"
           />
           <span data-save className="absolute inset-0 grid place-items-center">
             Save
@@ -232,7 +236,7 @@ function AppDemoArt() {
           className="absolute left-3 right-3 flex h-[18px] items-center gap-2 rounded bg-white/[0.05] px-2 text-[10px]"
           style={{ top: 116, opacity: reduce ? 1 : 0 }}
         >
-          <span className="size-1.5 rounded-full bg-sky-400" />
+          <span className="size-1.5 rounded-full bg-sky-500" />
           Deploy v2
         </div>
 
@@ -305,7 +309,11 @@ function RealtimeArt() {
 
         <motion.g
           animate={artActive ? { rotate: 360 } : { rotate: 0 }}
-          transition={artActive ? { duration: 16, repeat: Infinity, ease: "linear" } : { duration: 0 }}
+          transition={
+            artActive
+              ? { duration: 16, repeat: Infinity, ease: "linear" }
+              : { duration: 0 }
+          }
           style={{ transformOrigin: `${HUB.x}px ${HUB.y}px` }}
         >
           <circle
@@ -478,7 +486,8 @@ function CoreArt() {
     let frame: number;
     let previous: number | undefined;
     const tick = (timestamp: number) => {
-      if (previous !== undefined) clock.set(clock.get() + Math.min(timestamp - previous, 64));
+      if (previous !== undefined)
+        clock.set(clock.get() + Math.min(timestamp - previous, 64));
       previous = timestamp;
       frame = requestAnimationFrame(tick);
     };
@@ -537,7 +546,11 @@ function CoreArt() {
 
       <motion.g
         animate={artActive ? { scale: [1, 1.07, 1] } : { scale: 1 }}
-        transition={artActive ? { duration: 4, repeat: Infinity, ease: "easeInOut" } : { duration: 0 }}
+        transition={
+          artActive
+            ? { duration: 4, repeat: Infinity, ease: "easeInOut" }
+            : { duration: 0 }
+        }
         style={{ transformOrigin: `${CORE.x}px ${CORE.y}px` }}
       >
         <circle cx={CORE.x} cy={CORE.y} r="38" fill="url(#ai-core-halo)" />
@@ -546,7 +559,11 @@ function CoreArt() {
 
       <motion.g
         animate={artActive ? { rotate: 360 } : { rotate: 0 }}
-        transition={artActive ? { duration: 22, repeat: Infinity, ease: "linear" } : { duration: 0 }}
+        transition={
+          artActive
+            ? { duration: 22, repeat: Infinity, ease: "linear" }
+            : { duration: 0 }
+        }
         style={{ transformOrigin: `${CORE.x}px ${CORE.y}px` }}
       >
         <path
@@ -678,8 +695,14 @@ function TerminalArt() {
                 {active && s.kind === "type" && (
                   <motion.span
                     className="ml-0.5 inline-block h-3 w-1.5 translate-y-0.5 bg-sky-400"
-                    animate={artActive ? { opacity: [1, 0, 1] } : { opacity: 1 }}
-                    transition={artActive ? { duration: 0.9, repeat: Infinity } : { duration: 0 }}
+                    animate={
+                      artActive ? { opacity: [1, 0, 1] } : { opacity: 1 }
+                    }
+                    transition={
+                      artActive
+                        ? { duration: 0.9, repeat: Infinity }
+                        : { duration: 0 }
+                    }
                   />
                 )}
               </p>
@@ -705,36 +728,36 @@ export function WhatIBuild() {
 
         <StaggerChildren className="mt-10 grid auto-rows-fr grid-cols-1 gap-6 sm:mt-12 md:grid-cols-2">
           <StaggerItem className="h-full">
-          <Tile
-            title="Full-stack Applications"
-            desc="Modern web applications with scalable frontend and backend architecture."
-          >
-            <AppDemoArt />
-          </Tile>
+            <Tile
+              title="Full-stack Applications"
+              desc="Modern web applications with scalable frontend and backend architecture."
+            >
+              <AppDemoArt />
+            </Tile>
           </StaggerItem>
           <StaggerItem className="h-full">
-          <Tile
-            title="Real-time Systems"
-            desc="WebSockets, event-driven communication and real-time state."
-          >
-            <RealtimeArt />
-          </Tile>
+            <Tile
+              title="Real-time Systems"
+              desc="WebSockets, event-driven communication and real-time state."
+            >
+              <RealtimeArt />
+            </Tile>
           </StaggerItem>
           <StaggerItem className="h-full">
-          <Tile
-            title="AI-powered Products"
-            desc="Applications that use AI for actual workflows and real problems."
-          >
-            <CoreArt />
-          </Tile>
+            <Tile
+              title="AI-powered Products"
+              desc="Applications that use AI for actual workflows and real problems."
+            >
+              <CoreArt />
+            </Tile>
           </StaggerItem>
           <StaggerItem className="h-full">
-          <Tile
-            title="Developer Tools"
-            desc="Tools that solve problems for developers and learners."
-          >
-            <TerminalArt />
-          </Tile>
+            <Tile
+              title="Developer Tools"
+              desc="Tools that solve problems for developers and learners."
+            >
+              <TerminalArt />
+            </Tile>
           </StaggerItem>
         </StaggerChildren>
       </div>

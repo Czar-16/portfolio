@@ -3,6 +3,7 @@ import Link from "next/link";
 import { projects, type Project } from "@/data/projects";
 import { Reveal, StaggerChildren, StaggerItem } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
+import { ProjectTechStack } from "@/components/project-tech-stack";
 import { GithubIcon, ExternalIcon, ArrowRightIcon } from "@/components/icons";
 
 const GITHUB_REPOS_URL = "https://github.com/Czar-16?tab=repositories";
@@ -79,17 +80,19 @@ function ProjectCard({ project }: { project: Project }) {
           {project.description}
         </p>
 
-        <div className="mt-auto flex flex-col gap-4 pt-2">
-          <div className="flex flex-wrap gap-1.5">
-            {project.tech.slice(0, 4).map((tech) => (
-              <span key={tech} className="badge">
-                {tech}
-              </span>
+        {project.highlights.length > 0 && (
+          <ul aria-label={`${project.name} highlights`} className="space-y-1.5 text-[12px] leading-relaxed text-fg-secondary">
+            {project.highlights.slice(0, 3).map((highlight) => (
+              <li key={highlight} className="flex items-start gap-2">
+                <span aria-hidden="true" className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-accent" />
+                <span>{highlight}</span>
+              </li>
             ))}
-            {project.tech.length > 4 && (
-              <span className="badge text-fg-muted">+{project.tech.length - 4}</span>
-            )}
-          </div>
+          </ul>
+        )}
+
+        <div className="mt-auto flex flex-col gap-4 pt-2">
+          <ProjectTechStack tech={project.tech} projectName={project.name} />
 
           <div className="border-t border-line pt-4">
             <ProjectLinks project={project} />

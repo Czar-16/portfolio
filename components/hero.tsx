@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { CurrentlyBuildingCard } from "@/components/currently-building-card";
+import { TerminalCard } from "@/components/TerminalCard";
 import { AnimatedName } from "@/components/animated-name";
 import {
   GithubIcon,
@@ -56,7 +56,7 @@ export function Hero() {
       </div>
 
       {/* Content */}
-      <div className="shell relative flex min-h-[560px] items-end pb-7 pt-24 sm:min-h-[640px] sm:pb-10 sm:pt-32 lg:h-[min(50vw,860px)] lg:pb-12">
+      <div className="shell relative flex min-h-[560px] items-end pb-7 pt-24 sm:min-h-[640px] sm:pb-10 sm:pt-32 lg:min-h-[min(50vw,860px)] lg:pb-12">
         <div className="flex w-full flex-col gap-4 sm:gap-6 md:flex-row md:items-start md:gap-10">
           {/* Avatar */}
           <div
@@ -73,7 +73,7 @@ export function Hero() {
           </div>
 
           {/* Text + actions */}
-          <div className="flex w-full max-w-[760px] flex-col">
+          <div className="flex w-full min-w-0 max-w-[760px] flex-col">
             {/* Availability */}
             <div
               className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-black/50 px-3.5 py-1.5 backdrop-blur-md"
@@ -100,11 +100,11 @@ export function Hero() {
               interaction to the systems behind it.
             </p>
 
-            {/* Currently Building */}
+            {/* Interactive terminal */}
             <div
               className="mt-5 w-full max-w-[640px]"
             >
-              <CurrentlyBuildingCard />
+              <TerminalCard />
             </div>
 
             {/* Actions */}

@@ -1,0 +1,70 @@
+.card {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 360ms var(--ease-premium), transform 360ms var(--ease-premium);
+  box-shadow: 0 12px 28px rgb(0 0 0 / 18%), 0 0 24px color-mix(in oklab, var(--accent) 10%, transparent);
+}
+
+.card[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 15%) transparent;
+  overflow-wrap: anywhere;
+  scrollbar-gutter: stable;
+  overflow-anchor: none;
+}
+
+.line {
+  animation: arrive 260ms var(--ease-premium) both;
+}
+
+.intro[data-instant="true"] .line {
+  animation: none;
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--accent);
+  animation: blink 1s step-end infinite;
+}
+
+.cursor[data-active="false"] {
+  visibility: hidden;
+  animation: none;
+}
+
+.input {
+  border-radius: 2px;
+  caret-color: var(--accent);
+}
+
+.input:focus-visible {
+  outline: none;
+  box-shadow: 0 1px 0 color-mix(in oklab, var(--accent) 65%, transparent);
+}
+
+@media (pointer: coarse) {
+  .input { font-size: 16px; }
+}
+
+@keyframes arrive {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .card[data-visible="true"] { opacity: 1; transform: none; transition: none; }
+  .line, .cursor { animation: none; }
+}

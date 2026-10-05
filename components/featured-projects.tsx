@@ -6,6 +6,7 @@ import { Reveal } from "@/components/reveal";
 import { projects } from "@/data/projects";
 import { GithubIcon, ExternalIcon, ArrowRightIcon } from "@/components/icons";
 import { SectionHeading } from "@/components/section-heading";
+import { ProjectTechStack } from "@/components/project-tech-stack";
 
 export function FeaturedProjects() {
   const featured = projects.slice(0, 6);
@@ -48,18 +49,7 @@ export function FeaturedProjects() {
                       <p className="mt-2 text-sm text-fg-secondary">
                         {project.description}
                       </p>
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {project.tech.slice(0, 4).map((t) => (
-                          <span key={t} className="badge">
-                            {t}
-                          </span>
-                        ))}
-                        {project.tech.length > 4 && (
-                          <span className="badge text-fg-muted">
-                            +{project.tech.length - 4}
-                          </span>
-                        )}
-                      </div>
+                      <ProjectTechStack tech={project.tech} projectName={project.name} className="mt-4 gap-2" />
                     </div>
                     <div className="mt-6 flex gap-3">
                       {liveLink && (

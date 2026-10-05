@@ -48,4 +48,6 @@ export const watchItems: WatchItem[] = [
   { rank: 38, title: "Steve Jobs (2015)", year: 2015, slug: "steve-jobs", type: "Film" },
   { rank: 39, title: "Halt and Catch Fire", year: 2014, slug: "halt-and-catch-fire", type: "Series" },
   { rank: 40, title: "The Wolf of Wall Street", year: 2013, slug: "the-wolf-of-wall-street", type: "Film" },
+  { rank: 41, title: "Dumb Money", year: 2023, slug: "dumb-money", type: "Film" },
+  { rank: 42, title: "Bitconned", year: 2024, slug: "bitconned", type: "Film" },
 ];
