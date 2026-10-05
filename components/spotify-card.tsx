@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
+import { AnimatePresence, motion, useInView } from "motion/react";
+import { useReducedMotion } from "@/components/use-reduced-motion";
+import { useDocumentVisible } from "@/components/use-document-visible";
 
 const TRACK_URI = "spotify:track:6Ec5LeRzkisa5KJtwLfOoW"; // Am I Dreaming - Metro Boomin, A$AP Rocky, Roisee
 const SHOW_EMBED = false;
@@ -52,6 +54,11 @@ export function SpotifyCard({
   const [ready, setReady] = useState(false);
   const hostRef = useRef<HTMLDivElement>(null);
   const ctrlRef = useRef<SpotifyEmbedController | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(cardRef);
+  const reduce = useReducedMotion();
+  const visible = useDocumentVisible();
+  const animateBars = playing && inView && visible && !reduce;
 
   useEffect(() => {
     const SCRIPT_ID = "spotify-iframe-api";
@@ -106,7 +113,7 @@ export function SpotifyCard({
   }, []);
 
   return (
-    <div className="relative w-full rounded-xl border border-white/15 bg-black/55 backdrop-blur-md">
+    <div ref={cardRef} className="motion-card relative w-full rounded-xl border border-white/15 bg-black/55 backdrop-blur-md">
       <div
         ref={hostRef}
         aria-hidden="true"
@@ -149,11 +156,11 @@ export function SpotifyCard({
               key={i}
               className="w-[3px] rounded-full bg-accent"
               style={{ height: h }}
-              animate={playing ? { height: [h, h * 0.45, h] } : { height: h }}
+              animate={animateBars ? { height: [h, h * 0.45, h] } : { height: h }}
               transition={
-                playing
+                animateBars
                   ? { duration: 0.9, repeat: Infinity, delay: i * 0.04 }
-                  : { duration: 0.2 }
+                  : { duration: reduce ? 0 : 0.2 }
               }
             />
           ))}
@@ -211,9 +218,18 @@ export function SpotifyCard({
             aria-label={playing ? "Pause" : "Play"}
             aria-disabled={!ready}
             onClick={() => ctrlRef.current?.togglePlay()}
-            className="grid h-10 w-10 place-items-center rounded-full bg-white/25 transition hover:bg-white/35 disabled:opacity-50"
+            className="interactive grid h-10 w-10 place-items-center rounded-full bg-white/25 hover:bg-white/35 disabled:opacity-50"
             disabled={!ready}
           >
+            <AnimatePresence mode="wait" initial={false}>
+            <motion.span
+              key={playing ? "pause" : "play"}
+              initial={reduce ? false : { opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: reduce ? 1 : 0.85 }}
+              transition={{ duration: reduce ? 0 : 0.12 }}
+              className="flex items-center justify-center"
+            >
             {playing ? (
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
                 <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
@@ -223,6 +239,8 @@ export function SpotifyCard({
                 <path d="M8 5v14l11-7z" />
               </svg>
             )}
+            </motion.span>
+            </AnimatePresence>
           </button>
           <button
             type="button"

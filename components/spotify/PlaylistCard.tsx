@@ -1,84 +1,8 @@
 "use client";
 
 import { spotifyPlaylist } from "@/data/spotifyPlaylist";
+import { GracefulImage } from "@/components/graceful-image";
 
-const tracks = [
-  {
-    title: "Rise",
-    artist: "Jonas Blue, Jack & Jack",
-    duration: "03:14",
-  },
-  {
-    title: "Houdini",
-    artist: "Eminem",
-    duration: "03:47",
-  },
-  {
-    title: "Youngblood",
-    artist: "5 Seconds of Summer",
-    duration: "03:23",
-  },
-  {
-    title: "Blinding Lights",
-    artist: "The Weeknd",
-    duration: "03:20",
-  },
-  {
-    title: "Starboy",
-    artist: "The Weeknd",
-    duration: "03:50",
-  },
-  {
-    title: "Lose Yourself",
-    artist: "Eminem",
-    duration: "05:26",
-  },
-  {
-    title: "As It Was",
-    artist: "Harry Styles",
-    duration: "02:47",
-  },
-  {
-    title: "Heat Waves",
-    artist: "Glass Animals",
-    duration: "03:58",
-  },
-  {
-    title: "Industry Baby",
-    artist: "Lil Nas X, Jack Harlow",
-    duration: "03:32",
-  },
-  {
-    title: "The Nights",
-    artist: "Avicii",
-    duration: "02:56",
-  },
-  {
-    title: "Wake Me Up",
-    artist: "Avicii",
-    duration: "04:07",
-  },
-  {
-    title: "Believer",
-    artist: "Imagine Dragons",
-    duration: "03:24",
-  },
-  {
-    title: "Counting Stars",
-    artist: "OneRepublic",
-    duration: "04:17",
-  },
-  {
-    title: "Save Your Tears",
-    artist: "The Weeknd",
-    duration: "03:35",
-  },
-  {
-    title: "Demons",
-    artist: "Imagine Dragons",
-    duration: "02:55",
-  },
-];
 
 export function PlaylistCard() {
   return (
@@ -104,10 +28,10 @@ export function PlaylistCard() {
             href={spotifyPlaylist.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-[#3b9cff]/30 bg-[#3b9cff]/10 px-4 text-sm font-medium text-[#5eacff] transition-all duration-200 hover:border-[#3b9cff]/50 hover:bg-[#3b9cff]/15 hover:text-white"
+            className="interactive inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-[#3b9cff]/30 bg-[#3b9cff]/10 px-4 text-sm font-medium text-[#5eacff] hover:border-[#3b9cff]/50 hover:bg-[#3b9cff]/15 hover:text-white"
           >
             Deploy the vibes
-            <span className="ml-1.5">↗</span>
+            <span className="interaction-arrow ml-1.5">↗</span>
           </a>
         </div>
 
@@ -118,11 +42,13 @@ export function PlaylistCard() {
             <div className="flex flex-col gap-6 bg-gradient-to-b from-[#111d2e] via-[#0b131f] to-[#080c12] p-5 sm:flex-row sm:items-end sm:p-6">
               {/* Playlist cover */}
               <div className="mx-auto shrink-0 sm:mx-0">
-                <div className="h-40 w-40 overflow-hidden rounded-lg border border-white/[0.1] bg-[#111923] shadow-2xl sm:h-48 sm:w-48">
-                  <img
+                <div className="relative h-40 w-40 overflow-hidden rounded-lg border border-white/[0.1] bg-[#111923] shadow-2xl sm:h-48 sm:w-48">
+                  <GracefulImage
                     src={spotifyPlaylist.image}
                     alt={`${spotifyPlaylist.name ?? "Playlist"} cover`}
-                    className="h-full w-full object-cover"
+                    sizes="(min-width: 640px) 192px, 160px"
+                    className="object-cover"
+                    fallbackLabel="Playlist cover"
                   />
                 </div>
               </div>
@@ -148,7 +74,7 @@ export function PlaylistCard() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Open playlist on Spotify"
-                    className="flex h-11 w-11 items-center justify-center rounded-full bg-[#3b9cff] text-black shadow-[0_0_24px_rgba(59,156,255,0.25)] transition hover:scale-105 hover:bg-[#5eacff]"
+                    className="interactive flex h-11 w-11 items-center justify-center rounded-full bg-[#3b9cff] text-black shadow-[0_0_24px_rgba(59,156,255,0.25)] hover:bg-[#5eacff]"
                   >
                     <svg
                       viewBox="0 0 24 24"

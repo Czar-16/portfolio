@@ -49,7 +49,7 @@ export default function StackPage() {
       >
         {stack.map((category) => (
           <StaggerItem key={category.id} className="h-full">
-            <section className="flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card transition-[border-color,box-shadow] duration-300 hover:border-line-strong hover:shadow-pop">
+            <section className="motion-card flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
               <header className="flex items-baseline justify-between gap-3 border-b border-line px-5 py-4">
                 <h2 className="text-[15px] font-semibold tracking-tight text-fg">
                   {category.label}

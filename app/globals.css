@@ -1,4 +1,11 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/* Lenis animates native scroll positions; disable the browser's competing
+   smooth-scroll animation while it is active. */
+html.lenis {
+  scroll-behavior: auto !important;
+}
 
 /* ------------------------------------------------------------------ *
  *  Design tokens
@@ -80,6 +87,9 @@
   --shadow-accent: var(--sh-accent);
 
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-press: 160ms;
+  --motion-hover: 220ms;
+  --motion-enter: 400ms;
 }
 
 /* ------------------------------------------------------------------ *
@@ -245,7 +255,8 @@
     letter-spacing: -0.005em;
     white-space: nowrap;
     transition:
-      transform 0.22s var(--ease-premium),
+      translate 0.22s var(--ease-premium),
+      scale 0.16s var(--ease-premium),
       background-color 0.22s var(--ease-premium),
       border-color 0.22s var(--ease-premium),
       box-shadow 0.22s var(--ease-premium),
@@ -253,7 +264,6 @@
   }
 
   .btn:hover {
-    transform: translateY(-1px);
     border-color: var(--line-strong);
     background-color: var(--card-elevated);
   }
@@ -284,7 +294,8 @@
       color 0.2s var(--ease-premium),
       background-color 0.2s var(--ease-premium),
       border-color 0.2s var(--ease-premium),
-      transform 0.2s var(--ease-premium);
+      translate 0.22s var(--ease-premium),
+      scale 0.16s var(--ease-premium);
   }
 
   .icon-btn:hover {
@@ -293,13 +304,182 @@
     border-color: var(--line);
   }
 
-  /* Theme switch cross-fade, scoped so hover transitions stay snappy. */
-  html[data-theme-anim] body,
-  html[data-theme-anim] .t-surface {
-    transition:
-      background-color 0.4s var(--ease-premium),
-      border-color 0.4s var(--ease-premium),
-      color 0.4s var(--ease-premium);
+}
+
+/* Individual translate/scale properties keep pointer feedback independent
+   from Motion's entrance and layout transforms. */
+:where(button, a, .interactive, .interactive-card) {
+  transition:
+    color var(--motion-hover) var(--ease-premium),
+    background-color var(--motion-hover) var(--ease-premium),
+    border-color var(--motion-hover) var(--ease-premium),
+    box-shadow var(--motion-hover) var(--ease-premium),
+    opacity var(--motion-hover) var(--ease-premium),
+    translate var(--motion-hover) var(--ease-premium),
+    scale var(--motion-press) var(--ease-premium);
+}
+
+.motion-card {
+  transition:
+    border-color var(--motion-hover) var(--ease-premium),
+    background-color var(--motion-hover) var(--ease-premium),
+    box-shadow var(--motion-hover) var(--ease-premium);
+}
+
+.quote-card {
+  background-image: radial-gradient(ellipse at top right, color-mix(in oklab, var(--accent) 5%, transparent), transparent 65%);
+  scale: 1;
+  translate: 0 0;
+  transition:
+    scale 250ms var(--ease-premium),
+    translate 250ms var(--ease-premium),
+    border-color 250ms var(--ease-premium),
+    background-color 250ms var(--ease-premium),
+    box-shadow 250ms var(--ease-premium);
+}
+
+.quote-text {
+  scale: 1;
+  transform-origin: left center;
+  transition: scale 250ms var(--ease-premium);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .quote-item:hover {
+    z-index: 1;
+  }
+
+  .quote-card:hover {
+    scale: 1.03;
+    translate: 0 -4px;
+    border-color: color-mix(in oklab, var(--accent) 60%, var(--line));
+    box-shadow: var(--sh-pop), 0 0 0 1px color-mix(in oklab, var(--accent) 12%, transparent);
+  }
+
+  .quote-card:hover .quote-text {
+    scale: 1.02;
+  }
+}
+
+.image-reveal {
+  transition: opacity 200ms var(--ease-premium), transform 400ms var(--ease-premium);
+}
+
+.artwork[data-art-active="false"] * {
+  animation-play-state: paused !important;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .group:hover .project-image {
+    transform: scale(1.025);
+  }
+}
+
+.interaction-arrow {
+  transition: translate var(--motion-hover) var(--ease-premium);
+}
+
+.search-field {
+  transition: border-color var(--motion-hover) var(--ease-premium),
+    box-shadow var(--motion-hover) var(--ease-premium);
+}
+
+.search-field:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 14%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .motion-card:hover {
+    border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+    box-shadow: var(--sh-pop);
+  }
+
+  :is(.btn, .icon-btn, .interactive, .interactive-card):hover .interaction-arrow {
+    translate: 3px 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :where(button, a):not(:disabled):not([aria-disabled="true"]):active,
+  .interactive-card:active {
+    scale: 0.97;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    :is(.btn, .icon-btn, .interactive):not(:disabled):hover {
+      translate: 0 -1px;
+    }
+
+    .interactive-card:hover {
+      translate: 0 -3px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interaction-arrow,
+  .group:hover .image-reveal,
+  .motion-card,
+  .interactive-card,
+  .interactive {
+    translate: none !important;
+    scale: none !important;
+    transform: none !important;
+  }
+}
+
+/* Reveal a complete snapshot of the new theme from the toggle's position. */
+html[data-theme-reveal]::view-transition-group(root),
+html[data-theme-reveal]::view-transition-old(root),
+html[data-theme-reveal]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-theme-reveal]::view-transition-old(root) {
+  z-index: 1;
+}
+
+html[data-theme-reveal]::view-transition-new(root) {
+  z-index: 2;
+  animation: theme-reveal 0.85s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+html[data-theme-reveal] *,
+html[data-theme-reveal] *::before,
+html[data-theme-reveal] *::after {
+  transition-duration: 0s !important;
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0px at var(--theme-reveal-x) var(--theme-reveal-y));
+  }
+  to {
+    clip-path: circle(var(--theme-reveal-radius) at var(--theme-reveal-x) var(--theme-reveal-y));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme-reveal]::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* Fallback for browsers without View Transitions. Only override color
+   transitions during a theme switch. Outside this brief
+   window, each component keeps its own hover and interaction timing. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme-anim],
+  html[data-theme-anim] *,
+  html[data-theme-anim] *::before,
+  html[data-theme-anim] *::after {
+    transition-property: background-color, color, border-color, outline-color,
+      text-decoration-color, box-shadow, fill, stroke !important;
+    transition-duration: 0.5s !important;
+    transition-timing-function: var(--ease-premium) !important;
+    transition-delay: 0s !important;
   }
 }
 

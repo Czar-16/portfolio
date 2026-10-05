@@ -2,8 +2,11 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { useReducedMotion } from "@/components/use-reduced-motion";
+import { motionEase, motionSpring } from "@/components/motion-provider";
+import { lockBodyScroll } from "@/components/body-scroll-lock";
 import { navItems, socials, resume } from "@/data/site";
 import { ThemeToggle } from "@/components/theme-provider";
 import {
@@ -19,11 +22,22 @@ import {
 export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const reduce = useReducedMotion();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    if (!open) return;
+    const unlock = lockBodyScroll();
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.body.style.overflow = "";
+      unlock();
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [open]);
 
@@ -51,7 +65,7 @@ export function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`relative inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-[13px] font-medium transition-colors ${
+                  className={`interactive relative isolate inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-[13px] font-medium ${
                     active
                       ? "text-accent"
                       : "text-fg-secondary hover:text-fg"
@@ -61,7 +75,7 @@ export function Navbar() {
                     <motion.span
                       layoutId="nav-active"
                       className="absolute inset-0 -z-10 rounded-lg bg-accent/10"
-                      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                      transition={reduce ? { duration: 0 } : motionSpring}
                     />
                   )}
                   {item.label}
@@ -131,13 +145,25 @@ export function Navbar() {
         <div className="flex items-center gap-1 lg:hidden">
           <ThemeToggle />
           <button
+            ref={menuButtonRef}
             onClick={() => setOpen(!open)}
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
             className="icon-btn"
           >
-            {open ? <CloseIcon size={20} /> : <MenuIcon size={20} />}
+            <AnimatePresence initial={false} mode="wait">
+              <motion.span
+                key={open ? "close" : "menu"}
+                initial={reduce ? false : { opacity: 0, rotate: -45, scale: 0.8 }}
+                animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                exit={{ opacity: 0, rotate: reduce ? 0 : 45, scale: reduce ? 1 : 0.8 }}
+                transition={{ duration: reduce ? 0 : 0.12 }}
+                className="flex items-center justify-center"
+              >
+                {open ? <CloseIcon size={20} /> : <MenuIcon size={20} />}
+              </motion.span>
+            </AnimatePresence>
           </button>
         </div>
       </nav>
@@ -150,21 +176,26 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: reduce ? 0 : 0.25, ease: motionEase }}
             className="overflow-hidden border-b border-line bg-bg lg:hidden"
           >
             <div className="shell flex flex-col gap-1 py-4">
-              {navItems.map((item) => {
+              {navItems.map((item, index) => {
                 const active =
                   item.href === "/"
                     ? pathname === "/"
                     : pathname.startsWith(item.href);
                 return (
-                  <Link
+                  <motion.div
                     key={item.href}
+                    initial={reduce ? false : { opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: reduce ? 0 : 0.2, delay: reduce ? 0 : Math.min(index * 0.025, 0.12), ease: motionEase }}
+                  >
+                  <Link
                     href={item.href}
                     onClick={closeMenu}
-                    className={`rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
+                    className={`interactive block rounded-lg px-4 py-3 text-sm font-medium ${
                       active
                         ? "bg-accent/10 text-accent"
                         : "text-fg-secondary hover:bg-fg/5 hover:text-fg"
@@ -172,6 +203,7 @@ export function Navbar() {
                   >
                     {item.label}
                   </Link>
+                  </motion.div>
                 );
               })}
               <div className="mt-3 flex items-center gap-2 border-t border-line pt-4">

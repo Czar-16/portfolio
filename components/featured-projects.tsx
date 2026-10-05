@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { GracefulImage } from "@/components/graceful-image";
 import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { projects } from "@/data/projects";
@@ -24,14 +24,13 @@ export function FeaturedProjects() {
 
             return (
               <Reveal key={project.slug} className="h-full">
-                <div className="card group flex h-full flex-col overflow-hidden">
+                <div className="card motion-card group flex h-full flex-col overflow-hidden">
                   <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/5 bg-black/40">
-                    <Image
+                    <GracefulImage
                       src={project.image}
                       alt={project.imageAlt}
-                      fill
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                      className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                      className="project-image object-cover object-top"
                     />
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent" />
                   </div>
@@ -88,7 +87,7 @@ export function FeaturedProjects() {
           <div className="mt-10">
             <Link
               href="/projects"
-              className="group relative flex items-center justify-between overflow-hidden rounded-[14px] border border-line bg-card px-6 py-6 shadow-card transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-pop md:px-8 md:py-7"
+              className="interactive-card group relative flex items-center justify-between overflow-hidden rounded-[14px] border border-line bg-card px-6 py-6 shadow-card hover:border-accent/30 hover:shadow-pop md:px-8 md:py-7"
             >
               <div
                 className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-accent/10 blur-3xl"
@@ -107,7 +106,7 @@ export function FeaturedProjects() {
                 </p>
               </div>
               <span className="relative ml-4 inline-flex shrink-0 items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(59,158,255,0.35)] transition-colors group-hover:bg-accent/90">
-                See more projects <ArrowRightIcon size={15} />
+                See more projects <ArrowRightIcon size={15} className="interaction-arrow" />
               </span>
             </Link>
           </div>

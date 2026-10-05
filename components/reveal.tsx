@@ -1,12 +1,14 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
-import type { ReactNode } from "react";
+import { motion } from "motion/react";
+import { useReducedMotion } from "@/components/use-reduced-motion";
+import { Children, cloneElement, isValidElement, type ReactNode } from "react";
+import { motionEase } from "@/components/motion-provider";
 
 export function Reveal({
   children,
   delay = 0,
-  y = 24,
+  y = 16,
   className = "",
 }: {
   children: ReactNode;
@@ -23,7 +25,7 @@ export function Reveal({
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.4, delay: Math.min(delay, 0.2), ease: motionEase }}
       className={className}
     >
       {children}
@@ -34,7 +36,7 @@ export function Reveal({
 export function StaggerChildren({
   children,
   className = "",
-  gap = 0.06,
+  gap = 0.04,
 }: {
   children: ReactNode;
   className?: string;
@@ -51,11 +53,15 @@ export function StaggerChildren({
       viewport={{ once: true, margin: "-60px" }}
       variants={{
         hidden: {},
-        visible: { transition: { staggerChildren: gap } },
+        visible: {},
       }}
       className={className}
     >
-      {children}
+      {Children.map(children, (child, index) =>
+        isValidElement<{ delay?: number }>(child) && child.type === StaggerItem
+          ? cloneElement(child, { delay: Math.min(index * gap, 0.2) })
+          : child,
+      )}
     </motion.div>
   );
 }
@@ -63,9 +69,11 @@ export function StaggerChildren({
 export function StaggerItem({
   children,
   className = "",
+  delay = 0,
 }: {
   children: ReactNode;
   className?: string;
+  delay?: number;
 }) {
   const reduce = useReducedMotion();
 
@@ -74,11 +82,11 @@ export function StaggerItem({
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0, y: 20 },
+        hidden: { opacity: 0, y: 16 },
         visible: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+          transition: { duration: 0.4, delay, ease: motionEase },
         },
       }}
       className={className}

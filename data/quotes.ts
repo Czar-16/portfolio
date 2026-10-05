@@ -1,639 +1,409 @@
-/**
- * Quote library for /quotes.
- *
- * These are real, widely published quotations with their commonly cited
- * authors — add, edit or remove entries freely. Provenance of popular quotes
- * is often murky, so verify anything you plan to publish elsewhere.
- */
-
-export const quoteCategories = [
-  "All",
-  "Life",
-  "Work",
-  "Learning",
-  "Motivation",
-  "Philosophy",
-  "Technology",
-  "Leadership",
-  "Other",
-] as const;
-
-export type QuoteCategory = (typeof quoteCategories)[number];
-
 export type Quote = {
-  id: string;
+  id: number;
   text: string;
-  author: string;
-  tags: Exclude<QuoteCategory, "All">[];
 };
 
+// User-provided lines inspired by Alex Hormozi and Chris Williamson.
+// These are not direct quotations attributed to either person.
 export const quotes: Quote[] = [
   {
-    id: "nobody-coming",
-    text: "Nobody is coming to save you. Build the life yourself.",
-    author: "Inspired",
-    tags: ["Motivation", "Life"],
+    "id": 1,
+    "text": "Nobody is coming to save you. Build the life yourself."
   },
   {
-    id: "fewer-excuses",
-    text: "You don't need more motivation. You need fewer excuses.",
-    author: "Inspired",
-    tags: ["Motivation", "Work"],
+    "id": 2,
+    "text": "You don't need more motivation. You need fewer excuses."
   },
   {
-    id: "avoided-work",
-    text: "The work you keep avoiding is probably the work that changes your life.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 3,
+    "text": "The work you keep avoiding is probably the work that changes your life."
   },
   {
-    id: "future-over-mood",
-    text: "Discipline is choosing your future over your current mood.",
-    author: "Inspired",
-    tags: ["Motivation", "Life"],
+    "id": 4,
+    "text": "Discipline is choosing your future over your current mood."
   },
   {
-    id: "repeatedly-tolerate",
-    text: "Your results are usually a reflection of what you repeatedly tolerate.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 5,
+    "text": "Your results are usually a reflection of what you repeatedly tolerate."
   },
   {
-    id: "ready-through-action",
-    text: "Stop waiting to feel ready. Readiness is built through action.",
-    author: "Inspired",
-    tags: ["Motivation", "Work"],
+    "id": 6,
+    "text": "Stop waiting to feel ready. Readiness is built through action."
   },
   {
-    id: "when-excitement-disappears",
-    text: "If you can keep working when the excitement disappears, you'll become dangerous.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 7,
+    "text": "If you can keep working when the excitement disappears, you'll become dangerous."
   },
   {
-    id: "compound-effect",
-    text: "Most people don't fail because the goal was impossible. They quit before the compound effect arrived.",
-    author: "Inspired",
-    tags: ["Motivation", "Work"],
+    "id": 8,
+    "text": "Most people don't fail because the goal was impossible. They quit before the compound effect arrived."
   },
   {
-    id: "boring-work",
-    text: "Boring work repeated for years beats exciting work abandoned after weeks.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 9,
+    "text": "Boring work repeated for years beats exciting work abandoned after weeks."
   },
   {
-    id: "endure-boredom",
-    text: "Your ability to endure boredom may be one of your greatest competitive advantages.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 10,
+    "text": "Your ability to endure boredom may be one of your greatest competitive advantages."
   },
   {
-    id: "unreasonable-time",
-    text: "Success isn't complicated. Doing the right things for an unreasonable amount of time is.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 11,
+    "text": "Success isn't complicated. Doing the right things for an unreasonable amount of time is."
   },
   {
-    id: "something-valuable",
-    text: "You don't need to be exceptional at everything. Become exceptional at something valuable.",
-    author: "Inspired",
-    tags: ["Work", "Learning"],
+    "id": 12,
+    "text": "You don't need to be exceptional at everything. Become exceptional at something valuable."
   },
   {
-    id: "stay-in-game",
-    text: "The person willing to stay in the game longest eventually becomes hard to compete with.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 13,
+    "text": "The person willing to stay in the game longest eventually becomes hard to compete with."
   },
   {
-    id: "become-useful",
-    text: "Stop trying to look successful. Start becoming useful.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 14,
+    "text": "Stop trying to look successful. Start becoming useful."
   },
   {
-    id: "higher-standards",
-    text: "Your life changes when your standards become higher than your excuses.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 15,
+    "text": "Your life changes when your standards become higher than your excuses."
   },
   {
-    id: "chase-evidence",
-    text: "Don't chase applause. Chase evidence.",
-    author: "Inspired",
-    tags: ["Motivation", "Work"],
+    "id": 16,
+    "text": "Don't chase applause. Chase evidence."
   },
   {
-    id: "scoreboard",
-    text: "The scoreboard doesn't care about your intentions.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 17,
+    "text": "The scoreboard doesn't care about your intentions."
   },
   {
-    id: "potential-execution",
-    text: "Your potential means nothing without repeated execution.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 18,
+    "text": "Your potential means nothing without repeated execution."
   },
   {
-    id: "repetitions",
-    text: "The gap between where you are and where you want to be is mostly repetitions.",
-    author: "Inspired",
-    tags: ["Work", "Learning"],
+    "id": 19,
+    "text": "The gap between where you are and where you want to be is mostly repetitions."
   },
   {
-    id: "uncommon-results",
-    text: "If you want uncommon results, become comfortable doing uncommon amounts of work.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 20,
+    "text": "If you want uncommon results, become comfortable doing uncommon amounts of work."
   },
-
   {
-    id: "strategy-execution",
-    text: "A mediocre strategy executed relentlessly beats ten brilliant strategies executed inconsistently.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 21,
+    "text": "A mediocre strategy executed relentlessly beats ten brilliant strategies executed inconsistently."
   },
   {
-    id: "commitment-tax",
-    text: "Every unnecessary commitment is a tax on your ambition.",
-    author: "Inspired",
-    tags: ["Work", "Life"],
+    "id": 22,
+    "text": "Every unnecessary commitment is a tax on your ambition."
   },
   {
-    id: "changing-direction",
-    text: "You can't build something great while constantly changing what you're building.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 23,
+    "text": "You can't build something great while constantly changing what you're building."
   },
   {
-    id: "remove-distractions",
-    text: "Focus isn't doing more. It's aggressively removing what doesn't matter.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 24,
+    "text": "Focus isn't doing more. It's aggressively removing what doesn't matter."
   },
   {
-    id: "one-direction",
-    text: "One direction for years beats ten directions for months.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 25,
+    "text": "One direction for years beats ten directions for months."
   },
   {
-    id: "attention-investment",
-    text: "Your attention is an investment. Spend it like money.",
-    author: "Inspired",
-    tags: ["Life", "Work"],
+    "id": 26,
+    "text": "Your attention is an investment. Spend it like money."
   },
   {
-    id: "meaningless-yes",
-    text: "Every time you say yes to something meaningless, you're saying no to something important.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 27,
+    "text": "Every time you say yes to something meaningless, you're saying no to something important."
   },
   {
-    id: "movement-progress",
-    text: "Don't confuse movement with progress.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 28,
+    "text": "Don't confuse movement with progress."
   },
   {
-    id: "opportunities-distractions",
-    text: "More opportunities can become more distractions.",
-    author: "Inspired",
-    tags: ["Life", "Work"],
+    "id": 29,
+    "text": "More opportunities can become more distractions."
   },
   {
-    id: "stop-doing",
-    text: "The fastest way forward is often deciding what you will stop doing.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 30,
+    "text": "The fastest way forward is often deciding what you will stop doing."
   },
-
   {
-    id: "failure-evidence",
-    text: "Failure isn't evidence that you're incapable. It's evidence that you found something that didn't work.",
-    author: "Inspired",
-    tags: ["Learning", "Motivation"],
+    "id": 31,
+    "text": "Failure isn't evidence that you're incapable. It's evidence that you found something that didn't work."
   },
   {
-    id: "take-shots",
-    text: "Take enough shots and eventually one of them changes everything.",
-    author: "Inspired",
-    tags: ["Motivation", "Work"],
+    "id": 32,
+    "text": "Take enough shots and eventually one of them changes everything."
   },
   {
-    id: "cheap-to-fail",
-    text: "You don't need to avoid failure. You need to become cheap to fail.",
-    author: "Inspired",
-    tags: ["Learning", "Motivation"],
+    "id": 33,
+    "text": "You don't need to avoid failure. You need to become cheap to fail."
   },
   {
-    id: "learn-from-mistakes",
-    text: "A mistake becomes expensive when you refuse to learn from it.",
-    author: "Inspired",
-    tags: ["Learning", "Motivation"],
+    "id": 34,
+    "text": "A mistake becomes expensive when you refuse to learn from it."
   },
   {
-    id: "losing-teaches",
-    text: "Losing teaches you what winning often hides.",
-    author: "Inspired",
-    tags: ["Learning", "Life"],
+    "id": 35,
+    "text": "Losing teaches you what winning often hides."
   },
   {
-    id: "ego-future",
-    text: "Don't protect your ego at the expense of your future.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 36,
+    "text": "Don't protect your ego at the expense of your future."
   },
   {
-    id: "attempt-enough",
-    text: "If you're never embarrassed by your attempts, you're probably not attempting enough.",
-    author: "Inspired",
-    tags: ["Motivation", "Work"],
+    "id": 37,
+    "text": "If you're never embarrassed by your attempts, you're probably not attempting enough."
   },
   {
-    id: "failure-tuition",
-    text: "Failure is tuition. Make sure you're learning from what you paid for.",
-    author: "Inspired",
-    tags: ["Learning", "Motivation"],
+    "id": 38,
+    "text": "Failure is tuition. Make sure you're learning from what you paid for."
   },
   {
-    id: "recover-better",
-    text: "The goal isn't zero mistakes. The goal is becoming better at recovering from them.",
-    author: "Inspired",
-    tags: ["Learning", "Life"],
+    "id": 39,
+    "text": "The goal isn't zero mistakes. The goal is becoming better at recovering from them."
   },
   {
-    id: "survive-hardship",
-    text: "You become harder to stop every time you survive something you thought would break you.",
-    author: "Inspired",
-    tags: ["Motivation", "Life"],
+    "id": 40,
+    "text": "You become harder to stop every time you survive something you thought would break you."
   },
-
   {
-    id: "confidence-evidence",
-    text: "Confidence is accumulated evidence that you can trust yourself.",
-    author: "Inspired",
-    tags: ["Motivation", "Life"],
+    "id": 41,
+    "text": "Confidence is accumulated evidence that you can trust yourself."
   },
   {
-    id: "act-into-confidence",
-    text: "You don't think your way into confidence. You act your way into it.",
-    author: "Inspired",
-    tags: ["Motivation", "Work"],
+    "id": 42,
+    "text": "You don't think your way into confidence. You act your way into it."
   },
   {
-    id: "self-belief",
-    text: "Self-belief becomes easier when your actions give you reasons to believe.",
-    author: "Inspired",
-    tags: ["Motivation", "Life"],
+    "id": 43,
+    "text": "Self-belief becomes easier when your actions give you reasons to believe."
   },
   {
-    id: "collect-proof",
-    text: "Stop asking whether you are capable. Start collecting proof.",
-    author: "Inspired",
-    tags: ["Motivation", "Work"],
+    "id": 44,
+    "text": "Stop asking whether you are capable. Start collecting proof."
   },
   {
-    id: "silence-doubt",
-    text: "The fastest way to silence doubt is to produce results.",
-    author: "Inspired",
-    tags: ["Motivation", "Work"],
+    "id": 45,
+    "text": "The fastest way to silence doubt is to produce results."
   },
   {
-    id: "fixed-standards",
-    text: "Your mind will negotiate with you when your standards aren't fixed.",
-    author: "Inspired",
-    tags: ["Motivation", "Life"],
+    "id": 46,
+    "text": "Your mind will negotiate with you when your standards aren't fixed."
   },
   {
-    id: "stop-betraying-yourself",
-    text: "You don't need everyone to believe in you. You need to stop betraying yourself.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 47,
+    "text": "You don't need everyone to believe in you. You need to stop betraying yourself."
   },
   {
-    id: "doubt-action",
-    text: "Doubt gets louder when action gets quieter.",
-    author: "Inspired",
-    tags: ["Motivation", "Life"],
+    "id": 48,
+    "text": "Doubt gets louder when action gets quieter."
   },
   {
-    id: "future-self",
-    text: "Become the person your future self can depend on.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 49,
+    "text": "Become the person your future self can depend on."
   },
   {
-    id: "self-respect",
-    text: "Keep promises to yourself long enough and self-respect follows.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 50,
+    "text": "Keep promises to yourself long enough and self-respect follows."
   },
-
   {
-    id: "solve-painful-problems",
-    text: "Solve painful problems and people become willing to pay you.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 51,
+    "text": "Solve painful problems and people become willing to pay you."
   },
   {
-    id: "value-creation",
-    text: "Value creation is more important than looking busy.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 52,
+    "text": "Value creation is more important than looking busy."
   },
   {
-    id: "market-outcomes",
-    text: "The market rewards outcomes, not effort.",
-    author: "Inspired",
-    tags: ["Work", "Other"],
+    "id": 53,
+    "text": "The market rewards outcomes, not effort."
   },
   {
-    id: "wrong-product",
-    text: "If nobody wants what you're selling, working harder won't fix the fundamental problem.",
-    author: "Inspired",
-    tags: ["Work", "Learning"],
+    "id": 54,
+    "text": "If nobody wants what you're selling, working harder won't fix the fundamental problem."
   },
   {
-    id: "valuable-result",
-    text: "Make the result so valuable that price becomes a secondary conversation.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 55,
+    "text": "Make the result so valuable that price becomes a secondary conversation."
   },
   {
-    id: "learn-to-sell",
-    text: "Learn to sell before complaining that nobody understands your value.",
-    author: "Inspired",
-    tags: ["Work", "Learning"],
+    "id": 56,
+    "text": "Learn to sell before complaining that nobody understands your value."
   },
   {
-    id: "genuinely-useful",
-    text: "The best business advantage is being genuinely useful.",
-    author: "Inspired",
-    tags: ["Work", "Leadership"],
+    "id": 57,
+    "text": "The best business advantage is being genuinely useful."
   },
   {
-    id: "difficult-to-compare",
-    text: "Don't compete harder in a commodity market. Become difficult to compare.",
-    author: "Inspired",
-    tags: ["Work", "Motivation"],
+    "id": 58,
+    "text": "Don't compete harder in a commodity market. Become difficult to compare."
   },
   {
-    id: "retain-customers",
-    text: "More customers isn't always the answer. Sometimes the answer is keeping the customers you already have.",
-    author: "Inspired",
-    tags: ["Work", "Leadership"],
+    "id": 59,
+    "text": "More customers isn't always the answer. Sometimes the answer is keeping the customers you already have."
   },
   {
-    id: "reasons-to-stay",
-    text: "Your business gets stronger when your customers have more reasons to stay.",
-    author: "Inspired",
-    tags: ["Work", "Leadership"],
+    "id": 60,
+    "text": "Your business gets stronger when your customers have more reasons to stay."
   },
-
   {
-    id: "opportunity-safe",
-    text: "Opportunity rarely looks safe when it first appears.",
-    author: "Inspired",
-    tags: ["Motivation", "Life"],
+    "id": 61,
+    "text": "Opportunity rarely looks safe when it first appears."
   },
   {
-    id: "upside-disappears",
-    text: "By the time everyone agrees something is safe, most of the upside has already disappeared.",
-    author: "Inspired",
-    tags: ["Motivation", "Life"],
+    "id": 62,
+    "text": "By the time everyone agrees something is safe, most of the upside has already disappeared."
   },
   {
-    id: "risk-opportunity",
-    text: "Risk and opportunity often look identical from a distance.",
-    author: "Inspired",
-    tags: ["Philosophy", "Life"],
+    "id": 63,
+    "text": "Risk and opportunity often look identical from a distance."
   },
   {
-    id: "enough-evidence",
-    text: "You don't need certainty to move. You need enough evidence to take the next step.",
-    author: "Inspired",
-    tags: ["Motivation", "Learning"],
+    "id": 64,
+    "text": "You don't need certainty to move. You need enough evidence to take the next step."
   },
   {
-    id: "perfect-conditions",
-    text: "Waiting for perfect conditions is another form of fear.",
-    author: "Inspired",
-    tags: ["Motivation", "Life"],
+    "id": 65,
+    "text": "Waiting for perfect conditions is another form of fear."
   },
   {
-    id: "window-open",
-    text: "The window doesn't stay open because you're still thinking.",
-    author: "Inspired",
-    tags: ["Motivation", "Life"],
+    "id": 66,
+    "text": "The window doesn't stay open because you're still thinking."
   },
   {
-    id: "calculated-risks",
-    text: "Take calculated risks, not comfortable ones.",
-    author: "Inspired",
-    tags: ["Motivation", "Life"],
+    "id": 67,
+    "text": "Take calculated risks, not comfortable ones."
   },
   {
-    id: "survivable-downside",
-    text: "If the upside is enormous and the downside is survivable, pay attention.",
-    author: "Inspired",
-    tags: ["Motivation", "Work"],
+    "id": 68,
+    "text": "If the upside is enormous and the downside is survivable, pay attention."
   },
   {
-    id: "greatest-risk",
-    text: "Sometimes the biggest risk is remaining exactly where you are.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 69,
+    "text": "Sometimes the biggest risk is remaining exactly where you are."
   },
   {
-    id: "uncertainty-danger",
-    text: "Don't confuse uncertainty with danger.",
-    author: "Inspired",
-    tags: ["Philosophy", "Life"],
+    "id": 70,
+    "text": "Don't confuse uncertainty with danger."
   },
-
   {
-    id: "cannot-recover-yesterday",
-    text: "You can recover money. You can't recover yesterday.",
-    author: "Inspired",
-    tags: ["Life", "Philosophy"],
+    "id": 71,
+    "text": "You can recover money. You can't recover yesterday."
   },
   {
-    id: "calendar-priorities",
-    text: "Your calendar reveals your real priorities better than your words do.",
-    author: "Inspired",
-    tags: ["Life", "Work"],
+    "id": 72,
+    "text": "Your calendar reveals your real priorities better than your words do."
   },
   {
-    id: "calendar-matters",
-    text: "If something matters, eventually it needs a place on your calendar.",
-    author: "Inspired",
-    tags: ["Work", "Life"],
+    "id": 73,
+    "text": "If something matters, eventually it needs a place on your calendar."
   },
   {
-    id: "decide-time",
-    text: "You don't find time. You decide what deserves it.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 74,
+    "text": "You don't find time. You decide what deserves it."
   },
   {
-    id: "years-drifting",
-    text: "Every year you spend drifting is a year you can't buy back.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 75,
+    "text": "Every year you spend drifting is a year you can't buy back."
   },
   {
-    id: "finite-attention",
-    text: "Your attention is finite. Your ambitions aren't.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 76,
+    "text": "Your attention is finite. Your ambitions aren't."
   },
   {
-    id: "cost-distraction",
-    text: "The opportunity cost of distraction is invisible until years have passed.",
-    author: "Inspired",
-    tags: ["Life", "Work"],
+    "id": 77,
+    "text": "The opportunity cost of distraction is invisible until years have passed."
   },
   {
-    id: "build-for-thirties",
-    text: "Spend your twenties building things your thirties will thank you for.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 78,
+    "text": "Spend your twenties building things your thirties will thank you for."
   },
   {
-    id: "trajectory",
-    text: "A year of focused effort can completely change the trajectory of a life.",
-    author: "Inspired",
-    tags: ["Motivation", "Work"],
+    "id": 79,
+    "text": "A year of focused effort can completely change the trajectory of a life."
   },
   {
-    id: "lowest-impulses",
-    text: "Don't waste your most energetic years negotiating with your lowest impulses.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 80,
+    "text": "Don't waste your most energetic years negotiating with your lowest impulses."
   },
-
   {
-    id: "hidden-sacrifices",
-    text: "The life you envy is often built from sacrifices you aren't seeing.",
-    author: "Inspired",
-    tags: ["Life", "Philosophy"],
+    "id": 81,
+    "text": "The life you envy is often built from sacrifices you aren't seeing."
   },
   {
-    id: "today-tomorrow",
-    text: "What feels good today can quietly make tomorrow worse.",
-    author: "Inspired",
-    tags: ["Life", "Philosophy"],
+    "id": 82,
+    "text": "What feels good today can quietly make tomorrow worse."
   },
   {
-    id: "hard-today",
-    text: "What feels difficult today can quietly make tomorrow better.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 83,
+    "text": "What feels difficult today can quietly make tomorrow better."
   },
   {
-    id: "environment",
-    text: "Your environment shapes your behavior more than your intentions do.",
-    author: "Inspired",
-    tags: ["Life", "Philosophy"],
+    "id": 84,
+    "text": "Your environment shapes your behavior more than your intentions do."
   },
   {
-    id: "mediocrity-normal",
-    text: "If everyone around you normalizes mediocrity, ambition starts feeling abnormal.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 85,
+    "text": "If everyone around you normalizes mediocrity, ambition starts feeling abnormal."
   },
   {
-    id: "repeated-exposure",
-    text: "You become what you repeatedly expose yourself to.",
-    author: "Inspired",
-    tags: ["Life", "Philosophy"],
+    "id": 86,
+    "text": "You become what you repeatedly expose yourself to."
   },
   {
-    id: "protect-attention",
-    text: "Protect your attention from people who profit from your distraction.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 87,
+    "text": "Protect your attention from people who profit from your distraction."
   },
   {
-    id: "act-on-knowledge",
-    text: "You don't need more information. You need to act on the information you already have.",
-    author: "Inspired",
-    tags: ["Learning", "Motivation"],
+    "id": 88,
+    "text": "You don't need more information. You need to act on the information you already have."
   },
   {
-    id: "knowing-doing",
-    text: "Knowing what to do and doing it are two completely different skills.",
-    author: "Inspired",
-    tags: ["Learning", "Motivation"],
+    "id": 89,
+    "text": "Knowing what to do and doing it are two completely different skills."
   },
   {
-    id: "meaningful-life",
-    text: "A meaningful life isn't necessarily an easy life.",
-    author: "Inspired",
-    tags: ["Life", "Philosophy"],
+    "id": 90,
+    "text": "A meaningful life isn't necessarily an easy life."
   },
-
   {
-    id: "advice",
-    text: "Don't take advice from people whose lives you wouldn't trade for yours.",
-    author: "Inspired",
-    tags: ["Life", "Learning"],
+    "id": 91,
+    "text": "Don't take advice from people whose lives you wouldn't trade for yours."
   },
   {
-    id: "environment-influence",
-    text: "Choose your environment carefully; proximity becomes influence.",
-    author: "Inspired",
-    tags: ["Life", "Philosophy"],
+    "id": 92,
+    "text": "Choose your environment carefully; proximity becomes influence."
   },
   {
-    id: "normalize-goals",
-    text: "The people around you can either normalize your goals or normalize your excuses.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 93,
+    "text": "The people around you can either normalize your goals or normalize your excuses."
   },
   {
-    id: "outgrown-relationships",
-    text: "Some relationships survive only because neither person is willing to admit they've outgrown them.",
-    author: "Inspired",
-    tags: ["Life", "Philosophy"],
+    "id": 94,
+    "text": "Some relationships survive only because neither person is willing to admit they've outgrown them."
   },
   {
-    id: "better-apart",
-    text: "You can love someone and still recognize that you're better apart.",
-    author: "Inspired",
-    tags: ["Life", "Philosophy"],
+    "id": 95,
+    "text": "You can love someone and still recognize that you're better apart."
   },
   {
-    id: "possible-life",
-    text: "The people you spend your time with quietly shape what you consider possible.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 96,
+    "text": "The people you spend your time with quietly shape what you consider possible."
   },
   {
-    id: "future-over-opinion",
-    text: "Don't sacrifice your entire future to preserve someone's opinion of your present.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 97,
+    "text": "Don't sacrifice your entire future to preserve someone's opinion of your present."
   },
   {
-    id: "ambition-normal",
-    text: "Find people who make ambition feel normal rather than embarrassing.",
-    author: "Inspired",
-    tags: ["Life", "Motivation"],
+    "id": 98,
+    "text": "Find people who make ambition feel normal rather than embarrassing."
   },
   {
-    id: "who-you-become",
-    text: "Pay attention to who you become around different people.",
-    author: "Inspired",
-    tags: ["Life", "Philosophy"],
+    "id": 99,
+    "text": "Pay attention to who you become around different people."
   },
   {
-    id: "life-to-escape",
-    text: "Build a life you don't constantly need to escape from.",
-    author: "Inspired",
-    tags: ["Life", "Philosophy"],
-  },
+    "id": 100,
+    "text": "Build a life you don't constantly need to escape from."
+  }
 ];

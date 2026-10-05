@@ -1,152 +1,85 @@
-"use client";
-
-import { useMemo, useState } from "react";
-import { movies, genres, moviesArePlaceholder, type Genre } from "@/data/movies";
+import { movies } from "@/data/movies";
 import { Reveal, StaggerChildren, StaggerItem } from "@/components/reveal";
-import { SectionHeading } from "@/components/section-heading";
 import { MoviePoster } from "@/components/movie-poster";
-import { SearchIcon, FilmIcon } from "@/components/icons";
+import { FilmIcon } from "@/components/icons";
 
 export default function MoviesPage() {
-  const [query, setQuery] = useState("");
-  const [genre, setGenre] = useState<Genre>("All");
-
-  const filtered = useMemo(() => {
-    const needle = query.trim().toLowerCase();
-
-    return movies.filter((movie) => {
-      const matchesGenre = genre === "All" || movie.genres.some((g) => g === genre);
-      const matchesQuery =
-        needle.length === 0 ||
-        movie.title.toLowerCase().includes(needle) ||
-        String(movie.year).includes(needle);
-
-      return matchesGenre && matchesQuery;
-    });
-  }, [genre, query]);
-
   return (
     <div className="shell py-16 sm:py-20">
-      <SectionHeading
-        eyebrow="Movies"
-        title="Top 50 Movie Recommendations"
-        subtitle="A curated list of my all-time favourite movies across genres."
-      />
-
-      {moviesArePlaceholder && (
-        <Reveal className="mt-8">
-          <p className="flex items-start gap-2.5 rounded-xl border border-line bg-card px-4 py-3 text-[13px] leading-relaxed text-fg-muted">
-            <FilmIcon size={15} className="mt-0.5 shrink-0 text-accent" />
-            <span>
-              Starter set — edit{" "}
-              <code className="rounded bg-fg/5 px-1.5 py-0.5 font-mono text-[0.85em] text-fg-secondary">
-                data/movies.ts
-              </code>{" "}
-              to make this yours. Drop posters at{" "}
-              <code className="rounded bg-fg/5 px-1.5 py-0.5 font-mono text-[0.85em] text-fg-secondary">
-                public/movies/&lt;slug&gt;.jpg
-              </code>
-              .
+      <Reveal className="relative overflow-hidden rounded-2xl border border-line bg-card p-5 shadow-card sm:p-8 lg:p-10">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-20 -top-32 h-96 w-96 rounded-full bg-accent/10 blur-3xl"
+        />
+        <div className="relative flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="min-w-0 max-w-2xl">
+            <span className="eyebrow">
+              <span className="eyebrow-dot" />
+              Beyond the code
             </span>
-          </p>
-        </Reveal>
-      )}
-
-      <div className="mt-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-        <div className="relative w-full lg:max-w-xs">
-          <SearchIcon
-            size={15}
-            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-fg-muted"
-          />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search by title or year"
-            aria-label="Search movies by title or year"
-            className="h-10 w-full rounded-[9px] border border-line bg-card pl-10 pr-3 text-[13px] text-fg outline-none transition-colors placeholder:text-fg-muted focus:border-accent"
-          />
+            <h1 className="mt-4 text-[clamp(1.25rem,3vw,2rem)] font-semibold leading-[1.15] tracking-[-0.035em] text-fg">
+              MY RECOMMENDATIONS<span className="text-accent">.</span>
+            </h1>
+            <p className="mt-4 max-w-lg text-sm leading-7 text-fg-secondary sm:text-[15px]">
+              A handpicked collection of films I genuinely recommend — stories
+              that stayed with me long after the credits rolled.
+            </p>
+          </div>
+          <div className="flex shrink-0 items-center gap-3 rounded-xl border border-line bg-elevated/70 px-4 py-3">
+            <FilmIcon size={20} className="text-accent" />
+            <div>
+              <p className="text-xl font-semibold leading-none text-fg">
+                {movies.length}
+              </p>
+              <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-fg-secondary">
+                Selected films
+              </p>
+            </div>
+          </div>
         </div>
+      </Reveal>
 
-        <div className="flex flex-wrap gap-2">
-          {genres.map((option) => {
-            const active = option === genre;
-            return (
-              <button
-                key={option}
-                type="button"
-                onClick={() => setGenre(option)}
-                aria-pressed={active}
-                className={`h-8 rounded-full border px-3.5 font-mono text-[11px] transition-colors ${
-                  active
-                    ? "border-accent bg-accent/12 text-accent"
-                    : "border-line text-fg-secondary hover:border-line-strong hover:text-fg"
-                }`}
-              >
-                {option}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      <Reveal className="mt-9 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-b border-line pb-4 sm:mt-10">
+        <h2 className="text-lg font-semibold tracking-tight text-fg sm:text-xl">
+          The collection
+        </h2>
+        <p className="text-xs leading-relaxed text-fg-secondary sm:text-sm">
+          {movies.length} films · The movies I loved
+        </p>
+      </Reveal>
 
-      <p className="mt-5 font-mono text-[11px] text-fg-muted">
-        {filtered.length} {filtered.length === 1 ? "movie" : "movies"}
-        {genre !== "All" && ` · ${genre}`}
-      </p>
-
-      {filtered.length > 0 ? (
-        <StaggerChildren
-          className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-          gap={0.03}
-        >
-          {filtered.map((movie) => (
-            <StaggerItem key={movie.slug} className="h-full">
-              <article className="group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-line-strong hover:shadow-pop">
-                <div className="relative">
-                  <MoviePoster
-                    slug={movie.slug}
-                    title={movie.title}
-                    rank={`#${movie.rank}`}
-                    className="aspect-2/3 w-full"
-                  />
-                  <span className="absolute left-2.5 top-2.5 rounded-md border border-line bg-black/65 px-1.5 py-0.5 font-mono text-[10px] font-medium text-white backdrop-blur-sm">
-                    {String(movie.rank).padStart(2, "0")}
-                  </span>
-                </div>
-                <div className="flex flex-1 flex-col gap-1.5 p-4">
-                  <h2 className="line-clamp-2 text-[14px] font-semibold leading-snug text-fg">
-                    {movie.title}
-                  </h2>
-                  <p className="font-mono text-[11px] text-fg-muted">{movie.year}</p>
-                  <p className="mt-auto pt-1.5 font-mono text-[10px] text-fg-muted/80">
-                    {movie.genres.join(" · ")}
-                  </p>
-                </div>
-              </article>
-            </StaggerItem>
-          ))}
-        </StaggerChildren>
-      ) : (
-        <div className="mt-16 flex flex-col items-center gap-3 rounded-[14px] border border-dashed border-line bg-card/50 px-6 py-16 text-center">
-          <FilmIcon size={22} className="text-fg-muted" />
-          <p className="text-sm font-medium text-fg">No movies match those filters.</p>
-          <p className="max-w-sm text-[13px] text-fg-muted">
-            Try a different genre or clear the search box to see the full list of{" "}
-            {movies.length} recommendations.
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              setQuery("");
-              setGenre("All");
-            }}
-            className="btn mt-2"
-          >
-            Reset filters
-          </button>
-        </div>
-      )}
+      <StaggerChildren className="mt-6 grid grid-cols-2 gap-x-3 gap-y-5 sm:mt-7 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 xl:grid-cols-5">
+        {movies.map((movie) => (
+          <StaggerItem key={movie.slug} className="h-full">
+            <article className="motion-card group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
+              <div className="relative overflow-hidden">
+                <MoviePoster
+                  slug={movie.slug}
+                  title={movie.title}
+                  rank={`Film ${movie.rank}`}
+                  className="aspect-2/3 w-full"
+                />
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/35 via-transparent to-transparent"
+                />
+                <span className="absolute left-2.5 top-2.5 sm:left-3 sm:top-3 rounded-lg border border-white/20 bg-black/60 px-2 py-1 font-mono text-[11px] text-white backdrop-blur-md">
+                  <span className="sr-only">Film </span>
+                  {String(movie.rank).padStart(2, "0")}
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col gap-1.5 p-3 sm:gap-2 sm:p-4">
+                <p className="font-mono text-[11px] leading-5 tracking-wide text-fg-secondary">
+                  {movie.year}
+                </p>
+                <h3 className="text-[13px] font-semibold leading-5 text-fg sm:text-[15px] sm:leading-6">
+                  {movie.title}
+                </h3>
+              </div>
+            </article>
+          </StaggerItem>
+        ))}
+      </StaggerChildren>
     </div>
   );
 }

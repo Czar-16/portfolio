@@ -5,7 +5,7 @@ export function CurrentlyBuildingCard() {
   return (
     <Link
       href="/projects/designarena"
-      className="group relative flex w-full flex-col gap-3 rounded-xl border border-white/12 bg-black/55 p-4 backdrop-blur-md transition-colors hover:border-accent/30 hover:bg-black/65 md:p-5"
+      className="interactive-card group relative flex w-full flex-col gap-3 rounded-xl border border-white/12 bg-black/55 p-4 backdrop-blur-md hover:border-accent/30 hover:bg-black/65 md:p-5"
     >
       <span className="absolute inset-0 rounded-xl shadow-[0_0_22px_rgba(59,158,255,0.12)] opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true" />
       <div className="relative flex items-center gap-2">
@@ -38,7 +38,7 @@ export function CurrentlyBuildingCard() {
       </div>
 
       <span className="relative mt-0.5 inline-flex items-center gap-1.5 text-xs font-medium text-white/70 transition-colors group-hover:text-white">
-        View project <ArrowRightIcon size={12} className="transition-transform group-hover:translate-x-0.5" />
+        View project <ArrowRightIcon size={12} className="interaction-arrow" />
       </span>
     </Link>
   );

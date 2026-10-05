@@ -25,6 +25,7 @@ export function MoviePoster({
   className?: string;
 }) {
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   if (failed) {
     return (
@@ -55,8 +56,10 @@ export function MoviePoster({
         src={`/movies/${slug}.jpg`}
         alt={`${title} poster`}
         fill
-        sizes="(min-width: 1280px) 22vw, (min-width: 768px) 30vw, (min-width: 640px) 45vw, 90vw"
-        className="object-cover"
+        sizes="(min-width: 1480px) 260px, (min-width: 1280px) 18vw, (min-width: 1024px) 23vw, (min-width: 640px) 30vw, 46vw"
+        className="image-reveal project-image object-cover"
+        style={{ opacity: loaded ? 1 : 0 }}
+        onLoad={() => setLoaded(true)}
         onError={() => setFailed(true)}
       />
       <span className="sr-only">{rank}</span>

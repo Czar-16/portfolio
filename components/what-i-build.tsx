@@ -1,25 +1,33 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import {
   type AnimationSequence,
   motion,
   useAnimate,
   useInView,
   useMotionValue,
-  useReducedMotion,
-  useTime,
   useTransform,
   type MotionValue,
 } from "motion/react";
 import { SectionHeading } from "@/components/section-heading";
+import { StaggerChildren, StaggerItem } from "@/components/reveal";
+import { useDocumentVisible } from "@/components/use-document-visible";
+import { useReducedMotion } from "@/components/use-reduced-motion";
 
 /* ---------- shared frame for the artwork ---------- */
 
+const ArtworkActive = createContext(false);
+
 function Art({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { margin: "-20px" });
+  const visible = useDocumentVisible();
+  const reduce = useReducedMotion();
+  const active = inView && visible && !reduce;
   const mask = "radial-gradient(ellipse at center, black 30%, transparent 75%)";
   return (
-    <div className="relative mb-5 h-44 overflow-hidden rounded-2xl border border-accent/15 bg-accent/5">
+    <div ref={ref} data-art-active={active} className="artwork relative mb-5 h-44 shrink-0 overflow-hidden rounded-2xl border border-accent/15 bg-accent/5">
       <div
         aria-hidden
         className="absolute inset-0 text-fg-muted opacity-25"
@@ -30,7 +38,9 @@ function Art({ children }: { children: React.ReactNode }) {
           WebkitMaskImage: mask,
         }}
       />
-      <div className="relative h-full w-full">{children}</div>
+      <ArtworkActive.Provider value={active}>
+        <div className="relative h-full w-full">{children}</div>
+      </ArtworkActive.Provider>
     </div>
   );
 }
@@ -48,7 +58,8 @@ function Tile({
 }) {
   return (
     <div
-      className={`card group p-5 transition-colors duration-300 hover:border-accent/50 ${className}`}
+      className={`card motion-card group flex h-full flex-col p-5 ${className}`}
+      data-capability-card
     >
       <Art>{children}</Art>
       <h3 className="text-lg font-semibold">{title}</h3>
@@ -63,14 +74,15 @@ const EASE = [0.4, 0, 0.2, 1] as const;
 
 function AppDemoArt() {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { margin: "-60px" });
+  const artActive = useContext(ArtworkActive);
   const reduce = useReducedMotion();
   const [scope, animate] = useAnimate();
   const cx = useMotionValue(170);
   const cy = useMotionValue(120);
 
   useEffect(() => {
-    if (!inView || reduce) return;
+    if (!inView || reduce || !artActive) return;
     let stop = false;
     let controls: { stop: () => void } | undefined;
 
@@ -137,7 +149,7 @@ function AppDemoArt() {
       stop = true;
       controls?.stop();
     };
-  }, [inView, reduce, animate, cx, cy]);
+  }, [inView, reduce, artActive, animate, cx, cy]);
 
   const rows = [
     { t: "Set up auth", c: "bg-emerald-400" },
@@ -260,13 +272,14 @@ function RealtimeArt() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { margin: "-60px" });
   const reduce = useReducedMotion();
+  const artActive = useContext(ArtworkActive);
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
-    if (!inView || reduce) return;
+    if (!inView || reduce || !artActive) return;
     const id = setInterval(() => setTick((t) => t + 1), 2800);
     return () => clearInterval(id);
-  }, [inView, reduce]);
+  }, [inView, reduce, artActive]);
 
   const from = CLIENTS[ORDER[tick % ORDER.length]];
 
@@ -291,8 +304,8 @@ function RealtimeArt() {
         ))}
 
         <motion.g
-          animate={reduce ? undefined : { rotate: 360 }}
-          transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
+          animate={artActive ? { rotate: 360 } : { rotate: 0 }}
+          transition={artActive ? { duration: 16, repeat: Infinity, ease: "linear" } : { duration: 0 }}
           style={{ transformOrigin: `${HUB.x}px ${HUB.y}px` }}
         >
           <circle
@@ -326,7 +339,7 @@ function RealtimeArt() {
           />
         ))}
 
-        {!reduce && (
+        {artActive && (
           <g key={tick}>
             {/* sender ripple */}
             <motion.circle
@@ -455,9 +468,23 @@ function Particle({
 
 function CoreArt() {
   const reduce = useReducedMotion();
-  const clock = useTime();
+  const artActive = useContext(ArtworkActive);
+  const clock = useMotionValue(0);
   const still = useMotionValue(0);
   const time = reduce ? still : clock;
+
+  useEffect(() => {
+    if (!artActive) return;
+    let frame: number;
+    let previous: number | undefined;
+    const tick = (timestamp: number) => {
+      if (previous !== undefined) clock.set(clock.get() + Math.min(timestamp - previous, 64));
+      previous = timestamp;
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [artActive, clock]);
 
   return (
     <svg
@@ -490,7 +517,7 @@ function CoreArt() {
         />
       ))}
 
-      {!reduce &&
+      {artActive &&
         [0, 1.6].map((delay) => (
           <motion.circle
             key={delay}
@@ -509,8 +536,8 @@ function CoreArt() {
         ))}
 
       <motion.g
-        animate={reduce ? undefined : { scale: [1, 1.07, 1] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        animate={artActive ? { scale: [1, 1.07, 1] } : { scale: 1 }}
+        transition={artActive ? { duration: 4, repeat: Infinity, ease: "easeInOut" } : { duration: 0 }}
         style={{ transformOrigin: `${CORE.x}px ${CORE.y}px` }}
       >
         <circle cx={CORE.x} cy={CORE.y} r="38" fill="url(#ai-core-halo)" />
@@ -518,8 +545,8 @@ function CoreArt() {
       </motion.g>
 
       <motion.g
-        animate={reduce ? undefined : { rotate: 360 }}
-        transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+        animate={artActive ? { rotate: 360 } : { rotate: 0 }}
+        transition={artActive ? { duration: 22, repeat: Infinity, ease: "linear" } : { duration: 0 }}
         style={{ transformOrigin: `${CORE.x}px ${CORE.y}px` }}
       >
         <path
@@ -557,12 +584,13 @@ function TerminalArt() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { margin: "-40px" });
   const reduce = useReducedMotion();
+  const artActive = useContext(ArtworkActive);
   const [idx, setIdx] = useState(0);
   const [chars, setChars] = useState(0);
   const [bar, setBar] = useState(0);
 
   useEffect(() => {
-    if (!inView || reduce) return;
+    if (!inView || reduce || !artActive) return;
     const step = STEPS[idx];
     let timer: ReturnType<typeof setTimeout>;
     let iv: ReturnType<typeof setInterval> | undefined;
@@ -603,7 +631,7 @@ function TerminalArt() {
       clearTimeout(timer);
       if (iv) clearInterval(iv);
     };
-  }, [idx, inView, reduce]);
+  }, [idx, inView, reduce, artActive]);
 
   const upto = reduce ? STEPS.length : Math.min(idx + 1, STEPS.length);
 
@@ -650,8 +678,8 @@ function TerminalArt() {
                 {active && s.kind === "type" && (
                   <motion.span
                     className="ml-0.5 inline-block h-3 w-1.5 translate-y-0.5 bg-sky-400"
-                    animate={{ opacity: [1, 0, 1] }}
-                    transition={{ duration: 0.9, repeat: Infinity }}
+                    animate={artActive ? { opacity: [1, 0, 1] } : { opacity: 1 }}
+                    transition={artActive ? { duration: 0.9, repeat: Infinity } : { duration: 0 }}
                   />
                 )}
               </p>
@@ -675,36 +703,40 @@ export function WhatIBuild() {
           subtitle="Four areas I keep coming back to."
         />
 
-        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-12">
+        <StaggerChildren className="mt-12 grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2">
+          <StaggerItem className="h-full">
           <Tile
-            className="lg:col-span-7"
             title="Full-stack Applications"
             desc="Modern web applications with scalable frontend and backend architecture."
           >
             <AppDemoArt />
           </Tile>
+          </StaggerItem>
+          <StaggerItem className="h-full">
           <Tile
-            className="lg:col-span-5"
             title="Real-time Systems"
             desc="WebSockets, event-driven communication and real-time state."
           >
             <RealtimeArt />
           </Tile>
+          </StaggerItem>
+          <StaggerItem className="h-full">
           <Tile
-            className="lg:col-span-5"
             title="AI-powered Products"
             desc="Applications that use AI for actual workflows and real problems."
           >
             <CoreArt />
           </Tile>
+          </StaggerItem>
+          <StaggerItem className="h-full">
           <Tile
-            className="lg:col-span-7"
             title="Developer Tools"
             desc="Tools that solve problems for developers and learners."
           >
             <TerminalArt />
           </Tile>
-        </div>
+          </StaggerItem>
+        </StaggerChildren>
       </div>
     </section>
   );

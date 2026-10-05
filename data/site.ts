@@ -5,12 +5,12 @@
 
 export const site = {
   name: "Anoop Jha",
-  handle: "Czar-16",
-  wordmark: "Czar-16.",
+  handle: "Czar 16",
+  wordmark: "Czar 16.",
   tagline: "Turning ideas into products.",
   title: "Anoop Jha — Full-Stack Developer",
   description:
-    "Anoop Jha (Czar-16) is a full-stack developer building real-world products with TypeScript, Next.js and scalable backend systems.",
+    "Anoop Jha (Czar 16) is a full-stack developer building real-world products with TypeScript, Next.js and scalable backend systems.",
   positioning:
     "Full-stack developer building real-world products with TypeScript, Next.js, and scalable backend systems.",
   availability: "Open to Software Engineering opportunities",
@@ -57,7 +57,8 @@ export const github = {
   /** Public endpoints only. No token, no fabricated numbers. */
   api: {
     user: "https://api.github.com/users/Czar-16",
-    repos: "https://api.github.com/users/Czar-16/repos?per_page=100&sort=updated",
+    repos:
+      "https://api.github.com/users/Czar-16/repos?per_page=100&sort=updated",
     events: "https://api.github.com/users/Czar-16/events/public?per_page=100",
     contributions: "https://github.com/users/Czar-16/contributions.json",
   },

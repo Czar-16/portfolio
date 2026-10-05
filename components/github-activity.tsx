@@ -274,10 +274,6 @@ export function GitHubActivity() {
                     <span className="block truncate text-[13px] font-medium leading-none text-fg">
                       {repo.name}
                     </span>
-
-                    <span className="block truncate text-[11px] leading-none text-fg-muted">
-                      {repo.description || "—"}
-                    </span>
                   </span>
 
                   <span className="inline-flex shrink-0 items-center gap-1 text-xs text-fg-muted">

@@ -34,12 +34,12 @@ export function SectionHeading({
       {action && actionHref && (
         <Link
           href={actionHref}
-          className="group inline-flex shrink-0 items-center gap-1.5 self-start text-sm font-medium text-accent transition-colors hover:text-fg sm:self-auto"
+          className="interactive group inline-flex shrink-0 items-center gap-1.5 self-start text-sm font-medium text-accent hover:text-fg sm:self-auto"
         >
           {action}
           <ArrowRightIcon
             size={14}
-            className="transition-transform duration-200 group-hover:translate-x-0.5"
+            className="interaction-arrow"
           />
         </Link>
       )}

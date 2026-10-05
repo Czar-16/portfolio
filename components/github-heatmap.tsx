@@ -22,9 +22,9 @@ type Cell = {
 const WEEKS = 53;
 const DAYS = 7;
 
-const DARK_COLORS = ["#050608", "#06101c", "#072347", "#044596", "#147cfe"];
+const DARK_COLORS = ["#161b22", "#0e2e5c", "#1a4fb5", "#2563eb", "#3b82f6"];
 
-const LIGHT_COLORS = ["#f0f3f6", "#d6e4f2", "#a5c8eb", "#6ea0e5", "#3b78e0"];
+const LIGHT_COLORS = ["#ebedf0", "#6fd695", "#3cb35e", "#2d8f4b", "#216e39"];
 
 function getTheme() {
   if (typeof document === "undefined") {
@@ -236,68 +236,73 @@ export function GitHubHeatmap() {
   }
 
   return (
-    <div className="w-full overflow-hidden">
-      {/* Month labels */}
-      <div className="flex h-[16px]">
-        <div className="w-[27px] shrink-0" />
+    <div
+      ref={(el) => { if (el) el.scrollLeft = el.scrollWidth; }}
+      className="w-full overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-track]:bg-transparent"
+    >
+      <div className="min-w-max">
+        {/* Month labels */}
+        <div className="flex h-[16px]">
+          <div className="w-[27px] shrink-0" />
 
-        <div className="flex flex-1 justify-between">
-          {months.map((month, index) => (
-            <span
-              key={index}
-              className={`w-[11px] shrink-0 text-[9px] leading-none ${
-                theme === "dark" ? "text-white/35" : "text-slate-400"
-              }`}
-            >
-              {month}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Grid */}
-      <div className="mt-[2px] flex">
-        {/* Day labels */}
-        <div
-          className={`flex w-[27px] shrink-0 flex-col gap-[3px] pt-[1px] text-[9px] leading-[11px] ${
-            theme === "dark" ? "text-white/35" : "text-slate-400"
-          }`}
-        >
-          <span>Mon</span>
-          <span className="invisible">Tue</span>
-          <span>Wed</span>
-          <span className="invisible">Thu</span>
-          <span>Fri</span>
-          <span className="invisible">Sat</span>
-          <span className="invisible">Sun</span>
+          <div className="flex gap-[3px]">
+            {months.map((month, index) => (
+              <span
+                key={index}
+                className={`w-[11px] shrink-0 text-[9px] leading-none ${
+                  theme === "dark" ? "text-white/35" : "text-slate-400"
+                }`}
+              >
+                {month}
+              </span>
+            ))}
+          </div>
         </div>
 
-        {/* Contribution weeks */}
-        <div className="flex min-w-0 flex-1 justify-between gap-[3px]">
-          {weeks.map((week, weekIndex) => (
-            <div key={weekIndex} className="flex shrink-0 flex-col gap-[3px]">
-              {week.map((cell, dayIndex) => {
-                const level = Math.min(cell.level, 4);
+        {/* Grid */}
+        <div className="mt-[2px] flex">
+          {/* Day labels */}
+          <div
+            className={`flex w-[27px] shrink-0 flex-col gap-[3px] pt-[1px] text-[9px] leading-[11px] ${
+              theme === "dark" ? "text-white/35" : "text-slate-400"
+            }`}
+          >
+            <span>Mon</span>
+            <span className="invisible">Tue</span>
+            <span>Wed</span>
+            <span className="invisible">Thu</span>
+            <span>Fri</span>
+            <span className="invisible">Sat</span>
+            <span className="invisible">Sun</span>
+          </div>
 
-                return (
-                  <div
-                    key={`${weekIndex}-${dayIndex}`}
-                    className={`h-[11px] w-[11px] rounded-[2px] border ${
-                      theme === "dark"
-                        ? "border-white/[0.035]"
-                        : "border-black/[0.04]"
-                    }`}
-                    style={{
-                      backgroundColor: colors[level],
-                    }}
-                    title={`${cell.count} contribution${
-                      cell.count === 1 ? "" : "s"
-                    } on ${cell.date}`}
-                  />
-                );
-              })}
-            </div>
-          ))}
+          {/* Contribution weeks */}
+          <div className="flex gap-[3px]">
+            {weeks.map((week, weekIndex) => (
+              <div key={weekIndex} className="flex shrink-0 flex-col gap-[3px]">
+                {week.map((cell, dayIndex) => {
+                  const level = Math.min(cell.level, 4);
+
+                  return (
+                    <div
+                      key={`${weekIndex}-${dayIndex}`}
+                      className={`h-[11px] w-[11px] rounded-[2px] border ${
+                        theme === "dark"
+                          ? "border-white/[0.035]"
+                          : "border-black/[0.04]"
+                      }`}
+                      style={{
+                        backgroundColor: colors[level],
+                      }}
+                      title={`${cell.count} contribution${
+                        cell.count === 1 ? "" : "s"
+                      } on ${cell.date}`}
+                    />
+                  );
+                })}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

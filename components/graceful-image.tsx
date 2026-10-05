@@ -17,6 +17,7 @@ export function GracefulImage({
   fallbackLabel?: string;
 }) {
   const [failed, setFailed] = useState(false);
+  const [loadedSrc, setLoadedSrc] = useState("");
 
   if (failed) {
     return (
@@ -34,7 +35,9 @@ export function GracefulImage({
       alt={alt}
       fill
       sizes={sizes}
-      className={className}
+      className={`image-reveal ${className}`}
+      style={{ opacity: loadedSrc === src ? 1 : 0 }}
+      onLoad={() => setLoadedSrc(src)}
       onError={() => setFailed(true)}
     />
   );

@@ -176,12 +176,12 @@ export default function AboutPage() {
 
             <Link
               href="/stack"
-              className="group mt-6 inline-flex items-center gap-1.5 self-start border-t border-line pt-5 text-[13px] font-medium text-accent transition-colors hover:text-fg"
+              className="interactive group mt-6 inline-flex items-center gap-1.5 self-start border-t border-line pt-5 text-[13px] font-medium text-accent hover:text-fg"
             >
               Full tech stack
               <ArrowRightIcon
                 size={14}
-                className="transition-transform duration-200 group-hover:translate-x-0.5"
+                className="interaction-arrow"
               />
             </Link>
           </section>

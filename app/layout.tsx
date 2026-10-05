@@ -4,8 +4,9 @@ import "./globals.css";
 import Script from "next/script";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
 import { CommandPaletteWrapper } from "@/components/command-palette-wrapper";
+import { SmoothScroll } from "@/components/smooth-scroll";
+import { MotionProvider } from "@/components/motion-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,12 +52,14 @@ export default function RootLayout({
             __html: `(function(){try{var t=localStorage.getItem('czar-theme');if(t==='light'){document.documentElement.dataset.theme='light'}}catch(e){}})();`,
           }}
         />
-        <ThemeProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <CommandPaletteWrapper />
-        </ThemeProvider>
+        <MotionProvider>
+          <ThemeProvider>
+            <SmoothScroll />
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <CommandPaletteWrapper />
+          </ThemeProvider>
+        </MotionProvider>
       </body>
     </html>
   );

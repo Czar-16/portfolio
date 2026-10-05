@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { GracefulImage } from "@/components/graceful-image";
 import Link from "next/link";
 import { projects, type Project } from "@/data/projects";
 import { Reveal, StaggerChildren, StaggerItem } from "@/components/reveal";
@@ -44,14 +44,13 @@ function ProjectLinks({ project }: { project: Project }) {
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-line-strong hover:shadow-pop">
+    <article className="motion-card group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
       <div className="relative aspect-video shrink-0 overflow-hidden">
-        <Image
+        <GracefulImage
           src={project.image}
           alt={project.imageAlt}
-          fill
           sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
-          className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+          className="project-image object-cover object-top"
         />
       </div>
 
@@ -121,7 +120,7 @@ function SeeMoreBox() {
             There&apos;s more
           </p>
           <h2 className="text-2xl font-semibold tracking-tight text-fg sm:text-3xl">
-            You've seen the good stuff. Now see the chaos
+            You&apos;ve seen the good stuff. Now see the chaos
           </h2>
           <p className="max-w-md text-[15px] leading-relaxed text-fg-secondary">
             The bugs are free. The code is open source.
