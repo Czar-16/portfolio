@@ -9,8 +9,8 @@ export default function Home() {
   return (
     <div className="flex flex-col flex-1">
       <Hero />
-      <WhatIBuild />
       <FeaturedProjects />
+      <WhatIBuild />
       <DashboardSection />
       <PlaylistCard />
       <AboutContact />

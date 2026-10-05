@@ -3,6 +3,7 @@ import Link from "next/link";
 import { site, socials, contact, resume } from "@/data/site";
 import { Reveal } from "@/components/reveal";
 import { AnimatedName } from "@/components/animated-name";
+import { CopyButton } from "@/components/copy-button";
 import {
   GithubIcon,
   XIcon,
@@ -66,6 +67,7 @@ export default function AboutPage() {
                     Get in touch
                     <ArrowRightIcon size={14} className="interaction-arrow" />
                   </a>
+                  <CopyButton text={contact.email} label="Copy email" />
                   {resume.available && (
                     <a
                       href={resume.href}
@@ -78,6 +80,8 @@ export default function AboutPage() {
                     </a>
                   )}
                 </div>
+
+                <p className="mt-4 break-all font-mono text-xs text-fg-secondary">{contact.email}</p>
 
                 <div className="mt-8 flex items-center gap-3 border-t border-line pt-5">
                   <span className="mr-1 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-muted">

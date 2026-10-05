@@ -44,7 +44,7 @@ function ProjectLinks({ project }: { project: Project }) {
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="motion-card group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
+    <article id={project.slug} className="motion-card group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
       <div className="relative aspect-video shrink-0 overflow-hidden">
         <GracefulImage
           src={project.image}
@@ -182,12 +182,13 @@ export default function ProjectsPage() {
   return (
     <div className="shell py-16 sm:py-20">
       <SectionHeading
+        as="h1"
         eyebrow="Selected work"
         title="Projects"
         subtitle="Selected products I've designed, built and shipped."
       />
 
-      <StaggerChildren className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <StaggerChildren className="mt-10 grid grid-cols-1 gap-6 sm:mt-12 md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
           <StaggerItem key={project.slug} className="h-full">
             <ProjectCard project={project} />

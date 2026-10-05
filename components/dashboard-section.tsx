@@ -31,7 +31,9 @@ export function DashboardSection() {
   const transition = { duration: reduce ? 0 : 0.25, ease: motionEase };
   return (
     <section className="py-20 bg-bg-soft">
-      <div className="shell grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
+      <div
+        className={`shell grid grid-cols-1 items-start gap-8 lg:grid-cols-2 ${expanded ? "lg:items-stretch" : ""}`}
+      >
         <div className="card p-7 lg:p-8">
           <h3 className="text-lg font-semibold">
             <button

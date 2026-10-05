@@ -695,7 +695,7 @@ function TerminalArt() {
 
 export function WhatIBuild() {
   return (
-    <section className="py-20">
+    <section className="py-16 sm:py-20">
       <div className="shell">
         <SectionHeading
           eyebrow="Capabilities"
@@ -703,7 +703,7 @@ export function WhatIBuild() {
           subtitle="Four areas I keep coming back to."
         />
 
-        <StaggerChildren className="mt-12 grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2">
+        <StaggerChildren className="mt-10 grid auto-rows-fr grid-cols-1 gap-6 sm:mt-12 md:grid-cols-2">
           <StaggerItem className="h-full">
           <Tile
             title="Full-stack Applications"

@@ -5,15 +5,22 @@ import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { projects } from "@/data/projects";
 import { GithubIcon, ExternalIcon, ArrowRightIcon } from "@/components/icons";
+import { SectionHeading } from "@/components/section-heading";
 
 export function FeaturedProjects() {
   const featured = projects.slice(0, 6);
 
   return (
-    <section id="projects" className="py-20">
+    <section id="projects" className="py-16 sm:py-20">
       <div className="shell">
-        <h2 className="text-3xl font-bold mb-12">Featured Projects</h2>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <SectionHeading
+          eyebrow="Selected work"
+          title="Featured Projects"
+          subtitle="A selection of products I've built and shipped."
+          action="All projects"
+          actionHref="/projects"
+        />
+        <div className="mt-10 grid grid-cols-1 gap-6 sm:mt-12 md:grid-cols-2 lg:grid-cols-3">
           {featured.map((project) => {
             const liveLink =
               project.links.find((l) => l.label === "Live")?.href ||

@@ -4,8 +4,8 @@ import { ArrowRightIcon } from "@/components/icons";
 export function CurrentlyBuildingCard() {
   return (
     <Link
-      href="/projects/designarena"
-      className="interactive-card group relative flex w-full flex-col gap-3 rounded-xl border border-white/12 bg-black/55 p-4 backdrop-blur-md hover:border-accent/30 hover:bg-black/65 md:p-5"
+      href="/projects#designarena"
+      className="interactive-card group relative flex w-full flex-col gap-2 rounded-xl border border-white/12 bg-black/55 p-3.5 backdrop-blur-md hover:border-accent/30 hover:bg-black/65 sm:gap-3 sm:p-4 md:p-5"
     >
       <span className="absolute inset-0 rounded-xl shadow-[0_0_22px_rgba(59,158,255,0.12)] opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true" />
       <div className="relative flex items-center gap-2">
@@ -19,13 +19,15 @@ export function CurrentlyBuildingCard() {
         <h3 className="text-[18px] font-semibold leading-tight text-white md:text-[20px]">
           LLD Practice Platform
         </h3>
-        <p className="mt-1.5 text-sm leading-relaxed text-white/60">
-          An AI-powered platform for practicing Low-Level Design problems, submitting designs, and
-          getting structured feedback.
+        <p className="mt-1.5 text-sm leading-relaxed text-white/60 sm:hidden">
+          Practice system design with AI feedback.
+        </p>
+        <p className="mt-1.5 hidden text-sm leading-relaxed text-white/60 sm:block">
+          An AI-powered platform for practicing Low-Level Design problems and getting structured feedback.
         </p>
       </div>
 
-      <div className="relative flex flex-wrap items-center gap-1.5 pt-1">
+      <div className="relative hidden flex-wrap items-center gap-1.5 pt-1 sm:flex">
         <span className="rounded-md border border-white/10 bg-white/[0.06] px-2 py-1 text-[11px] font-medium text-white/70">
           Next.js
         </span>

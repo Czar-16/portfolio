@@ -5,6 +5,7 @@ import { Reveal } from "@/components/reveal";
 import { StackCard, StackTile } from "@/components/stack-motion";
 import { ArrowRightIcon, CodeIcon, SparkIcon } from "@/components/icons";
 import styles from "./stack.module.css";
+import { SectionHeading } from "@/components/section-heading";
 
 const categoryDetails: Record<string, { description: string; symbol: string }> = {
   languages: { description: "The foundations behind every build.", symbol: "</>" },
@@ -31,12 +32,14 @@ function TechGlyph({ name }: { name: string }) {
 export default function StackPage() {
   return (
     <div className="shell py-16 sm:py-20">
-      <Reveal className="mb-6 flex flex-wrap items-baseline justify-between gap-2">
-        <h1 className="text-xl font-semibold tracking-tight text-fg">Inside the toolkit</h1>
-        <p className="text-xs text-fg-secondary sm:text-sm">Every layer, from idea to deployment.</p>
-      </Reveal>
+      <SectionHeading
+        as="h1"
+        eyebrow="My toolkit"
+        title="Inside the toolkit"
+        subtitle="Every layer, from idea to deployment."
+      />
 
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 md:grid-cols-2 xl:grid-cols-3">
         {stack.map((category, index) => {
           const detail = categoryDetails[category.id];
           return (

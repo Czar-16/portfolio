@@ -8,12 +8,16 @@ export function SectionHeading({
   subtitle,
   action,
   actionHref,
+  as: Heading = "h2",
+  id,
 }: {
   eyebrow: string;
   title: string;
   subtitle?: string;
   action?: string;
   actionHref?: string;
+  as?: "h1" | "h2";
+  id?: string;
 }) {
   return (
     <Reveal className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -22,9 +26,9 @@ export function SectionHeading({
           <span className="eyebrow-dot" />
           {eyebrow}
         </span>
-        <h2 className="text-2xl font-semibold tracking-tight text-fg sm:text-3xl lg:text-[2.25rem]">
+        <Heading id={id} className="text-2xl font-semibold tracking-tight text-fg sm:text-3xl lg:text-[2.25rem]">
           {title}
-        </h2>
+        </Heading>
         {subtitle && (
           <p className="max-w-xl text-sm leading-relaxed text-fg-secondary sm:text-base">
             {subtitle}
