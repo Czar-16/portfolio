@@ -49,7 +49,9 @@ export function FeaturedProjects() {
                           </span>
                         ))}
                         {project.tech.length > 4 && (
-                          <span className="badge text-fg-muted">+{project.tech.length - 4}</span>
+                          <span className="badge text-fg-muted">
+                            +{project.tech.length - 4}
+                          </span>
                         )}
                       </div>
                     </div>
@@ -97,10 +99,11 @@ export function FeaturedProjects() {
                   Keep exploring
                 </p>
                 <p className="text-lg font-semibold tracking-tight text-fg md:text-xl">
-                  {projects.length - 6} more project{projects.length - 6 > 1 ? "s" : ""} waiting — the best one&apos;s probably in there
+                  More projects hiding in the shadows.
                 </p>
                 <p className="text-sm text-fg-secondary">
-                  All builds, experiments and shipped things live on the projects page.
+                  All builds, experiments and shipped things live on the
+                  projects page.
                 </p>
               </div>
               <span className="relative ml-4 inline-flex shrink-0 items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(59,158,255,0.35)] transition-colors group-hover:bg-accent/90">

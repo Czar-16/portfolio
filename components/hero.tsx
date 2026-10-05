@@ -52,12 +52,11 @@ export function Hero() {
 
         <div className="-rotate-[8deg] text-right">
           <p className="font-hand text-[30px] leading-snug text-white/90">
-            Turning ideas
+            Building what i wish existed.
             <br />
-            into products.
           </p>
 
-          <p className="mt-1 font-hand text-[28px] text-white/90">// Czar-16</p>
+          <p className="mt-1 font-hand text-[28px] text-white/90">~ Czar16</p>
         </div>
       </motion.div>
 
