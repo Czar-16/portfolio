@@ -1,0 +1,37 @@
+.techBadge {
+  transition:
+    transform 180ms ease-out,
+    background-color 180ms ease-out,
+    border-color 180ms ease-out,
+    color 180ms ease-out,
+    box-shadow 180ms ease-out;
+}
+
+.techBadge svg {
+  transition: opacity 180ms ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .techBadge:hover {
+    transform: translateY(-3px) scale(1.04);
+    background-color: color-mix(in oklab, var(--accent) 12%, var(--card));
+    border-color: color-mix(in oklab, var(--accent) 45%, var(--line));
+    color: var(--fg);
+    box-shadow: 0 4px 12px color-mix(in oklab, var(--accent) 14%, transparent);
+  }
+
+  .techBadge:hover svg {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .techBadge,
+  .techBadge svg {
+    transition: none;
+  }
+
+  .techBadge:hover {
+    transform: none;
+  }
+}

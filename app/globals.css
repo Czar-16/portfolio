@@ -306,6 +306,18 @@ html.lenis {
 
 }
 
+@media (pointer: coarse) {
+  .icon-btn {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+
+  .btn {
+    min-height: 44px;
+  }
+}
+
 /* Individual translate/scale properties keep pointer feedback independent
    from Motion's entrance and layout transforms. */
 :where(button, a, .interactive, .interactive-card) {
@@ -350,14 +362,14 @@ html.lenis {
   }
 
   .quote-card:hover {
-    scale: 1.03;
-    translate: 0 -4px;
+    scale: 1.025;
+    translate: 0 -2px;
     border-color: color-mix(in oklab, var(--accent) 60%, var(--line));
     box-shadow: var(--sh-pop), 0 0 0 1px color-mix(in oklab, var(--accent) 12%, transparent);
   }
 
   .quote-card:hover .quote-text {
-    scale: 1.02;
+    scale: 1.01;
   }
 }
 
@@ -412,7 +424,7 @@ html.lenis {
     }
 
     .interactive-card:hover {
-      translate: 0 -3px;
+      translate: 0 -2px;
     }
   }
 }

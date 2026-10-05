@@ -34,7 +34,7 @@ export function AboutContact() {
               <span className="text-accent">Meaningful experiences.</span>
             </h2>
             <p className="mt-5 max-w-lg text-[15px] leading-[1.8] text-fg-secondary">
-              I&apos;m Anoop Jha also known as Czar 16, a full-stack AI
+              I&apos;m Anoop Jha also known as Czar16, a full-stack AI
               developer passionate about building performant and accessible web
               applications. With a focus on modern technologies and clean
               design, I turn ideas into products that feel good to use.

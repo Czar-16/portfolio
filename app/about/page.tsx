@@ -1,223 +1,153 @@
+import Image from "next/image";
 import Link from "next/link";
-import { site, socials, contact } from "@/data/site";
-import { stack } from "@/data/stack";
-import { Reveal, StaggerChildren, StaggerItem } from "@/components/reveal";
+import { site, socials, contact, resume } from "@/data/site";
+import { Reveal } from "@/components/reveal";
+import { AnimatedName } from "@/components/animated-name";
 import {
   GithubIcon,
   XIcon,
   LinkedinIcon,
   MailIcon,
-  ExternalIcon,
   ArrowRightIcon,
+  DownloadIcon,
 } from "@/components/icons";
 
-const channels = [
-  { label: "Email", value: socials.email, href: contact.mailto, icon: MailIcon },
-  {
-    label: "GitHub",
-    value: `@${site.handle}`,
-    href: socials.github,
-    icon: GithubIcon,
-  },
-  { label: "X", value: "@itsCzar16", href: socials.x, icon: XIcon },
-  {
-    label: "LinkedIn",
-    value: "in/anoop-jha",
-    href: socials.linkedin,
-    icon: LinkedinIcon,
-  },
+const socialLinks = [
+  { label: "GitHub", href: socials.github, icon: GithubIcon },
+  { label: "LinkedIn", href: socials.linkedin, icon: LinkedinIcon },
+  { label: "X", href: socials.x, icon: XIcon },
 ] as const;
 
 export default function AboutPage() {
   return (
-    <div className="shell py-16 sm:py-20">
-      <Reveal>
-        <section>
-          <span className="eyebrow">
-            <span className="eyebrow-dot" />
-            About
-          </span>
-          <p className="mt-6 max-w-3xl text-2xl leading-[1.35] tracking-tight text-fg sm:text-3xl lg:text-[2.6rem]">
-            I&apos;m Anoop, a Computer Science engineer who enjoys turning ideas into
-            products. I like working across the stack—from interfaces and APIs to
-            databases, real-time systems and AI-powered workflows.
-          </p>
-          <p className="mt-6 max-w-2xl text-[15px] leading-[1.75] text-fg-secondary">
-            Most of my work sits where the interesting problems are: modelling state
-            correctly, keeping the feedback loop honest, and shipping something that
-            actually holds up after the first deploy. I care about code that the next
-            person — including future me — can read.
-          </p>
-
-          <div className="mt-7 inline-flex items-center gap-2.5 rounded-full border border-success/30 bg-success/8 px-4 py-2">
-            <span className="relative flex h-2 w-2" aria-hidden="true">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
-            </span>
-            <span className="text-[13px] text-fg-secondary">{site.availability}</span>
-          </div>
-        </section>
-      </Reveal>
-
-      <div className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+    <div className="shell py-12 sm:py-16 lg:py-20">
+      <div className="mx-auto max-w-5xl">
         <Reveal>
-          <section className="flex h-full flex-col rounded-[14px] border border-line bg-card p-6 shadow-card sm:p-8">
-            <h2 className="text-lg font-semibold tracking-tight text-fg">Contact</h2>
-            <p className="mt-2 text-[13px] leading-relaxed text-fg-secondary">
-              Fastest way to reach me is email. Everything else is kept active too.
-            </p>
+          <section
+            aria-labelledby="about-heading"
+            className="relative overflow-hidden rounded-3xl border border-line bg-card shadow-card"
+          >
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-24 -top-32 size-96 rounded-full bg-accent/6 blur-3xl"
+            />
 
-            <ul className="mt-6 flex flex-col divide-y divide-line">
-              {channels.map((channel) => {
-                const Icon = channel.icon;
-                return (
-                  <li key={channel.label}>
+            <div className="relative grid items-center gap-10 p-6 sm:p-10 md:grid-cols-[1fr_280px] md:gap-12 lg:p-12">
+              <div className="min-w-0">
+                <span className="eyebrow">
+                  <span className="eyebrow-dot" />
+                  About me
+                </span>
+                <h1
+                  id="about-heading"
+                  className="mt-6 text-4xl font-semibold leading-[1.05] tracking-[-0.04em] text-fg sm:text-5xl lg:text-6xl"
+                >
+                  <AnimatedName variant="about" />
+                </h1>
+                <p className="mt-4 text-lg font-medium tracking-tight text-fg-secondary sm:text-xl">
+                  Full-stack developer.
+                </p>
+                <p className="mt-5 max-w-md text-sm leading-relaxed text-fg-secondary sm:text-[15px]">
+                  I turn ideas into fast, intuitive products—from thoughtful
+                  interfaces to reliable backends.
+                </p>
+
+                <div className="mt-7 inline-flex items-start gap-2.5 text-xs leading-relaxed text-fg-secondary">
+                  <span
+                    aria-hidden="true"
+                    className="mt-1 size-1.5 shrink-0 rounded-full bg-success shadow-[0_0_0_3px_color-mix(in_oklab,var(--success)_12%,transparent)]"
+                  />
+                  {site.availability}
+                </div>
+
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a href={contact.mailto} className="btn btn-primary group h-11 px-5">
+                    <MailIcon size={15} />
+                    Get in touch
+                    <ArrowRightIcon size={14} className="interaction-arrow" />
+                  </a>
+                  {resume.available && (
                     <a
-                      href={channel.href}
-                      target={channel.href.startsWith("mailto:") ? undefined : "_blank"}
+                      href={resume.href}
+                      target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center gap-4 py-3.5 transition-colors"
+                      className="btn h-11 px-5"
                     >
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[9px] border border-line bg-bg-soft text-fg-secondary transition-colors group-hover:border-accent/45 group-hover:text-accent">
-                        <Icon size={15} />
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-fg-muted">
-                          {channel.label}
-                        </span>
-                        <span className="mt-0.5 block truncate text-[13px] text-fg-secondary transition-colors group-hover:text-fg">
-                          {channel.value}
-                        </span>
-                      </span>
-                      <ExternalIcon
-                        size={13}
-                        className="shrink-0 text-fg-muted opacity-0 transition-opacity group-hover:opacity-100"
-                      />
+                      <DownloadIcon size={15} />
+                      Resume
                     </a>
-                  </li>
-                );
-              })}
-            </ul>
+                  )}
+                </div>
 
-            <div className="mt-6 flex gap-2 border-t border-line pt-5">
-              <a
-                href={contact.mailto}
-                className="icon-btn border border-line"
-                aria-label="Send an email"
-                title="Send an email"
-              >
-                <MailIcon size={16} />
-              </a>
-              <a
-                href={socials.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="icon-btn border border-line"
-                aria-label="GitHub"
-                title="GitHub"
-              >
-                <GithubIcon size={16} />
-              </a>
-              <a
-                href={socials.x}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="icon-btn border border-line"
-                aria-label="X (Twitter)"
-                title="X (Twitter)"
-              >
-                <XIcon size={15} />
-              </a>
-              <a
-                href={socials.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="icon-btn border border-line"
-                aria-label="LinkedIn"
-                title="LinkedIn"
-              >
-                <LinkedinIcon size={16} />
-              </a>
-              <a href={contact.mailto} className="btn btn-primary ml-auto">
-                <MailIcon size={14} />
-                Email me
-              </a>
+                <div className="mt-8 flex items-center gap-3 border-t border-line pt-5">
+                  <span className="mr-1 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-muted">
+                    Elsewhere
+                  </span>
+                  {socialLinks.map(({ label, href, icon: Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="icon-btn"
+                      aria-label={label}
+                      title={label}
+                    >
+                      <Icon size={17} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <div className="order-first mx-auto w-full max-w-[220px] md:order-last md:max-w-none">
+                <div className="relative aspect-square overflow-hidden rounded-2xl border border-line bg-bg-soft">
+                  <Image
+                    src="/profile/profile.jpg"
+                    alt="Anoop's profile avatar"
+                    fill
+                    preload
+                    sizes="(min-width: 768px) 280px, 220px"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="mt-4 flex items-center justify-between px-1">
+                  <span className="font-mono text-[11px] tracking-wide text-fg-secondary">
+                    {site.handle}
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-fg-muted">
+                    Build. Learn. Repeat.
+                  </span>
+                </div>
+              </div>
             </div>
           </section>
         </Reveal>
 
-        <Reveal delay={0.06}>
-          <section className="flex h-full flex-col rounded-[14px] border border-line bg-card p-6 shadow-card sm:p-8">
-            <h2 className="text-lg font-semibold tracking-tight text-fg">
-              Where the work happens
-            </h2>
-            <p className="mt-2 text-[13px] leading-relaxed text-fg-secondary">
-              The tools behind the projects on this site.
-            </p>
-
-            <StaggerChildren className="mt-6 flex flex-col gap-4" gap={0.05}>
-              {stack.slice(0, 4).map((category) => (
-                <StaggerItem key={category.id}>
-                  <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-fg-muted">
-                      {category.label}
-                    </p>
-                    <div className="mt-2 flex flex-wrap gap-1.5">
-                      {category.items.slice(0, 6).map((item) => (
-                        <span key={item} className="badge">
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </StaggerItem>
-              ))}
-            </StaggerChildren>
-
-            <Link
-              href="/stack"
-              className="interactive group mt-6 inline-flex items-center gap-1.5 self-start border-t border-line pt-5 text-[13px] font-medium text-accent hover:text-fg"
-            >
-              Full tech stack
-              <ArrowRightIcon
-                size={14}
-                className="interaction-arrow"
-              />
-            </Link>
-          </section>
+        <Reveal className="mt-5" delay={0.04}>
+          <nav aria-label="Explore my work" className="grid gap-4 sm:grid-cols-2">
+            {[
+              { href: "/projects", label: "Selected work", title: "Explore my projects" },
+              { href: "/stack", label: "My toolkit", title: "See what I build with" },
+            ].map(({ href, label, title }) => (
+              <Link
+                key={href}
+                href={href}
+                className="interactive-card group flex items-center justify-between gap-4 rounded-2xl border border-line bg-card px-6 py-5 shadow-card hover:border-accent/40"
+              >
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-fg-muted">
+                    {label}
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-fg">{title}</p>
+                </div>
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-line bg-bg-soft text-accent">
+                  <ArrowRightIcon size={16} className="interaction-arrow" />
+                </span>
+              </Link>
+            ))}
+          </nav>
         </Reveal>
       </div>
-
-      <Reveal className="mt-6">
-        <section className="flex flex-col items-center gap-5 rounded-[14px] border border-line bg-card px-6 py-12 text-center sm:py-14">
-          <h2 className="max-w-lg text-xl font-semibold tracking-tight text-fg sm:text-2xl">
-            {contact.subheading}
-          </h2>
-          <p className="max-w-md text-[14px] leading-relaxed text-fg-secondary">
-            I&apos;m happy to talk through architecture, review a design doc, or dig into
-            something you&apos;re stuck on.
-          </p>
-          <div className="flex flex-wrap justify-center gap-2.5">
-            <a href={contact.mailto} className="btn btn-primary">
-              <MailIcon size={15} />
-              Email Anoop
-            </a>
-            <a
-              href={socials.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn"
-            >
-              <GithubIcon size={15} />
-              View GitHub
-            </a>
-            <Link href="/projects" className="btn">
-              See projects
-              <ArrowRightIcon size={14} />
-            </Link>
-          </div>
-        </section>
-      </Reveal>
     </div>
   );
 }

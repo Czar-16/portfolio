@@ -13,7 +13,7 @@ function initials(title: string) {
     .join("");
 }
 
-export function MoviePoster({
+export function WatchPoster({
   slug,
   title,
   rank,
@@ -53,7 +53,7 @@ export function MoviePoster({
       className={`relative w-full overflow-hidden border border-line bg-bg-soft ${className}`}
     >
       <Image
-        src={`/movies/${slug}.jpg`}
+        src={`/watch/${slug}.jpg`}
         alt={`${title} poster`}
         fill
         sizes="(min-width: 1480px) 260px, (min-width: 1280px) 18vw, (min-width: 1024px) 23vw, (min-width: 640px) 30vw, 46vw"

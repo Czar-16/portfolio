@@ -87,13 +87,13 @@ export function FeaturedProjects() {
           <div className="mt-10">
             <Link
               href="/projects"
-              className="interactive-card group relative flex items-center justify-between overflow-hidden rounded-[14px] border border-line bg-card px-6 py-6 shadow-card hover:border-accent/30 hover:shadow-pop md:px-8 md:py-7"
+              className="interactive-card group relative flex flex-col items-start justify-between gap-5 overflow-hidden rounded-[14px] border border-line bg-card px-6 py-6 shadow-card hover:border-accent/30 hover:shadow-pop sm:flex-row sm:items-center md:px-8 md:py-7"
             >
               <div
                 className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-accent/10 blur-3xl"
                 aria-hidden="true"
               />
-              <div className="relative flex flex-col gap-1">
+              <div className="relative min-w-0 flex flex-col gap-1">
                 <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-fg-muted">
                   Keep exploring
                 </p>
@@ -105,7 +105,7 @@ export function FeaturedProjects() {
                   projects page.
                 </p>
               </div>
-              <span className="relative ml-4 inline-flex shrink-0 items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(59,158,255,0.35)] transition-colors group-hover:bg-accent/90">
+              <span className="relative inline-flex shrink-0 items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(59,158,255,0.35)] transition-colors group-hover:bg-accent/90">
                 See more projects <ArrowRightIcon size={15} className="interaction-arrow" />
               </span>
             </Link>

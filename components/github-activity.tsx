@@ -198,7 +198,7 @@ export function GitHubActivity() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-3">
         {[
           {
             value: String(stats.repos),
@@ -221,7 +221,7 @@ export function GitHubActivity() {
               {stat.value}
             </p>
 
-            <p className="mt-1 text-[11px] leading-none text-fg-muted">
+            <p className="mt-1 break-words text-[11px] leading-4 text-fg-muted">
               {stat.label}
             </p>
           </div>

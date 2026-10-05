@@ -7,6 +7,7 @@ import { Navbar } from "@/components/navbar";
 import { CommandPaletteWrapper } from "@/components/command-palette-wrapper";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { MotionProvider } from "@/components/motion-provider";
+import { BackToTop } from "@/components/back-to-top";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,7 +57,8 @@ export default function RootLayout({
           <ThemeProvider>
             <SmoothScroll />
             <Navbar />
-            <main className="flex-1">{children}</main>
+            <main id="page-top" tabIndex={-1} className="flex-1 focus:outline-none">{children}</main>
+            <BackToTop />
             <CommandPaletteWrapper />
           </ThemeProvider>
         </MotionProvider>

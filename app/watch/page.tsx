@@ -1,9 +1,9 @@
-import { movies } from "@/data/movies";
+import { watchItems } from "@/data/watch";
 import { Reveal, StaggerChildren, StaggerItem } from "@/components/reveal";
-import { MoviePoster } from "@/components/movie-poster";
+import { WatchPoster } from "@/components/watch-poster";
 import { FilmIcon } from "@/components/icons";
 
-export default function MoviesPage() {
+export default function WatchPage() {
   return (
     <div className="shell py-16 sm:py-20">
       <Reveal className="relative overflow-hidden rounded-2xl border border-line bg-card p-5 shadow-card sm:p-8 lg:p-10">
@@ -21,7 +21,7 @@ export default function MoviesPage() {
               MY RECOMMENDATIONS<span className="text-accent">.</span>
             </h1>
             <p className="mt-4 max-w-lg text-sm leading-7 text-fg-secondary sm:text-[15px]">
-              A handpicked collection of films I genuinely recommend — stories
+              A handpicked collection of movies and series — stories
               that stayed with me long after the credits rolled.
             </p>
           </div>
@@ -29,10 +29,10 @@ export default function MoviesPage() {
             <FilmIcon size={20} className="text-accent" />
             <div>
               <p className="text-xl font-semibold leading-none text-fg">
-                {movies.length}
+                {watchItems.length}
               </p>
               <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-fg-secondary">
-                Selected films
+                Movies &amp; series
               </p>
             </div>
           </div>
@@ -44,19 +44,19 @@ export default function MoviesPage() {
           The collection
         </h2>
         <p className="text-xs leading-relaxed text-fg-secondary sm:text-sm">
-          {movies.length} films · The movies I loved
+          {watchItems.length} picks · Movies and series I loved
         </p>
       </Reveal>
 
       <StaggerChildren className="mt-6 grid grid-cols-2 gap-x-3 gap-y-5 sm:mt-7 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 xl:grid-cols-5">
-        {movies.map((movie) => (
+        {watchItems.map((movie) => (
           <StaggerItem key={movie.slug} className="h-full">
             <article className="motion-card group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
               <div className="relative overflow-hidden">
-                <MoviePoster
+                <WatchPoster
                   slug={movie.slug}
                   title={movie.title}
-                  rank={`Film ${movie.rank}`}
+                  rank={`${movie.type} ${movie.rank}`}
                   className="aspect-2/3 w-full"
                 />
                 <div
@@ -64,13 +64,13 @@ export default function MoviesPage() {
                   className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/35 via-transparent to-transparent"
                 />
                 <span className="absolute left-2.5 top-2.5 sm:left-3 sm:top-3 rounded-lg border border-white/20 bg-black/60 px-2 py-1 font-mono text-[11px] text-white backdrop-blur-md">
-                  <span className="sr-only">Film </span>
+                  <span className="sr-only">Pick </span>
                   {String(movie.rank).padStart(2, "0")}
                 </span>
               </div>
               <div className="flex flex-1 flex-col gap-1.5 p-3 sm:gap-2 sm:p-4">
                 <p className="font-mono text-[11px] leading-5 tracking-wide text-fg-secondary">
-                  {movie.year}
+                  {movie.year} · {movie.type}
                 </p>
                 <h3 className="text-[13px] font-semibold leading-5 text-fg sm:text-[15px] sm:leading-6">
                   {movie.title}

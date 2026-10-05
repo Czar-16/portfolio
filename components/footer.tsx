@@ -11,7 +11,7 @@ export function Footer() {
             href="/"
             className="text-sm font-semibold tracking-tight text-fg"
           >
-            Czar-16<span className="text-accent">.</span>
+            {site.handle}<span className="text-accent">.</span>
           </Link>
           <p className="text-xs text-fg-muted">{site.tagline}</p>
         </div>

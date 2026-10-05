@@ -5,12 +5,12 @@
 
 export const site = {
   name: "Anoop Jha",
-  handle: "Czar 16",
-  wordmark: "Czar 16.",
+  handle: "Czar16",
+  wordmark: "Czar16.",
   tagline: "Turning ideas into products.",
   title: "Anoop Jha — Full-Stack Developer",
   description:
-    "Anoop Jha (Czar 16) is a full-stack developer building real-world products with TypeScript, Next.js and scalable backend systems.",
+    "Anoop Jha (Czar16) is a full-stack developer building real-world products with TypeScript, Next.js and scalable backend systems.",
   positioning:
     "Full-stack developer building real-world products with TypeScript, Next.js, and scalable backend systems.",
   availability: "Open to Software Engineering opportunities",
@@ -44,7 +44,7 @@ export const navItems: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "Projects", href: "/projects" },
   { label: "Stack", href: "/stack" },
-  { label: "Movies", href: "/movies" },
+  { label: "Watch", href: "/watch" },
   { label: "Quotes", href: "/quotes" },
 
   { label: "About", href: "/about" },

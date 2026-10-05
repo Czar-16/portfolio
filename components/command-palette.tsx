@@ -1,16 +1,28 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { useReducedMotion } from "@/components/use-reduced-motion";
 import { CloseIcon, SearchIcon } from "@/components/icons";
 import { motionEase } from "@/components/motion-provider";
 import { lockBodyScroll } from "@/components/body-scroll-lock";
+import { contact, navItems, socials } from "@/data/site";
+
+type Command = { label: string; href: string };
+
+const actionItems: Command[] = [
+  { label: "Open GitHub", href: socials.github },
+  { label: "Open X", href: socials.x },
+  { label: "Open LinkedIn", href: socials.linkedin },
+  { label: "Contact Me", href: contact.mailto },
+];
 
 export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
+  const listId = useId();
   const router = useRouter();
   const reduce = useReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -19,15 +31,23 @@ export default function CommandPalette() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k" && !e.repeat && !e.isComposing) {
         e.preventDefault();
-        if (!isOpen) triggerRef.current = document.activeElement as HTMLElement;
+        if (!isOpen) {
+          triggerRef.current = document.activeElement as HTMLElement;
+          setQuery("");
+          setActiveIndex(0);
+        }
         setIsOpen(!isOpen);
       }
     };
 
     const handleOpenEvent = () => {
-      if (!isOpen) triggerRef.current = document.activeElement as HTMLElement;
+      if (!isOpen) {
+        triggerRef.current = document.activeElement as HTMLElement;
+        setQuery("");
+        setActiveIndex(0);
+      }
       setIsOpen(true);
     };
 
@@ -76,25 +96,54 @@ export default function CommandPalette() {
     };
   }, [isOpen]);
 
-  const navItems = [
-    { label: "Home", href: "/" },
-    { label: "Projects", href: "/#projects" },
-    { label: "Stack", href: "/stack" },
-    { label: "Movies", href: "/movies" },
-    { label: "Quotes", href: "/quotes" },
-    { label: "Achievements", href: "/achievements" },
-    { label: "About", href: "/about" },
-  ];
+  const search = query.trim().toLowerCase();
+  const filteredNav = navItems.filter((item) => item.label.toLowerCase().includes(search));
+  const filteredActions = actionItems.filter((item) => item.label.toLowerCase().includes(search));
+  const results = [...filteredNav, ...filteredActions];
+  const activeId = results.length ? `${listId}-option-${activeIndex}` : undefined;
 
-  const actionItems = [
-    { label: "Open GitHub", href: "https://github.com/Czar-16", external: true },
-    { label: "Open X", href: "https://x.com", external: true },
-    { label: "Open LinkedIn", href: "https://linkedin.com", external: true },
-    { label: "Contact Me", href: "mailto:anoopjha@example.com", external: true },
-  ];
+  useEffect(() => {
+    if (!isOpen) return;
+    const frame = requestAnimationFrame(() => {
+      dialogRef.current?.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: "nearest" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [activeIndex, query, isOpen]);
 
-  const filteredNav = navItems.filter((i) => i.label.toLowerCase().includes(query.toLowerCase()));
-  const filteredActions = actionItems.filter((i) => i.label.toLowerCase().includes(query.toLowerCase()));
+  function activate(item: Command) {
+    setIsOpen(false);
+    if (item.href.startsWith("mailto:")) {
+      window.location.assign(item.href);
+    } else if (item.href.startsWith("https://")) {
+      window.open(item.href, "_blank", "noopener,noreferrer");
+    } else {
+      router.push(item.href);
+    }
+  }
+
+  function renderCommand(item: Command, index: number) {
+    return (
+      <motion.button
+        key={item.href}
+        id={`${listId}-option-${index}`}
+        type="button"
+        role="option"
+        aria-selected={index === activeIndex}
+        layout={reduce ? false : "position"}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: reduce ? 0 : 0.15 }}
+        onFocus={() => setActiveIndex(index)}
+        onPointerMove={() => setActiveIndex(index)}
+        onClick={() => activate(item)}
+        className={`interactive w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-accent/10 hover:text-accent ${
+          index === activeIndex ? "bg-accent/10 text-accent" : "text-fg"
+        }`}
+      >
+        {item.label}
+      </motion.button>
+    );
+  }
 
   return (
     <AnimatePresence>
@@ -107,7 +156,7 @@ export default function CommandPalette() {
           exit={{ opacity: 0 }}
           transition={{ duration: reduce ? 0 : 0.18 }}
           onPointerDown={(event) => { if (event.target === event.currentTarget) setIsOpen(false); }}
-          className="fixed inset-0 z-[60] flex items-start justify-center px-4 pt-20 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto overscroll-contain bg-black/60 p-4 backdrop-blur-sm md:pt-20"
         >
           <motion.div
             ref={dialogRef}
@@ -118,81 +167,70 @@ export default function CommandPalette() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: reduce ? 1 : 0.98, y: reduce ? 0 : -4 }}
             transition={{ duration: reduce ? 0 : 0.22, ease: motionEase }}
-            className="card w-full max-w-lg bg-card overflow-hidden shadow-pop"
+            className="card flex max-h-[calc(100dvh-2rem)] w-full max-w-lg flex-col overflow-hidden bg-card shadow-pop md:max-h-[calc(100dvh-6rem)]"
           >
-            <div className="flex items-center px-4 border-b">
+            <div className="flex shrink-0 items-center px-4 border-b">
               <SearchIcon className="w-5 h-5 text-fg-muted mr-3" />
               <input
                 ref={searchRef}
                 type="text"
+                role="combobox"
+                aria-label="Search commands"
+                aria-autocomplete="list"
+                aria-expanded={isOpen}
+                aria-controls={listId}
+                aria-activedescendant={activeId}
+                autoComplete="off"
                 placeholder="Type a command or search..."
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setActiveIndex(0);
+                }}
+                onKeyDown={(event) => {
+                  if (event.nativeEvent.isComposing || event.keyCode === 229) return;
+                  if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                    event.preventDefault();
+                    if (!results.length) return;
+                    const direction = event.key === "ArrowDown" ? 1 : -1;
+                    setActiveIndex((index) => (index + direction + results.length) % results.length);
+                  } else if (event.key === "Enter") {
+                    event.preventDefault();
+                    const selected = results[activeIndex];
+                    if (selected) activate(selected);
+                  }
+                }}
                 className="min-w-0 flex-1 bg-transparent py-4 text-fg focus:outline-none"
               />
               <button type="button" onClick={() => setIsOpen(false)} aria-label="Close command palette" className="icon-btn ml-2"><CloseIcon size={16} /></button>
             </div>
-            <div className="p-4 max-h-80 overflow-y-auto space-y-4">
-              {filteredNav.length > 0 && (
-                <div>
-                  <p className="text-xs text-fg-muted uppercase tracking-wider mb-2">Navigation</p>
-                  <div className="relative space-y-1">
-                    <AnimatePresence initial={false} mode="popLayout">
-                    {filteredNav.map((item) => (
-                      <motion.button
-                        key={item.href}
-                        layout={reduce ? false : "position"}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: reduce ? 0 : 0.15 }}
-                        onClick={() => {
-                          setIsOpen(false);
-                          router.push(item.href);
-                        }}
-                        className="interactive w-full text-left px-3 py-2 rounded-lg hover:bg-accent/10 hover:text-accent text-sm"
-                      >
-                        {item.label}
-                      </motion.button>
-                    ))}
-                    </AnimatePresence>
+            <div className="min-h-0 max-h-80 overflow-y-auto overscroll-contain p-4">
+              <div id={listId} role="listbox" aria-label="Commands" className="space-y-4">
+                {filteredNav.length > 0 && (
+                  <div role="group" aria-labelledby={`${listId}-navigation`}>
+                    <p id={`${listId}-navigation`} className="mb-2 text-xs uppercase tracking-wider text-fg-muted">Navigation</p>
+                    <div role="presentation" className="relative space-y-1">
+                      {filteredNav.map((item, index) => renderCommand(item, index))}
+                    </div>
                   </div>
-                </div>
-              )}
-
-              {filteredActions.length > 0 && (
-                <div>
-                  <p className="text-xs text-fg-muted uppercase tracking-wider mb-2">Actions</p>
-                  <div className="relative space-y-1">
-                    <AnimatePresence initial={false} mode="popLayout">
-                    {filteredActions.map((item) => (
-                      <motion.button
-                        key={item.href}
-                        layout={reduce ? false : "position"}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: reduce ? 0 : 0.15 }}
-                        onClick={() => {
-                          setIsOpen(false);
-                          if (item.external) {
-                            window.open(item.href, "_blank");
-                          } else {
-                            router.push(item.href);
-                          }
-                        }}
-                        className="interactive w-full text-left px-3 py-2 rounded-lg hover:bg-accent/10 hover:text-accent text-sm"
-                      >
-                        {item.label}
-                      </motion.button>
-                    ))}
-                    </AnimatePresence>
+                )}
+                {filteredActions.length > 0 && (
+                  <div role="group" aria-labelledby={`${listId}-actions`}>
+                    <p id={`${listId}-actions`} className="mb-2 text-xs uppercase tracking-wider text-fg-muted">Actions</p>
+                    <div role="presentation" className="relative space-y-1">
+                      {filteredActions.map((item, index) => renderCommand(item, filteredNav.length + index))}
+                    </div>
                   </div>
-                </div>
-              )}
-              {!filteredNav.length && !filteredActions.length && (
+                )}
+              </div>
+              {!results.length && (
                 <p role="status" className="py-6 text-center text-sm text-fg-muted">No matching commands.</p>
               )}
+            </div>
+            <div className="flex shrink-0 flex-wrap gap-x-4 gap-y-2 border-t border-line bg-bg-soft px-4 py-3 text-[11px] text-fg-secondary">
+              <span><kbd className="font-mono text-fg">↑↓</kbd> Navigate</span>
+              <span><kbd className="font-mono text-fg">Enter</kbd> Open</span>
+              <span><kbd className="font-mono text-fg">Esc</kbd> Close</span>
             </div>
           </motion.div>
         </motion.div>

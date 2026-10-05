@@ -4,13 +4,13 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://czar-16.dev"),
   title: "Anoop Jha — Full-Stack Developer",
   description:
-    "Anoop Jha (Czar 16) is a full-stack developer building real-world products with TypeScript, Next.js and scalable backend systems.",
+    "Anoop Jha (Czar16) is a full-stack developer building real-world products with TypeScript, Next.js and scalable backend systems.",
   openGraph: {
     title: "Anoop Jha — Full-Stack Developer",
     description:
-      "Anoop Jha (Czar 16) is a full-stack developer building real-world products with TypeScript, Next.js and scalable backend systems.",
+      "Anoop Jha (Czar16) is a full-stack developer building real-world products with TypeScript, Next.js and scalable backend systems.",
     url: "https://czar-16.dev",
-    siteName: "Czar 16",
+    siteName: "Czar16",
     images: [
       {
         url: "/og-card.png",

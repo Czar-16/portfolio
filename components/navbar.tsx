@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useReducedMotion } from "@/components/use-reduced-motion";
 import { motionEase, motionSpring } from "@/components/motion-provider";
@@ -15,12 +15,17 @@ import {
   LinkedinIcon,
   MenuIcon,
   CloseIcon,
-  CommandIcon,
+  SearchIcon,
   DownloadIcon,
 } from "@/components/icons";
 
+const subscribeToPlatform = () => () => {};
+const getShortcut = () => /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? "Cmd+K" : "Ctrl+K";
+const getServerShortcut = () => "Ctrl+K";
+
 export function Navbar() {
   const pathname = usePathname();
+  const shortcut = useSyncExternalStore(subscribeToPlatform, getShortcut, getServerShortcut);
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -42,6 +47,10 @@ export function Navbar() {
   }, [open]);
 
   const closeMenu = () => setOpen(false);
+  const openPalette = () => {
+    setOpen(false);
+    window.dispatchEvent(new CustomEvent("open-command-palette"));
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-bg-veil backdrop-blur-xl">
@@ -51,7 +60,7 @@ export function Navbar() {
           href="/"
           className="shrink-0 text-lg font-semibold tracking-tight text-fg transition-colors hover:text-accent"
         >
-          Czar-16<span className="text-accent">.</span>
+          Czar16<span className="text-accent">.</span>
         </Link>
 
         {/* Desktop nav links */}
@@ -87,13 +96,16 @@ export function Navbar() {
 
         {/* Desktop right side */}
         <div className="hidden items-center gap-1 lg:flex">
-          {/* ⌘K hint */}
           <button
-            onClick={() => window.dispatchEvent(new CustomEvent("open-command-palette"))}
-            aria-label="Open command palette"
-            className="icon-btn hidden xl:flex"
+            type="button"
+            onClick={openPalette}
+            aria-label={`Search commands (${shortcut})`}
+            aria-haspopup="dialog"
+            className="btn h-9 gap-2 px-3 text-xs"
           >
-            <CommandIcon size={15} />
+            <SearchIcon size={14} />
+            Search
+            <kbd className="rounded border border-line bg-bg-soft px-1.5 py-0.5 font-mono text-[10px] text-fg-secondary">{shortcut}</kbd>
           </button>
 
           <ThemeToggle />
@@ -143,6 +155,17 @@ export function Navbar() {
 
         {/* Mobile right side */}
         <div className="flex items-center gap-1 lg:hidden">
+          <button
+            type="button"
+            onClick={openPalette}
+            aria-label={`Search commands (${shortcut})`}
+            aria-haspopup="dialog"
+            className="btn h-9 gap-2 px-2.5 text-xs"
+          >
+            <SearchIcon size={14} />
+            Search
+            <kbd className="hidden rounded border border-line bg-bg-soft px-1.5 py-0.5 font-mono text-[10px] text-fg-secondary md:inline">{shortcut}</kbd>
+          </button>
           <ThemeToggle />
           <button
             ref={menuButtonRef}
@@ -173,11 +196,12 @@ export function Navbar() {
         {open && (
           <motion.div
             id="mobile-menu"
+            data-lenis-prevent
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: reduce ? 0 : 0.25, ease: motionEase }}
-            className="overflow-hidden border-b border-line bg-bg lg:hidden"
+            className="max-h-[calc(100dvh-65px)] overflow-x-hidden overflow-y-auto overscroll-contain border-b border-line bg-bg lg:hidden"
           >
             <div className="shell flex flex-col gap-1 py-4">
               {navItems.map((item, index) => {
