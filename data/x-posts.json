@@ -1,0 +1,434 @@
+[
+  {
+    "metrics": {
+      "likes": 15,
+      "views": 498
+    },
+    "id": "2096970091237900456",
+    "text": "Either the odds are going to work in my favor or I am going to work until the odds wish they were.",
+    "createdAt": "2026-09-07T14:33:24.000Z",
+    "url": "https://x.com/itsCzar16/status/2096970091237900456",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HRnvLoBa8AAFWMI.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 13,
+      "views": 215
+    },
+    "id": "2096458324929577065",
+    "text": "Locked in for the day",
+    "createdAt": "2026-09-06T04:39:49.000Z",
+    "url": "https://x.com/itsCzar16/status/2096458324929577065",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HRgduxEaQAAT85r.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 23,
+      "views": 498
+    },
+    "id": "2095122427642888513",
+    "text": "In the Zoneeee➰",
+    "createdAt": "2026-09-02T12:11:26.000Z",
+    "url": "https://x.com/itsCzar16/status/2095122427642888513",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HRNevMGaIAMno3Z.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 20,
+      "views": 276
+    },
+    "id": "2076219000783245684",
+    "text": "Before building my Pinterest high-quality image downloader.\n I spent 2 solid hours digging into how Pinterest actually stores and serves images .\nThe system design and architecture behind it. Sharing a small note from a huge pile.",
+    "createdAt": "2026-07-12T08:15:58.000Z",
+    "url": "https://x.com/itsCzar16/status/2076219000783245684",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HNA2B6QaIAAwxnU.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 284,
+      "views": 15760
+    },
+    "id": "2092722824968581355",
+    "text": "Rate limit✅ \nNext:  Consistent hashing🌀",
+    "createdAt": "2026-08-26T21:16:17.000Z",
+    "url": "https://x.com/itsCzar16/status/2092722824968581355",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HQrYT56bsAAvf8c.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 5,
+      "views": 155
+    },
+    "id": "2070300892092637657",
+    "text": "Pulled an all-nighter building project.\n\nStill not done.\nStill a lot left to build.\n\nTime to close the laptop, hit the gym, recharge, and come back for another round. 💪",
+    "createdAt": "2026-06-26T00:19:31.000Z",
+    "url": "https://x.com/itsCzar16/status/2070300892092637657",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HLsu98LagAAeuid.png",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 9,
+      "views": 238
+    },
+    "id": "2088789336149860803",
+    "text": "Hooked up OmniRoute. 500+ models added, auto-picks the best one.\n\nFree models work for me right now since I don’t have a subscription — and paid models like Claude & GPT are there whenever I need them.\n\nTested it on a real Docker build. Just worked.",
+    "createdAt": "2026-08-16T00:46:00.000Z",
+    "url": "https://x.com/itsCzar16/status/2088789336149860803",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HPy1EfEbsAALvCS.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 28,
+      "views": 1024
+    },
+    "id": "2079967250216562761",
+    "text": "PurePin is live 🎉\n\nDownload your favourite Pinterest images in the highest quality possible with PurePin.\n\nhttp://purepin.vercel.app",
+    "createdAt": "2026-07-22T16:30:11.000Z",
+    "url": "https://x.com/itsCzar16/status/2079967250216562761",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HN2FYKoasAMfdgj.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 2,
+      "views": 36
+    },
+    "id": "1974475293449769458",
+    "text": "Shut up \nSuit up\nShow up",
+    "createdAt": "2025-10-04T14:02:48.000Z",
+    "url": "https://x.com/itsCzar16/status/1974475293449769458",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 2,
+      "views": 39
+    },
+    "id": "1968800522334249151",
+    "text": "Search for everything except love and death because they will find you when the time is right.",
+    "createdAt": "2025-09-18T22:13:17.000Z",
+    "url": "https://x.com/itsCzar16/status/1968800522334249151",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 18,
+      "views": 783
+    },
+    "id": "2073231865729998888",
+    "text": "The fastest way to attract what you want in life is to deserve it by doing so much work it becomes unreasonable not to achieve it. Do so much work it would be unreasonable that you fail. The seat at the table is yours if you want it.\nDo the hard work. Build the skills no one can",
+    "createdAt": "2026-07-04T02:26:10.000Z",
+    "url": "https://x.com/itsCzar16/status/2073231865729998888",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 4,
+      "views": 138
+    },
+    "id": "2067029216982606007",
+    "text": "Thought real-time messaging would be the hard part.\n\nTurns out delivering messages was easy.\n\nFiguring out who's online, who's offline, and when they disappeared and typing indicator is where the real challenge started.",
+    "createdAt": "2026-06-16T23:39:03.000Z",
+    "url": "https://x.com/itsCzar16/status/2067029216982606007",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HK-QFbKb0AApWAH.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 19,
+      "views": 318
+    },
+    "id": "2075094936492642370",
+    "text": "11 down, 1 to go 📚 no cap",
+    "createdAt": "2026-07-09T05:49:20.000Z",
+    "url": "https://x.com/itsCzar16/status/2075094936492642370",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HMw313lasAAVZ3o.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 4,
+      "views": 104
+    },
+    "id": "2070138789033542026",
+    "text": "Read something that blew my mind\nHere is the very short glimpse\nThe man who wrote Jingle Bells struggled his entire life.Abandoned his kids Chased gold Found nothing.Died poor, giving piano lessons just to survive.\nThe man died broke. His song \"jingle bells\"  became immortal.",
+    "createdAt": "2026-06-25T13:35:23.000Z",
+    "url": "https://x.com/itsCzar16/status/2070138789033542026",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 3,
+      "views": 65
+    },
+    "id": "2064011336695304695",
+    "text": "02/7\n- Solved 4 Leetcode questions \n- Made a chrome extension (Blackout)\n- Studied about prompt engineering and how to better ai prompts\n- Os (1 hr)\n- System design (1 hr)\n- Read book \n- Worked on Buzzline",
+    "createdAt": "2026-06-08T15:47:04.000Z",
+    "url": "https://x.com/itsCzar16/status/2064011336695304695",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HKTXUP_aYAAqotM.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 2,
+      "views": 53
+    },
+    "id": "1953091058050711583",
+    "text": "DSA isn’t just about code. It’s about chaos, rough pages,messy scribbles and cracked pens. 💯",
+    "createdAt": "2025-08-06T13:49:29.000Z",
+    "url": "https://x.com/itsCzar16/status/1953091058050711583",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/GxrF903awAQijVe.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 8,
+      "views": 210
+    },
+    "id": "2071850280409514137",
+    "text": "Another day, another chapter. 📖",
+    "createdAt": "2026-06-30T06:56:14.000Z",
+    "url": "https://x.com/itsCzar16/status/2071850280409514137",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HMCw12EXEAA2Qep.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 2,
+      "views": 45
+    },
+    "id": "2060476248556814680",
+    "text": "git commit -m \"3am grind\"",
+    "createdAt": "2026-05-29T21:39:54.000Z",
+    "url": "https://x.com/itsCzar16/status/2060476248556814680",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HJhIOl2aQAAV9Qv.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 2,
+      "views": 49
+    },
+    "id": "1951043280109457727",
+    "text": "The Queen of England died 18 months ago she ruled an entire nation and accumulated more wealth than 99.9% of humans and yet, you haven't thought about her except for right now. No matter how big your dreams, you're going to die.Everyone will move on. Do what you want.",
+    "createdAt": "2025-07-31T22:12:21.000Z",
+    "url": "https://x.com/itsCzar16/status/1951043280109457727",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 17,
+      "views": 230
+    },
+    "id": "2093663321539109101",
+    "text": "Man turborepo setup is painful\nCoding se phele debugging ho rahi hai.",
+    "createdAt": "2026-08-29T11:33:28.000Z",
+    "url": "https://x.com/itsCzar16/status/2093663321539109101",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HQ4vsL-aoAAO2TU.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 22,
+      "views": 428
+    },
+    "id": "2089027524164796805",
+    "text": "24 hours challenge — update\n\nDay went fully busy, no distractions, just focusing on the task in hand.\n\n If we track hours, we can do a lot more than we think.\n12hrs tracked today\nSlept only 3 hours, really tired. \n\nRealised this :\nSeprate how you feel from how you act💯.",
+    "createdAt": "2026-08-16T16:32:28.000Z",
+    "url": "https://x.com/itsCzar16/status/2089027524164796805",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HP23dYMaIAAGchT.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 2,
+      "views": 46
+    },
+    "id": "1952009139191943637",
+    "text": "The best thing a man can do while it is raining is, let it rain",
+    "createdAt": "2025-08-03T14:10:20.000Z",
+    "url": "https://x.com/itsCzar16/status/1952009139191943637",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 10,
+      "views": 116
+    },
+    "id": "2106705942318645395",
+    "text": "Code + F1 Perfect combo \nP1 MV3",
+    "createdAt": "2026-10-04T11:20:12.000Z",
+    "url": "https://x.com/itsCzar16/status/2106705942318645395",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HTyF4Y5bMAA1MqV.jpg",
+      "alt": "Image attached to this X post"
+    }
+  },
+  {
+    "metrics": {
+      "likes": 8,
+      "views": 69
+    },
+    "id": "2107205646815019055",
+    "text": "Build + Deployment errors",
+    "createdAt": "2026-10-05T20:25:50.000Z",
+    "url": "https://x.com/itsCzar16/status/2107205646815019055",
+    "author": {
+      "name": "Czar16",
+      "handle": "itsCzar16",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/2074147795435724800/0wpKqoBj_normal.jpg"
+    },
+    "image": {
+      "url": "https://pbs.twimg.com/media/HT5MXG0agAAunGe.jpg",
+      "alt": "Image attached to this X post"
+    }
+  }
+]

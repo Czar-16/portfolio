@@ -7,7 +7,7 @@ import { GracefulImage } from "@/components/graceful-image";
 export function PlaylistCard() {
   return (
     <section className="shell py-10 sm:py-12">
-      <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#05080c]">
+      <div className="card-lift overflow-hidden rounded-2xl border border-white/[0.08] bg-[#05080c]">
         {/* Section header */}
         <div className="flex flex-col gap-4 border-b border-white/[0.08] px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div>
@@ -60,7 +60,7 @@ export function PlaylistCard() {
                 </p>
 
                 <h3 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                  {spotifyPlaylist.name ?? "CodeKarleBSDk"}
+                  {spotifyPlaylist.name}
                 </h3>
 
                 <p className="mt-2 text-sm text-white/40">

@@ -301,86 +301,90 @@ export function TerminalCard() {
   return (
     <div
       ref={cardRef}
-      role="region"
-      aria-label="Interactive terminal"
-      className={`${styles.card} flex h-[280px] w-full min-w-0 flex-col overflow-hidden rounded-xl border border-white/12 bg-black/50 font-mono text-[12px] leading-[1.65] text-white/65 backdrop-blur-md sm:h-[300px] sm:text-[13px] lg:text-[14px]`}
+      className={`card-lift-host ${styles.entrance}`}
       data-visible={inView || reduceMotion}
-      onClick={(event) => focusTerminal(event.target)}
     >
-      <p className="sr-only">Terminal introduction: {INTRO_LINES.map((line) => line.kind === "command" ? `$ ${line.text}` : line.text).join(". ")}. Type help for commands. Use arrow keys for command history, Tab to complete a partial command, and Control L to clear.</p>
-      <div className="relative flex h-10 shrink-0 items-center justify-between border-b border-white/10 px-3.5">
-        <div aria-hidden="true" className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-red-400/75" />
-          <span className="h-2.5 w-2.5 rounded-full bg-amber-300/75" />
-          <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/75" />
-        </div>
-        <span className="pointer-events-none absolute inset-x-16 text-center text-[11px] text-white/50">czar16 — zsh</span>
-        {!finished ? (
-          <button type="button" onClick={() => setSkipped(true)} className="rounded px-1.5 py-0.5 text-[10px] text-white/50 transition-colors hover:text-white focus-visible:text-white" aria-label="Skip terminal introduction">skip</button>
-        ) : <span aria-hidden="true" className="text-[10px] text-white/35">⌨</span>}
-      </div>
-
-      <div ref={scrollRef} data-lenis-prevent className={`${styles.scroll} min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain px-3.5 py-3 sm:px-4`}>
-        {showIntro && (
-          <div aria-hidden="true" className={styles.intro} data-instant={skipped || reduceMotion}>
-            {INTRO_LINES.map((line, index) => {
-              const complete = finished || index < progress.index;
-              const active = !finished && index === progress.index && line.kind !== "output";
-              if ((!complete && !active) || (finished && line.kind === "prompt")) return null;
-              return (
-                <div
-                  key={`intro-${index}`}
-                  data-intro-line={index}
-                  data-intro-kind={line.kind}
-                  className={`${line.kind === "output" ? styles.line : ""} whitespace-pre-wrap break-words ${line.kind !== "output" ? "text-white" : `pl-4 ${line.text.includes("✓") ? "text-success" : ""}`}`}
-                >
-                  {line.kind !== "output" && <span className="text-success">${" "}</span>}
-                  <span data-intro-text>{complete ? line.text : line.text.slice(0, progress.length)}</span>
-                  {line.kind !== "output" && <span className={styles.cursor} data-active={index === cursorIndex} />}
-                </div>
-              );
-            })}
+      <div
+        role="region"
+        aria-label="Interactive terminal"
+        className={`card-lift ${styles.card} flex h-[280px] w-full min-w-0 flex-col overflow-hidden rounded-xl border border-white/12 bg-black/50 font-mono text-[12px] leading-[1.65] text-white/65 backdrop-blur-md sm:h-[300px] sm:text-[13px] lg:text-[14px]`}
+        onClick={(event) => focusTerminal(event.target)}
+      >
+        <p className="sr-only">Terminal introduction: {INTRO_LINES.map((line) => line.kind === "command" ? `$ ${line.text}` : line.text).join(". ")}. Type help for commands. Use arrow keys for command history, Tab to complete a partial command, and Control L to clear.</p>
+        <div className="relative flex h-10 shrink-0 items-center justify-between border-b border-white/10 px-3.5">
+          <div aria-hidden="true" className="flex gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-red-400/75" />
+            <span className="h-2.5 w-2.5 rounded-full bg-amber-300/75" />
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/75" />
           </div>
-        )}
+          <span className="pointer-events-none absolute inset-x-16 text-center text-[11px] text-white/50">czar16 — zsh</span>
+          {!finished ? (
+            <button type="button" onClick={() => setSkipped(true)} className="rounded px-1.5 py-0.5 text-[10px] text-white/50 transition-colors hover:text-white focus-visible:text-white" aria-label="Skip terminal introduction">skip</button>
+          ) : <span aria-hidden="true" className="text-[10px] text-white/35">⌨</span>}
+        </div>
 
-        <div aria-live="polite" aria-relevant="additions" aria-atomic="false">
-          {lines.map((line) => (
-            <div key={line.id} className={`${line.kind === "output" ? styles.line : ""} whitespace-pre-wrap [overflow-wrap:anywhere] ${line.kind === "command" ? "flex gap-1 text-white" : line.text.includes("✓") ? "pl-4 text-success" : "pl-4"}`}>
-              {line.kind === "command" && <Prompt />}
-              <span>{line.text}
-                {line.links && <span className="mt-0.5 flex flex-wrap gap-x-3 gap-y-1">{line.links.map((link) => (
-                  <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" className="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">{link.label}</a>
-                ))}</span>}
-              </span>
+        <div ref={scrollRef} data-lenis-prevent className={`${styles.scroll} min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain px-3.5 py-3 sm:px-4`}>
+          {showIntro && (
+            <div aria-hidden="true" className={styles.intro} data-instant={skipped || reduceMotion}>
+              {INTRO_LINES.map((line, index) => {
+                const complete = finished || index < progress.index;
+                const active = !finished && index === progress.index && line.kind !== "output";
+                if ((!complete && !active) || (finished && line.kind === "prompt")) return null;
+                return (
+                  <div
+                    key={`intro-${index}`}
+                    data-intro-line={index}
+                    data-intro-kind={line.kind}
+                    className={`${line.kind === "output" ? styles.line : ""} whitespace-pre-wrap break-words ${line.kind !== "output" ? "text-white" : `pl-4 ${line.text.includes("✓") ? "text-success" : ""}`}`}
+                  >
+                    {line.kind !== "output" && <span className="text-success">${" "}</span>}
+                    <span data-intro-text>{complete ? line.text : line.text.slice(0, progress.length)}</span>
+                    {line.kind !== "output" && <span className={styles.cursor} data-active={index === cursorIndex} />}
+                  </div>
+                );
+              })}
             </div>
-          ))}
-        </div>
+          )}
 
-        <form className={`mt-1 flex min-w-0 items-center gap-1 ${!finished ? "hidden" : ""}`} onSubmit={(event) => { event.preventDefault(); runCommand(); }}>
-          <Prompt />
-          <div className="min-w-0 flex-1">
-            <input
-              ref={inputRef}
-              aria-label="Terminal command"
-              aria-describedby={hintId}
-              placeholder="Type a command..."
-              disabled={!finished}
-              value={value}
-              onChange={(event) => { setValue(event.target.value); setHistoryIndex(history.length); }}
-              onKeyDown={handleKeyDown}
-              className={`${styles.input} w-full min-w-0 bg-transparent font-mono text-[16px] leading-[1.65] text-white placeholder:text-white/40 sm:text-[13px] lg:text-[14px]`}
-              autoComplete="off"
-              autoCapitalize="off"
-              spellCheck={false}
-              enterKeyHint="send"
-            />
+          <div aria-live="polite" aria-relevant="additions" aria-atomic="false">
+            {lines.map((line) => (
+              <div key={line.id} className={`${line.kind === "output" ? styles.line : ""} whitespace-pre-wrap [overflow-wrap:anywhere] ${line.kind === "command" ? "flex gap-1 text-white" : line.text.includes("✓") ? "pl-4 text-success" : "pl-4"}`}>
+                {line.kind === "command" && <Prompt />}
+                <span>{line.text}
+                  {line.links && <span className="mt-0.5 flex flex-wrap gap-x-3 gap-y-1">{line.links.map((link) => (
+                    <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" className="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">{link.label}</a>
+                  ))}</span>}
+                </span>
+              </div>
+            ))}
           </div>
-        </form>
-      </div>
-      <div className="flex h-10 shrink-0 items-center border-t border-white/10 px-3.5 sm:px-4">
-        <p id={hintId} className="text-[11px] leading-relaxed text-white/50">
-          {finished ? <>Type <code className="text-accent">help</code> to explore. Press Enter.</> : "Click or press any key to skip."}
-        </p>
+
+          <form className={`mt-1 flex min-w-0 items-center gap-1 ${!finished ? "hidden" : ""}`} onSubmit={(event) => { event.preventDefault(); runCommand(); }}>
+            <Prompt />
+            <div className="min-w-0 flex-1">
+              <input
+                ref={inputRef}
+                aria-label="Terminal command"
+                aria-describedby={hintId}
+                placeholder="Type a command..."
+                disabled={!finished}
+                value={value}
+                onChange={(event) => { setValue(event.target.value); setHistoryIndex(history.length); }}
+                onKeyDown={handleKeyDown}
+                className={`${styles.input} w-full min-w-0 bg-transparent font-mono text-[16px] leading-[1.65] text-white placeholder:text-white/40 sm:text-[13px] lg:text-[14px]`}
+                autoComplete="off"
+                autoCapitalize="off"
+                spellCheck={false}
+                enterKeyHint="send"
+              />
+            </div>
+          </form>
+        </div>
+        <div className="flex h-10 shrink-0 items-center border-t border-white/10 px-3.5 sm:px-4">
+          <p id={hintId} className="text-[11px] leading-relaxed text-white/50">
+            {finished ? <>Type <code className="text-accent">help</code> to explore. Press Enter.</> : "Click or press any key to skip."}
+          </p>
+        </div>
       </div>
     </div>
   );

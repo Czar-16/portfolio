@@ -13,9 +13,8 @@ export function StackCard({ children, className, labelledBy }: {
   const reduce = useReducedMotion();
 
   return (
-    <motion.section
-      aria-labelledby={labelledBy}
-      className={className}
+    <motion.div
+      className="card-lift-host h-full min-w-0"
       initial={reduce ? false : "hidden"}
       whileInView="visible"
       viewport={{ once: true, amount: 0.15 }}
@@ -33,8 +32,10 @@ export function StackCard({ children, className, labelledBy }: {
         },
       }}
     >
-      {children}
-    </motion.section>
+      <section aria-labelledby={labelledBy} className={`card-lift ${className}`}>
+        {children}
+      </section>
+    </motion.div>
   );
 }
 

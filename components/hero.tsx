@@ -21,9 +21,9 @@ const ghostBtn =
 
 export function Hero() {
   return (
-    <section className="relative mx-auto w-[calc(100%-24px)] max-w-[2100px] overflow-hidden rounded-[32px] border border-white/10">
+    <section className="relative mx-auto w-[calc(100%-24px)] max-w-[2100px] rounded-[32px] border border-white/10">
       {/* Banner */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 overflow-hidden rounded-[inherit]">
         <Image
           src={BANNER}
           alt=""

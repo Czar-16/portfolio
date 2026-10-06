@@ -45,7 +45,7 @@ function ProjectLinks({ project }: { project: Project }) {
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <article id={project.slug} className="motion-card group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
+    <article id={project.slug} className="card-lift group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
       <div className="relative aspect-video shrink-0 overflow-hidden">
         <GracefulImage
           src={project.image}
@@ -105,7 +105,7 @@ function ProjectCard({ project }: { project: Project }) {
 
 function SeeMoreBox() {
   return (
-    <div className="relative overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
+    <div className="card-lift relative overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
       {/* Soft glow */}
       <div
         className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-accent/15 blur-3xl"

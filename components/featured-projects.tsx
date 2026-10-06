@@ -32,7 +32,7 @@ export function FeaturedProjects() {
 
             return (
               <Reveal key={project.slug} className="h-full">
-                <div className="card motion-card group flex h-full flex-col overflow-hidden">
+                <div className="card card-lift group flex h-full flex-col overflow-hidden">
                   <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/5 bg-black/40">
                     <GracefulImage
                       src={project.image}

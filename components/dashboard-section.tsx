@@ -3,6 +3,8 @@
 import { stack } from "@/data/stack";
 import { techIcons } from "@/data/tech-icons";
 import { GitHubActivity } from "@/components/github-activity";
+import { XPostsCard } from "@/components/x-posts-card";
+import { LeetCodeStatsCard } from "@/components/leetcode-stats-card";
 import styles from "./dashboard-section.module.css";
 import { useId, useState } from "react";
 import { motion } from "motion/react";
@@ -31,10 +33,8 @@ export function DashboardSection() {
   const transition = { duration: reduce ? 0 : 0.25, ease: motionEase };
   return (
     <section className="py-20 bg-bg-soft">
-      <div
-        className={`shell grid grid-cols-1 items-start gap-8 lg:grid-cols-2 ${expanded ? "lg:items-stretch" : ""}`}
-      >
-        <div className="card p-7 lg:p-8">
+      <div className="shell grid grid-cols-1 items-stretch gap-8 lg:grid-cols-2">
+        <div className="card card-lift p-7 lg:p-8">
           <h3 className="text-lg font-semibold">
             <button
               type="button"
@@ -94,9 +94,12 @@ export function DashboardSection() {
           </motion.div>
         </div>
 
-        <div className="card p-6 lg:p-7">
+        <div className="card card-lift p-6 lg:p-7">
           <GitHubActivity />
         </div>
+
+        <LeetCodeStatsCard />
+        <XPostsCard />
       </div>
     </section>
   );

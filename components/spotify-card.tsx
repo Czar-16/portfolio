@@ -113,7 +113,7 @@ export function SpotifyCard({
   }, []);
 
   return (
-    <div ref={cardRef} className="motion-card relative w-full rounded-xl border border-white/15 bg-black/55 backdrop-blur-md">
+    <div ref={cardRef} className="card-lift relative w-full rounded-xl border border-white/15 bg-black/55 backdrop-blur-md">
       <div
         ref={hostRef}
         aria-hidden="true"

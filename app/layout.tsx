@@ -8,6 +8,7 @@ import { CommandPaletteWrapper } from "@/components/command-palette-wrapper";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { MotionProvider } from "@/components/motion-provider";
 import { BackToTop } from "@/components/back-to-top";
+import { CursorGlow } from "@/components/cursor-glow";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -62,6 +63,7 @@ export default function RootLayout({
             <CommandPaletteWrapper />
           </ThemeProvider>
         </MotionProvider>
+        <CursorGlow />
       </body>
     </html>
   );

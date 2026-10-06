@@ -62,7 +62,7 @@ function Tile({
 }) {
   return (
     <div
-      className={`card motion-card group flex h-full flex-col p-5 ${className}`}
+      className={`card card-lift group flex h-full flex-col p-5 ${className}`}
       data-capability-card
     >
       <Art>{children}</Art>

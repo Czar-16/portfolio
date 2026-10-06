@@ -18,7 +18,7 @@
   "nightcrawler": "https://m.media-amazon.com/images/M/MV5BYjMwMmI5MWQtOTU4OS00OTAyLTg0OTYtNmQ5YzExZTQ3ZWJhXkEyXkFqcGc@._V1_QL75_UX500_.jpg",
   "source-code": "https://m.media-amazon.com/images/M/MV5BMTY0MTc3MzMzNV5BMl5BanBnXkFtZTcwNDE4MjE0NA@@._V1_QL75_UX500_.jpg",
   "the-batman": "https://m.media-amazon.com/images/M/MV5BMmU5NGJlMzAtMGNmOC00YjJjLTgyMzUtNjAyYmE4Njg5YWMyXkEyXkFqcGc@._V1_QL75_UX500_.jpg",
-  "true-detective": "https://m.media-amazon.com/images/M/MV5BYjgwYzA1NWMtNDYyZi00ZGQyLWI5NTktMDYwZjE2OTIwZWEwXkEyXkFqcGc@._V1_QL75_UX500_.jpg",
+  "caught-stealing": "https://www.sonypictures.com/sites/default/files/title-key-art/caughtstealing_onesheet_1400x2100_pvod.jpg",
   "the-uprising": "https://m.media-amazon.com/images/M/MV5BYmNiZjVhOGItZTUxMi00MDUwLWJlNDItYTg2MTViZmQzMmU0XkEyXkFqcGc@._V1_QL75_UX500_.jpg",
   "the-gentlemen": "https://m.media-amazon.com/images/M/MV5BMjE2ZjQ4ZGMtZjFhMi00NmI5LTliNjEtODczMWMxNjliZjgxXkEyXkFqcGc@._V1_QL75_UX500_.jpg",
   "wrath-of-man": "https://m.media-amazon.com/images/M/MV5BODE4ZGY4OTktNDBjMy00NGVkLTk5YWUtNjA3NGU3MTA5NzM0XkEyXkFqcGc@._V1_QL75_UX500_.jpg",
@@ -40,5 +40,16 @@
   "halt-and-catch-fire": "https://m.media-amazon.com/images/M/MV5BZTRkNzQwMjAtMzg5Mi00ZDQwLThmYWYtNmQwMDFiYmIxOWRhXkEyXkFqcGc@._V1_QL75_UX500_.jpg",
   "the-wolf-of-wall-street": "https://m.media-amazon.com/images/M/MV5BMjIxMjgxNTk0MF5BMl5BanBnXkFtZTgwNjIyOTg2MDE@._V1_QL75_UX500_.jpg",
   "dumb-money": "https://www.sonypictures.com/sites/default/files/title-key-art/dumbmoney_onesheet_1400x2100_est.jpg",
-  "bitconned": "https://images.squarespace-cdn.com/content/v1/659dbf35c403a37668fc103f/1705274388753-2FFC6KZUHEY26R6KKQB6/BITCONNED_POSTER.jpg"
+  "bitconned": "https://images.squarespace-cdn.com/content/v1/659dbf35c403a37668fc103f/1705274388753-2FFC6KZUHEY26R6KKQB6/BITCONNED_POSTER.jpg",
+  "scarface": "https://www.impawards.com/1983/posters/scarface_ver1.jpg",
+  "the-godfather": "https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+  "extraction": "https://m.media-amazon.com/images/M/MV5BNDBhMmI3OWYtZTA2Ny00Y2RjLTliMWQtYWY5MGIwN2RlZGFjXkEyXkFqcGc@._V1_QL75_UX500_.jpg",
+  "narcos": "https://m.media-amazon.com/images/M/MV5BNzQwOTcwMzIwN15BMl5BanBnXkFtZTgwMjYxMTA0NjE@._V1_QL75_UX500_.jpg",
+  "eternal-sunshine-of-the-spotless-mind": "https://m.media-amazon.com/images/M/MV5BMTY4NzcwODg3Nl5BMl5BanBnXkFtZTcwNTEwOTMyMw@@._V1_QL75_UX500_.jpg",
+  "the-art-of-racing-in-the-rain": "https://m.media-amazon.com/images/M/MV5BNzUyMTJlMzMtYjJkYy00MDA4LTlhMDAtNjM1OGVhYmFjZmJiXkEyXkFqcGc@._V1_QL75_UX500_.jpg",
+  "den-of-thieves": "https://m.media-amazon.com/images/M/MV5BMzYyODcwMDAyM15BMl5BanBnXkFtZTgwOTA4MjIwNDI@._V1_QL75_UX500_.jpg",
+  "the-town": "https://m.media-amazon.com/images/M/MV5BMTcyNzcxODg3Nl5BMl5BanBnXkFtZTcwMTUyNjQ3Mw@@._V1_QL75_UX500_.jpg",
+  "tumse-na-ho-payega": "https://m.media-amazon.com/images/M/MV5BNmYxYWIzZTYtMTFmMy00YjBiLThiYjMtNmVmOGU5NDE0ZWM1XkEyXkFqcGc@._V1_QL75_UX500_.jpg",
+  "dont-fuck-with-cats": "https://m.media-amazon.com/images/M/MV5BNmJhMjdhMmYtNTI0NS00OGIzLWIzZGItZTQ4NzI4ZWU0ZjYyXkEyXkFqcGc@._V1_QL75_UX500_.jpg",
+  "fyre": "https://m.media-amazon.com/images/M/MV5BMjQ2NzE1MjYxMV5BMl5BanBnXkFtZTgwMjM3MDQxNzM@._V1_QL75_UX500_.jpg"
 }

@@ -1,0 +1,60 @@
+.card {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+.card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease-out;
+}
+.card::after {
+  padding: 1px;
+  background: radial-gradient(260px circle at var(--mouse-x) var(--mouse-y), color-mix(in oklab, var(--accent) 55%, transparent), transparent 75%);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+.viewport { position: relative; flex-shrink: 0; height: 384px; margin-block: 1.5rem; overflow: hidden; }
+.post { position: absolute; inset: 0; display: flex; flex-direction: column; min-width: 0; }
+.textOnlyPost { bottom: auto; }
+.post > * { flex-shrink: 0; }
+.postText {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  margin-top: 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--fg);
+}
+.media { position: relative; display: block; flex-shrink: 0; height: 230px; margin-top: auto; overflow: hidden; border: 1px solid var(--line); border-radius: 0.75rem; background: var(--card-elevated); }
+.postLink { align-self: flex-start; display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--fg-secondary); }
+.postLink:hover { color: var(--fg); }
+.textLink:hover { text-decoration: underline; text-underline-offset: 3px; color: var(--fg); }
+.postText:hover { color: var(--fg); }
+.profileLink { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-right: -0.5rem; border-radius: 0.5rem; color: var(--fg-secondary); }
+.profileLink:hover { color: var(--fg); background: var(--card-elevated); }
+.footer { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; border-top: 1px solid var(--line); padding-top: 1.25rem; min-height: 65px; }
+.empty { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.empty .postLink { align-self: center; }
+.shimmer { background: linear-gradient(100deg, var(--line) 25%, var(--card-elevated) 50%, var(--line) 75%); background-size: 200% 100%; border-radius: 0.25rem; animation: shimmer 1.8s linear infinite; }
+.media.shimmer { border-radius: 0.75rem; }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (min-width: 768px) { .card { padding: 1.75rem; } }
+@media (hover: hover) and (pointer: fine) { :global([data-theme="dark"]) .card:hover::after { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .card::after { display: none; } .shimmer { animation: none; } }

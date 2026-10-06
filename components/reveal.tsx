@@ -18,7 +18,7 @@ export function Reveal({
 }) {
   const reduce = useReducedMotion();
 
-  if (reduce) return <div className={className}>{children}</div>;
+  if (reduce) return <div className={`card-lift-host ${className}`}>{children}</div>;
 
   return (
     <motion.div
@@ -26,7 +26,7 @@ export function Reveal({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.4, delay: Math.min(delay, 0.2), ease: motionEase }}
-      className={className}
+      className={`card-lift-host ${className}`}
     >
       {children}
     </motion.div>
@@ -77,7 +77,7 @@ export function StaggerItem({
 }) {
   const reduce = useReducedMotion();
 
-  if (reduce) return <div className={className}>{children}</div>;
+  if (reduce) return <div className={`card-lift-host ${className}`}>{children}</div>;
 
   return (
     <motion.div
@@ -89,7 +89,7 @@ export function StaggerItem({
           transition: { duration: 0.4, delay, ease: motionEase },
         },
       }}
-      className={className}
+      className={`card-lift-host ${className}`}
     >
       {children}
     </motion.div>

@@ -4,7 +4,7 @@ export type WatchItem = {
   title: string;
   year: number;
   slug: string;
-  type: "Film" | "Series";
+  type: "Film" | "Series" | "Documentary" | "Docuseries";
 };
 
 export const watchItems: WatchItem[] = [
@@ -27,7 +27,7 @@ export const watchItems: WatchItem[] = [
   { rank: 17, title: "Nightcrawler", year: 2014, slug: "nightcrawler", type: "Film" },
   { rank: 18, title: "Source Code", year: 2011, slug: "source-code", type: "Film" },
   { rank: 19, title: "The Batman", year: 2022, slug: "the-batman", type: "Film" },
-  { rank: 20, title: "True Detective", year: 2014, slug: "true-detective", type: "Series" },
+  { rank: 20, title: "Caught Stealing", year: 2025, slug: "caught-stealing", type: "Film" },
   { rank: 21, title: "The Uprising", year: 2026, slug: "the-uprising", type: "Film" },
   { rank: 22, title: "The Gentlemen (2019)", year: 2019, slug: "the-gentlemen", type: "Film" },
   { rank: 23, title: "Wrath of Man", year: 2021, slug: "wrath-of-man", type: "Film" },
@@ -50,4 +50,15 @@ export const watchItems: WatchItem[] = [
   { rank: 40, title: "The Wolf of Wall Street", year: 2013, slug: "the-wolf-of-wall-street", type: "Film" },
   { rank: 41, title: "Dumb Money", year: 2023, slug: "dumb-money", type: "Film" },
   { rank: 42, title: "Bitconned", year: 2024, slug: "bitconned", type: "Film" },
+  { rank: 43, title: "Scarface", year: 1983, slug: "scarface", type: "Film" },
+  { rank: 44, title: "The Godfather", year: 1972, slug: "the-godfather", type: "Film" },
+  { rank: 45, title: "Extraction", year: 2020, slug: "extraction", type: "Film" },
+  { rank: 46, title: "Narcos", year: 2015, slug: "narcos", type: "Series" },
+  { rank: 47, title: "Eternal Sunshine of the Spotless Mind", year: 2004, slug: "eternal-sunshine-of-the-spotless-mind", type: "Film" },
+  { rank: 48, title: "The Art of Racing in the Rain", year: 2019, slug: "the-art-of-racing-in-the-rain", type: "Film" },
+  { rank: 49, title: "Den of Thieves", year: 2018, slug: "den-of-thieves", type: "Film" },
+  { rank: 50, title: "The Town", year: 2010, slug: "the-town", type: "Film" },
+  { rank: 51, title: "Tumse Na Ho Payega", year: 2023, slug: "tumse-na-ho-payega", type: "Film" },
+  { rank: 52, title: "Don't F**k with Cats: Hunting an Internet Killer", year: 2019, slug: "dont-fuck-with-cats", type: "Docuseries" },
+  { rank: 53, title: "FYRE: The Greatest Party That Never Happened", year: 2019, slug: "fyre", type: "Documentary" },
 ];

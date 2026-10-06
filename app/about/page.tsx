@@ -26,7 +26,7 @@ export default function AboutPage() {
         <Reveal>
           <section
             aria-labelledby="about-heading"
-            className="relative overflow-hidden rounded-3xl border border-line bg-card shadow-card"
+            className="card-lift relative overflow-hidden rounded-3xl border border-line bg-card shadow-card"
           >
             <div
               aria-hidden="true"
@@ -136,7 +136,7 @@ export default function AboutPage() {
               <Link
                 key={href}
                 href={href}
-                className="interactive-card group flex items-center justify-between gap-4 rounded-2xl border border-line bg-card px-6 py-5 shadow-card hover:border-accent/40"
+                className="card-lift group flex items-center justify-between gap-4 rounded-2xl border border-line bg-card px-6 py-5 shadow-card"
               >
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-fg-muted">

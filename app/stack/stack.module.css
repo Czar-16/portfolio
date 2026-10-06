@@ -1,17 +1,9 @@
 .card {
   position: relative;
-  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 18px;
   background: var(--card);
-  /* Keep the shadow list identical on hover, including dark mode's inset
-     shadow, so browsers can interpolate it instead of switching instantly. */
-  box-shadow: var(--sh-card), 0 12px 36px -14px transparent;
-  translate: 0 0;
-  transition:
-    border-color 380ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 380ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    translate 380ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: var(--sh-card);
 }
 
 .card::before {
@@ -50,15 +42,6 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .card:hover {
-    border-color: color-mix(in oklab, var(--accent) 35%, var(--line));
-    box-shadow: var(--sh-card), 0 12px 36px -14px color-mix(in oklab, var(--accent) 24%, transparent);
-  }
-
-  .card:hover::before {
-    opacity: 0.8;
-  }
-
   .tile:hover {
     border-color: color-mix(in oklab, var(--accent) 35%, var(--line));
     background: color-mix(in oklab, var(--accent) 5%, var(--card-elevated));
@@ -71,10 +54,6 @@
 }
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .card:hover {
-    translate: 0 -4px;
-  }
-
   .tile:hover .glyph {
     transform: translateY(-2px) rotate(-5deg);
   }

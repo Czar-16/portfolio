@@ -1,0 +1,186 @@
+.card {
+  --lc-easy: #15803d;
+  --lc-medium: #f2be3e;
+  --lc-medium-label: #966000;
+  --lc-hard: #dc2626;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 1.5rem;
+  border-radius: 1rem;
+}
+
+:global([data-theme="dark"]) .card {
+  --lc-easy: #4ade80;
+  --lc-medium: #ffa116;
+  --lc-medium-label: var(--lc-medium);
+  --lc-hard: #fb7185;
+}
+
+.card::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease-out;
+  content: "";
+}
+.card::after {
+  padding: 1px;
+  background: radial-gradient(260px circle at var(--mouse-x) var(--mouse-y), color-mix(in oklab, var(--accent) 55%, transparent), transparent 75%);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+.body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  padding-block: 1.5rem;
+}
+.ringWrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin-inline: auto;
+  flex-shrink: 0;
+}
+.ring {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.ringCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.segment { transition: filter 180ms ease-out; }
+.segment[data-active="true"] { filter: drop-shadow(0 0 5px currentColor); }
+.segment[data-difficulty="easy"] { color: var(--lc-easy); }
+.segment[data-difficulty="medium"] { color: var(--lc-medium); }
+.segment[data-difficulty="hard"] { color: var(--lc-hard); }
+.rows {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+.difficultyRow {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.625rem;
+  height: 64px;
+  padding-inline: 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
+  transition: background-color 180ms ease-out, border-color 180ms ease-out;
+}
+.difficultyRow[data-difficulty="easy"] { --difficulty-color: var(--lc-easy); }
+.difficultyRow[data-difficulty="medium"] {
+  --difficulty-color: var(--lc-medium);
+  --difficulty-label-color: var(--lc-medium-label);
+}
+.difficultyRow[data-difficulty="hard"] { --difficulty-color: var(--lc-hard); }
+.difficultyRow:hover,
+.difficultyRow:focus-visible {
+  background: color-mix(in oklab, var(--difficulty-color) 5%, var(--card));
+  border-color: color-mix(in oklab, var(--difficulty-color) 20%, var(--line));
+}
+.difficultyLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--difficulty-label-color, var(--difficulty-color));
+  font-weight: 500;
+}
+.dot { width: 5px; height: 5px; border-radius: 50%; background: var(--difficulty-color); }
+.barTrack {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--line);
+}
+.barFill { height: 100%; border-radius: inherit; background: var(--difficulty-color); }
+.profileLink {
+  display: flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  margin-right: -0.5rem;
+  border-radius: 0.5rem;
+  color: var(--fg-secondary);
+  transition: color 180ms ease-out, background-color 180ms ease-out;
+}
+.profileLink:hover { background: var(--card-elevated); color: var(--fg); }
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  min-height: 37px;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+.offline {
+  position: absolute;
+  top: 2.2rem;
+  right: 4.5rem;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lc-medium);
+}
+.shimmer {
+  background: linear-gradient(100deg, var(--line) 25%, var(--card-elevated) 50%, var(--line) 75%);
+  background-size: 200% 100%;
+  border-radius: 0.25rem;
+  animation: shimmer 1.8s linear infinite;
+}
+.skeletonRing {
+  position: absolute;
+  inset: 13px;
+  border-radius: 50%;
+  mask: radial-gradient(circle, transparent 64%, #000 65%, #000 72%, transparent 73%);
+}
+.skeletonNumber { width: 76px; height: 40px; }
+.skeletonCaption { width: 90px; height: 12px; margin-top: 0.5rem; }
+.skeletonLabel { width: 56px; height: 20px; }
+.skeletonCount { width: 100px; height: 16px; }
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+@media (min-width: 768px) {
+  .card { padding: 1.75rem; }
+}
+@container (min-width: 560px) {
+  .body { grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.15fr); gap: 2rem; }
+}
+@media (hover: hover) and (pointer: fine) {
+  :global([data-theme="dark"]) .card:hover::after { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card::after { display: none; }
+  .segment,
+  .difficultyRow,
+  .profileLink { transition: none; }
+  .shimmer { animation: none; }
+}

@@ -18,9 +18,9 @@ export default function QuotesPage() {
 
       <ol className="mt-12 grid list-none grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3" aria-label="100 hard-hitting quotes">
         {quotes.map((quote, index) => (
-          <li key={quote.id} className="quote-item relative h-full">
+          <li key={quote.id} className="card-lift-host relative h-full">
             <Reveal className="h-full" delay={(index % 3) * 0.04}>
-              <figure className="quote-card motion-card group relative flex h-full min-h-52 flex-col overflow-hidden rounded-[14px] border border-line bg-card p-6 shadow-card sm:p-7">
+              <figure className="quote-card card-lift group relative flex h-full min-h-52 flex-col overflow-hidden rounded-[14px] border border-line bg-card p-6 shadow-card sm:p-7">
                 <div className="mb-6 flex items-center justify-between">
                   <span className="font-mono text-[11px] font-medium tracking-[0.18em] text-fg-muted" aria-hidden="true">
                     {String(quote.id).padStart(3, "0")}
