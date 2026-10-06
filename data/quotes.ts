@@ -1,6 +1,25 @@
+export type QuoteCategoryId = "discipline" | "focus" | "resilience" | "business" | "mindset";
+
+export const quoteCategories = [
+  { id: "discipline", label: "Discipline & Action", description: "Less waiting. More doing.", symbol: "↗" },
+  { id: "focus", label: "Focus & Time", description: "Spend your attention wisely.", symbol: "◎" },
+  { id: "resilience", label: "Resilience & Confidence", description: "Fall down. Collect evidence.", symbol: "◇" },
+  { id: "business", label: "Business & Risk", description: "Build value. Take the shot.", symbol: "⌁" },
+  { id: "mindset", label: "Mindset & Relationships", description: "Your world shapes your thinking.", symbol: "✳" },
+] as const satisfies readonly { id: QuoteCategoryId; label: string; description: string; symbol: string }[];
+
+function categoryForQuote(id: number): QuoteCategoryId {
+  if (id <= 20) return "discipline";
+  if (id <= 30 || (id >= 71 && id <= 80)) return "focus";
+  if (id <= 50) return "resilience";
+  if (id <= 70) return "business";
+  return "mindset";
+}
+
 export type Quote = {
   id: number;
   text: string;
+  category: QuoteCategoryId;
 };
 
 // User-provided lines inspired by Alex Hormozi and Chris Williamson.
@@ -406,4 +425,4 @@ export const quotes: Quote[] = [
     "id": 100,
     "text": "Build a life you don't constantly need to escape from."
   }
-];
+].map((quote) => ({ ...quote, category: categoryForQuote(quote.id) }));

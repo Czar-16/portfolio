@@ -2,6 +2,7 @@ import { watchItems } from "@/data/watch";
 import { Reveal, StaggerChildren, StaggerItem } from "@/components/reveal";
 import { WatchPoster } from "@/components/watch-poster";
 import { FilmIcon } from "@/components/icons";
+import { WatchClosingCard } from "@/components/watch-closing-card";
 
 export default function WatchPage() {
   return (
@@ -81,6 +82,9 @@ export default function WatchPage() {
             </article>
           </StaggerItem>
         ))}
+        <StaggerItem className="col-span-full h-full xl:col-span-2">
+          <WatchClosingCard count={watchItems.length} />
+        </StaggerItem>
       </StaggerChildren>
     </div>
   );

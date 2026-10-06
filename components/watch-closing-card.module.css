@@ -1,0 +1,92 @@
+.scene {
+  --pixel-skin: #dca77f;
+  --pixel-hair: #242b3b;
+  --pixel-trousers: #34435c;
+  --pixel-hoodie: color-mix(in oklab, var(--accent) 55%, var(--bg));
+  --pixel-laptop: color-mix(in oklab, var(--fg-muted) 50%, var(--bg));
+}
+
+.thought {
+  width: 100%;
+  max-width: 360px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card-elevated);
+}
+
+.thoughtTrail {
+  display: flex;
+  width: 100%;
+  max-width: 260px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 8px 0 0 68px;
+}
+
+.thoughtTrail span {
+  width: 7px;
+  height: 7px;
+  background: color-mix(in oklab, var(--accent) 40%, var(--card));
+}
+
+.thoughtTrail span:nth-child(2) {
+  width: 5px;
+  height: 5px;
+  margin-left: 8px;
+}
+
+.thoughtTrail span:nth-child(3) {
+  width: 3px;
+  height: 3px;
+  margin-left: 14px;
+}
+
+.developer {
+  width: min(100%, 260px);
+  height: auto;
+  flex-shrink: 0;
+}
+
+.eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .leftHand {
+    animation: type 1.2s steps(2, end) infinite;
+  }
+
+  .rightHand {
+    animation: type 1.2s steps(2, end) -.6s infinite;
+  }
+
+  .eyes {
+    animation: blink 5.6s step-end infinite;
+  }
+
+  .cursor {
+    animation: cursor 1s step-end infinite;
+  }
+}
+
+.scene[data-animate="false"] * {
+  animation-play-state: paused;
+}
+
+@keyframes type {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes blink {
+  0%, 94%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(.15); }
+}
+
+@keyframes cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
