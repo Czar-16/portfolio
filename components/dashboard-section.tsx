@@ -34,7 +34,7 @@ export function DashboardSection() {
   return (
     <section className="py-20 bg-bg-soft">
       <div className="shell grid grid-cols-1 items-stretch gap-8 lg:grid-cols-2">
-        <div className="card card-lift p-7 lg:p-8">
+        <div className="card card-lift min-w-0 p-7 lg:p-8">
           <h3 className="text-lg font-semibold">
             <button
               type="button"
@@ -94,7 +94,7 @@ export function DashboardSection() {
           </motion.div>
         </div>
 
-        <div className="card card-lift p-6 lg:p-7">
+        <div className="card card-lift min-w-0 p-6 lg:p-7">
           <GitHubActivity />
         </div>
 

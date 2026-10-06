@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "import:x": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/import-x-archive.mjs",
-    "test:x": "node --test tests/x-posts.test.mjs"
+    "test:x": "node --test tests/x-posts.test.mjs",
+    "test:e2e": "npm run build:e2e && playwright test",
+    "typecheck": "tsc --noEmit",
+    "build:e2e": "PLAYWRIGHT_TEST_BUILD=1 next build"
   },
   "dependencies": {
     "acorn": "^8.19.0",
@@ -20,6 +23,7 @@
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

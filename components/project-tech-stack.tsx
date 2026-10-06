@@ -86,11 +86,28 @@ export function ProjectTechStack({
     }
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") dismiss();
+      if (event.key === "Escape") {
+        const restoreFocus = panel.current?.contains(document.activeElement);
+        if (restoreFocus) trigger.current?.focus({ preventScroll: true });
+        dismiss();
+      }
     }
 
     function onScroll(event: Event) {
       if (event.target instanceof Node && panel.current?.contains(event.target)) return;
+      // Keyboard focus can scroll the trigger into view after onFocus opens
+      // the panel. Re-anchor it instead of dismissing that newly opened panel.
+      if (focused.current && document.activeElement === trigger.current && trigger.current) {
+        const rect = trigger.current.getBoundingClientRect();
+        if (rect.bottom > 65 && rect.top < window.innerHeight) {
+          setPosition(current => current ? {
+            ...current,
+            left: Math.max(12, Math.min(rect.left, window.innerWidth - current.width - 12)),
+            top: rect.bottom + 8,
+          } : current);
+          return;
+        }
+      }
       dismiss();
     }
 
@@ -113,7 +130,7 @@ export function ProjectTechStack({
   return (
     <div className={`flex flex-wrap gap-1.5 ${className}`}>
       {tech.slice(0, 4).map((technology) => (
-        <span key={technology} className="badge">{technology}</span>
+        <span key={technology} className="badge max-w-full !h-auto min-h-[26px] !whitespace-normal py-1 leading-relaxed [overflow-wrap:anywhere]">{technology}</span>
       ))}
       {remaining.length > 0 && (
         <button
@@ -122,7 +139,7 @@ export function ProjectTechStack({
           aria-label={`${remaining.length} more technologies for ${projectName}`}
           aria-expanded={open}
           aria-controls={open ? id : undefined}
-          className="badge cursor-pointer transition-colors duration-180 hover:border-accent/40 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="badge min-h-9 min-w-9 justify-center cursor-pointer transition-colors duration-180 hover:border-accent/40 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           onPointerEnter={(event) => {
             if (event.pointerType === "touch") return;
             hovering.current = true;
@@ -136,7 +153,8 @@ export function ProjectTechStack({
             focused.current = true;
             show();
           }}
-          onBlur={() => {
+          onBlur={(event) => {
+            if (event.relatedTarget instanceof Node && panel.current?.contains(event.relatedTarget)) return;
             focused.current = false;
             pinned.current = false;
             scheduleClose();
@@ -166,6 +184,8 @@ export function ProjectTechStack({
             <motion.div
               id={id}
               role="region"
+              tabIndex={0}
+              data-lenis-prevent
               aria-label={`More technologies for ${projectName}`}
               className="overflow-y-auto rounded-xl border border-line bg-elevated p-4 text-fg shadow-pop"
               style={{ maxHeight: "calc(100dvh - 24px)" }}
@@ -173,6 +193,13 @@ export function ProjectTechStack({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: reduceMotion ? 0 : 6 }}
               transition={{ duration: reduceMotion ? 0 : 0.18, ease: motionEase }}
+              onFocus={() => { focused.current = true; cancelClose(); }}
+              onBlur={(event) => {
+                if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+                focused.current = false;
+                pinned.current = false;
+                scheduleClose();
+              }}
               onPointerEnter={(event) => {
                 if (event.pointerType === "touch") return;
                 hovering.current = true;

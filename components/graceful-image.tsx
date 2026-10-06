@@ -16,10 +16,10 @@ export function GracefulImage({
   sizes?: string;
   fallbackLabel?: string;
 }) {
-  const [failed, setFailed] = useState(false);
+  const [failedSrc, setFailedSrc] = useState("");
   const [loadedSrc, setLoadedSrc] = useState("");
 
-  if (failed) {
+  if (failedSrc === src) {
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-bg-soft px-6">
         <span className="text-center font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
@@ -38,7 +38,7 @@ export function GracefulImage({
       className={`image-reveal ${className}`}
       style={{ opacity: loadedSrc === src ? 1 : 0 }}
       onLoad={() => setLoadedSrc(src)}
-      onError={() => setFailed(true)}
+      onError={() => setFailedSrc(src)}
     />
   );
 }

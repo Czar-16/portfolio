@@ -55,11 +55,11 @@ export default function StackPage() {
                 </div>
                 {detail && <p className="mt-2 text-[13px] leading-6 text-fg-secondary">{detail.description}</p>}
               </header>
-              <ul className="grid grid-cols-1 gap-2.5 min-[380px]:grid-cols-2">
-                {category.items.map((item) => (
-                  <StackTile key={item} className={styles.tile}>
+              <ul className="grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,145px),1fr))]">
+                {category.items.map((item, tileIndex) => (
+                  <StackTile key={item} className={styles.tile} index={tileIndex}>
                     <TechGlyph name={item} />
-                    <span className="min-w-0 text-xs font-medium leading-5 text-fg sm:text-[13px]">{item}</span>
+                    <span className="min-w-0 [overflow-wrap:anywhere] text-xs font-medium leading-5 text-fg sm:text-[13px]">{item}</span>
                   </StackTile>
                 ))}
               </ul>

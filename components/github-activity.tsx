@@ -72,21 +72,26 @@ const FALLBACK_REPOS: RepoRow[] = [
 
 export function GitHubActivity() {
   const [stats, setStats] = useState(STATS_FALLBACK);
+  const [unavailable, setUnavailable] = useState(false);
   const [repos, setRepos] = useState<RepoRow[] | null>(null);
 
   useEffect(() => {
     let cancelled = false;
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 8000);
 
     (async () => {
       try {
         const [userRes, reposRes] = await Promise.all([
           fetch("https://api.github.com/users/Czar-16", {
             cache: "no-store",
+            signal: controller.signal,
           }),
           fetch(
             "https://api.github.com/users/Czar-16/repos?per_page=100&sort=updated",
             {
               cache: "no-store",
+              signal: controller.signal,
             },
           ),
         ]);
@@ -135,6 +140,7 @@ export function GitHubActivity() {
 
           setRepos(rows);
         } else {
+          setUnavailable(true);
           const body = await reposRes.text().catch(() => "");
           const limited = body.toLowerCase().includes("rate limit");
 
@@ -150,12 +156,18 @@ export function GitHubActivity() {
           }
         }
       } catch {
+        if (cancelled) return;
+        setUnavailable(true);
         setRepos((previous) => previous ?? FALLBACK_REPOS);
+      } finally {
+        window.clearTimeout(timeout);
       }
     })();
 
     return () => {
       cancelled = true;
+      controller.abort();
+      window.clearTimeout(timeout);
     };
   }, []);
 
@@ -163,7 +175,7 @@ export function GitHubActivity() {
   const isLoading = repos === null;
 
   return (
-    <div className="flex h-full flex-col gap-4">
+    <div className="flex h-full min-w-0 flex-col gap-4">
       {/* Section heading */}
       <a
         href={github.profileUrl}
@@ -186,15 +198,7 @@ export function GitHubActivity() {
         data-heatmap-wrapper
         className="overflow-hidden rounded-xl border border-line bg-card p-4 dark:border-[#1e293b] dark:bg-[#0d1117]"
       >
-        <a
-          href={github.profileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block w-full"
-          aria-label="View GitHub profile"
-        >
-          <GitHubHeatmap />
-        </a>
+        <GitHubHeatmap />
       </div>
 
       {/* Stats */}
@@ -232,7 +236,7 @@ export function GitHubActivity() {
       <div className="flex flex-1 flex-col">
         <p className="text-xs font-semibold text-fg">Featured Repositories</p>
 
-        <ul className="mt-2 flex max-h-[320px] flex-col divide-y divide-line overflow-y-auto overscroll-contain rounded-lg border border-line bg-card">
+        <ul aria-label="Featured repositories" aria-busy={isLoading} data-lenis-prevent className="mt-2 flex max-h-[320px] flex-col divide-y divide-line overflow-y-auto overscroll-contain rounded-lg border border-line bg-card">
           {isLoading ? (
             Array.from({ length: 8 }).map((_, index) => (
               <li key={index} className="flex items-center gap-3 px-3 py-2.5">
@@ -241,13 +245,13 @@ export function GitHubActivity() {
                 <span className="flex-1 space-y-1.5">
                   <span className="block h-3 w-24 animate-pulse rounded bg-line" />
 
-                  <span className="block h-2.5 w-40 animate-pulse rounded bg-line/60" />
+                  <span className="block h-2.5 w-full max-w-40 animate-pulse rounded bg-line/60" />
                 </span>
               </li>
             ))
           ) : visibleRepos.length === 0 ? (
             <li className="px-4 py-6 text-center text-sm text-fg-muted">
-              Couldn&apos;t load repos right now —{" "}
+              {unavailable ? "Couldn’t load repos right now" : "No public repositories yet"} —{" "}
               <a
                 href={github.profileUrl}
                 target="_blank"

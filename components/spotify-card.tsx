@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { GracefulImage } from "@/components/graceful-image";
 import { AnimatePresence, motion, useInView } from "motion/react";
 import { useReducedMotion } from "@/components/use-reduced-motion";
 import { useDocumentVisible } from "@/components/use-document-visible";
@@ -32,6 +32,8 @@ declare global {
   }
 }
 
+let cachedApi: SpotifyIframeApi | null = null;
+
 type Props = {
   title?: string;
   artist?: string;
@@ -52,6 +54,7 @@ export function SpotifyCard({
 }: Props) {
   const [playing, setPlaying] = useState(false);
   const [ready, setReady] = useState(false);
+  const [unavailable, setUnavailable] = useState(false);
   const hostRef = useRef<HTMLDivElement>(null);
   const ctrlRef = useRef<SpotifyEmbedController | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -66,14 +69,16 @@ export function SpotifyCard({
     const host = hostRef.current;
     if (!host) return;
 
+    const timeout = window.setTimeout(() => { if (!cancelled) setUnavailable(true); }, 8000);
     const mountEl = document.createElement("div");
     host.appendChild(mountEl);
 
     const init = (api: SpotifyIframeApi) => {
       if (cancelled) return;
+      cachedApi = api;
       api.createController(
         mountEl,
-        { uri: TRACK_URI, width: 300, height: 80 },
+        { uri: TRACK_URI, width: Math.min(300, host.clientWidth), height: 80 },
         (controller) => {
           if (cancelled) {
             controller.destroy?.();
@@ -83,6 +88,9 @@ export function SpotifyCard({
           controller.addListener("playback_update", (e) =>
             setPlaying(!e.data.isPaused),
           );
+          window.clearTimeout(timeout);
+          setUnavailable(false);
+          host.querySelectorAll("iframe").forEach((iframe) => { iframe.tabIndex = -1; });
           setReady(true);
         },
       );
@@ -94,33 +102,35 @@ export function SpotifyCard({
       init(api);
     };
 
-    if (!document.getElementById(SCRIPT_ID)) {
+    if (cachedApi) init(cachedApi);
+    else if (!document.getElementById(SCRIPT_ID)) {
       const script = document.createElement("script");
       script.id = SCRIPT_ID;
       script.src = "https://open.spotify.com/embed/iframe-api/v1";
       script.async = true;
+      script.onerror = () => { if (!cancelled) setUnavailable(true); };
       document.body.appendChild(script);
     }
 
     return () => {
       cancelled = true;
+      window.clearTimeout(timeout);
       window.onSpotifyIframeApiReady = prev;
       ctrlRef.current?.destroy?.();
       ctrlRef.current = null;
       if (mountEl.parentNode) mountEl.parentNode.removeChild(mountEl);
-      setReady(false);
     };
   }, []);
 
   return (
-    <div ref={cardRef} className="card-lift relative w-full rounded-xl border border-white/15 bg-black/55 backdrop-blur-md">
+    <div ref={cardRef} className="card-lift relative w-full min-w-0 [container-type:inline-size] rounded-xl border border-white/15 bg-black/55 backdrop-blur-md">
       <div
         ref={hostRef}
         aria-hidden="true"
         className={
           SHOW_EMBED
-            ? "absolute bottom-2 left-2 z-10 h-20 w-[300px] overflow-hidden rounded-md"
-            : "pointer-events-none absolute h-20 w-[300px] overflow-hidden opacity-0"
+            ? "absolute bottom-2 left-2 z-10 h-20 w-[300px] max-w-full overflow-hidden rounded-md"
+            : "pointer-events-none absolute h-20 w-[300px] max-w-full overflow-hidden opacity-0"
         }
         style={SHOW_EMBED ? undefined : { left: 0, top: 0 }}
       />
@@ -128,17 +138,16 @@ export function SpotifyCard({
       <div className="flex items-center gap-4 p-3 sm:p-4">
         <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-linear-to-br from-red-600/70 to-neutral-900 md:h-[68px] md:w-17">
           {cover && (
-            <Image
+            <GracefulImage
               src={cover}
               alt=""
-              fill
               sizes="68px"
               className="object-cover"
             />
           )}
         </div>
 
-        <div className="min-w-0 shrink-0">
+        <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold text-white md:text-lg">
             {title}
           </p>
@@ -148,7 +157,7 @@ export function SpotifyCard({
         </div>
 
         <div
-          className="ml-auto hidden h-10 items-center gap-[3px] sm:flex"
+          className="spotify-bars ml-auto hidden h-10 shrink-0 items-center gap-[3px]"
           aria-hidden="true"
         >
           {bars.map((h, i) => (
@@ -196,9 +205,11 @@ export function SpotifyCard({
         </svg>
       </div>
 
-      <div className="flex items-center justify-between border-t border-white/10 px-4 py-2.5">
+      {unavailable && <p role="status" className="px-4 pb-3 text-xs text-white/70">Player unavailable. <a href="https://open.spotify.com/track/6Ec5LeRzkisa5KJtwLfOoW" target="_blank" rel="noopener noreferrer" className="text-accent underline">Listen on Spotify</a></p>}
+
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-4 py-2.5">
         <div className="flex items-center gap-2 text-xs text-white/70 md:text-sm">
-          <span className="h-2 w-2 rounded-full bg-[#1ED760] shadow-[0_0_8px_rgba(30,215,96,0.7)]" />
+          <span className="h-2 w-2 shrink-0 rounded-full bg-[#1ED760] shadow-[0_0_8px_rgba(30,215,96,0.7)]" />
           Last played on Spotify • {lastPlayed}
         </div>
 
@@ -206,7 +217,7 @@ export function SpotifyCard({
           <button
             type="button"
             aria-label="Previous"
-            aria-disabled="true"
+            disabled
             className="p-1 opacity-40"
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
@@ -245,7 +256,7 @@ export function SpotifyCard({
           <button
             type="button"
             aria-label="Next"
-            aria-disabled="true"
+            disabled
             className="p-1 opacity-40"
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">

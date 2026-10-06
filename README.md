@@ -34,3 +34,27 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Verification
+
+```bash
+npm run lint
+npm run typecheck
+npm run test:x
+npx playwright install --with-deps chromium firefox webkit
+npm run test:e2e
+```
+
+The browser suite builds the production app into `.next-test`, starts it on port
+3100, and checks all seven page types in Chromium, Firefox, and WebKit. The
+separate build directory allows the development server to keep running.
+
+Coverage includes 320–1920px widths and breakpoint boundaries, both themes,
+short landscape layouts, touch and keyboard interactions, reduced motion,
+external-content failure and timeout states, and 200% zoom-equivalent reflow.
+Native browser zoom is not exposed by Playwright, so the zoom check uses the
+corresponding CSS viewport and pixel density. External responses are stubbed
+for repeatability; live service availability is not asserted.
+
+Screenshots for visual review are written to `test-results/review`; the HTML
+report and failure traces are available through `npx playwright show-report`.

@@ -33,6 +33,10 @@ export function Navbar() {
   useEffect(() => {
     if (!open) return;
     const unlock = lockBodyScroll();
+    const desktop = window.matchMedia("(min-width: 1280px)");
+    const closeOnDesktop = () => { if (desktop.matches) setOpen(false); };
+    closeOnDesktop();
+    desktop.addEventListener("change", closeOnDesktop);
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setOpen(false);
@@ -41,10 +45,20 @@ export function Navbar() {
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => {
+      desktop.removeEventListener("change", closeOnDesktop);
       unlock();
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [open]);
+
+  // Route changes can also come from history or the command palette.
+  const previousPath = useRef(pathname);
+  useEffect(() => {
+    if (previousPath.current !== pathname) {
+      previousPath.current = pathname;
+      setOpen(false);
+    }
+  }, [pathname]);
 
   const closeMenu = () => setOpen(false);
   const openPalette = () => {
@@ -64,7 +78,7 @@ export function Navbar() {
         </Link>
 
         {/* Desktop nav links */}
-        <ul className="hidden items-center gap-1 lg:flex">
+        <ul className="hidden items-center gap-1 xl:flex">
           {navItems.map((item) => {
             const active =
               item.href === "/"
@@ -95,7 +109,7 @@ export function Navbar() {
         </ul>
 
         {/* Desktop right side */}
-        <div className="hidden items-center gap-1 lg:flex">
+        <div className="hidden items-center gap-1 xl:flex">
           <button
             type="button"
             onClick={openPalette}
@@ -154,7 +168,7 @@ export function Navbar() {
         </div>
 
         {/* Mobile right side */}
-        <div className="flex items-center gap-1 lg:hidden">
+        <div className="flex items-center gap-1 xl:hidden">
           <button
             type="button"
             onClick={openPalette}
@@ -201,7 +215,7 @@ export function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: reduce ? 0 : 0.25, ease: motionEase }}
-            className="max-h-[calc(100dvh-65px)] overflow-x-hidden overflow-y-auto overscroll-contain border-b border-line bg-bg lg:hidden"
+            className="max-h-[calc(100dvh-65px)] overflow-x-hidden overflow-y-auto overscroll-contain border-b border-line bg-bg xl:hidden"
           >
             <div className="shell flex flex-col gap-1 py-4">
               {navItems.map((item, index) => {

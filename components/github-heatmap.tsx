@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useTheme } from "@/components/theme-provider";
 
 type Contribution = {
   date: string;
@@ -25,21 +26,6 @@ const DAYS = 7;
 const DARK_COLORS = ["#161b22", "#0e2e5c", "#1a4fb5", "#2563eb", "#3b82f6"];
 
 const LIGHT_COLORS = ["#ebedf0", "#6fd695", "#3cb35e", "#2d8f4b", "#216e39"];
-
-function getTheme() {
-  if (typeof document === "undefined") {
-    return "dark" as const;
-  }
-
-  const theme = document.documentElement.dataset.theme;
-
-  if (theme === "light") return "light" as const;
-  if (theme === "dark") return "dark" as const;
-
-  return window.matchMedia("(prefers-color-scheme: light)").matches
-    ? ("light" as const)
-    : ("dark" as const);
-}
 
 function buildCalendar(contributions: Contribution[]): Cell[][] {
   const sorted = [...contributions].sort((a, b) =>
@@ -113,36 +99,12 @@ export function GitHubHeatmap() {
     null,
   );
 
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-
-  useEffect(() => {
-    setTheme(getTheme());
-
-    const observer = new MutationObserver(() => {
-      setTheme(getTheme());
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-theme"],
-    });
-
-    const media = window.matchMedia("(prefers-color-scheme: light)");
-
-    const handleThemeChange = () => {
-      setTheme(getTheme());
-    };
-
-    media.addEventListener("change", handleThemeChange);
-
-    return () => {
-      observer.disconnect();
-      media.removeEventListener("change", handleThemeChange);
-    };
-  }, []);
+  const { theme } = useTheme();
 
   useEffect(() => {
     let cancelled = false;
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 8000);
 
     async function loadContributions() {
       try {
@@ -150,6 +112,7 @@ export function GitHubHeatmap() {
           "https://github-contributions-api.jogruber.de/v4/Czar-16?y=last",
           {
             cache: "no-store",
+            signal: controller.signal,
           },
         );
 
@@ -160,14 +123,19 @@ export function GitHubHeatmap() {
         const data = (await response.json()) as ApiResponse;
 
         if (!cancelled) {
+          if (!Array.isArray(data.contributions) || !data.contributions.every((item) =>
+            typeof item.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(item.date) &&
+            Number.isFinite(Date.parse(item.date)) && Number.isFinite(item.count) &&
+            Number.isInteger(item.level) && item.level >= 0 && item.level <= 4
+          )) throw new Error("Invalid contributions");
           setContributions(data.contributions);
         }
-      } catch (error) {
-        console.error("GitHub contribution error:", error);
-
+      } catch {
         if (!cancelled) {
           setContributions([]);
         }
+      } finally {
+        window.clearTimeout(timeout);
       }
     }
 
@@ -175,6 +143,8 @@ export function GitHubHeatmap() {
 
     return () => {
       cancelled = true;
+      controller.abort();
+      window.clearTimeout(timeout);
     };
   }, []);
 
@@ -195,7 +165,7 @@ export function GitHubHeatmap() {
    */
   if (contributions === null) {
     return (
-      <div className="w-full overflow-hidden">
+      <div role="status" aria-label="Loading GitHub contributions" className="w-full overflow-hidden">
         <div className="flex gap-[3px]">
           <div className="w-[27px] shrink-0" />
 
@@ -226,6 +196,7 @@ export function GitHubHeatmap() {
   if (!weeks.length) {
     return (
       <div
+        role="status"
         className={`flex h-[96px] items-center justify-center text-xs ${
           theme === "dark" ? "text-white/35" : "text-slate-400"
         }`}
@@ -237,6 +208,10 @@ export function GitHubHeatmap() {
 
   return (
     <div
+      tabIndex={0}
+      role="region"
+      aria-label="GitHub contribution calendar, scroll horizontally for earlier weeks"
+      data-lenis-prevent
       ref={(el) => { if (el) el.scrollLeft = el.scrollWidth; }}
       className="w-full overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-track]:bg-transparent"
     >

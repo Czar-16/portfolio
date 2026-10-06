@@ -3,7 +3,7 @@
 import { motion } from "motion/react";
 import { useReducedMotion } from "@/components/use-reduced-motion";
 import { Children, cloneElement, isValidElement, type ReactNode } from "react";
-import { motionEase } from "@/components/motion-provider";
+import { motionDuration, motionEase } from "@/components/motion-provider";
 
 export function Reveal({
   children,
@@ -24,8 +24,8 @@ export function Reveal({
     <motion.div
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.4, delay: Math.min(delay, 0.2), ease: motionEase }}
+      viewport={{ once: true, amount: "some" }}
+      transition={{ duration: motionDuration.enter, delay: Math.min(delay, motionDuration.staggerMax), ease: motionEase }}
       className={`card-lift-host ${className}`}
     >
       {children}
@@ -50,7 +50,7 @@ export function StaggerChildren({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-60px" }}
+      viewport={{ once: true, amount: "some" }}
       variants={{
         hidden: {},
         visible: {},
@@ -59,7 +59,7 @@ export function StaggerChildren({
     >
       {Children.map(children, (child, index) =>
         isValidElement<{ delay?: number }>(child) && child.type === StaggerItem
-          ? cloneElement(child, { delay: Math.min(index * gap, 0.2) })
+          ? cloneElement(child, { delay: Math.min(index * gap, motionDuration.staggerMax) })
           : child,
       )}
     </motion.div>
@@ -86,7 +86,7 @@ export function StaggerItem({
         visible: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.4, delay, ease: motionEase },
+          transition: { duration: motionDuration.enter, delay: Math.min(delay, motionDuration.staggerMax), ease: motionEase },
         },
       }}
       className={`card-lift-host ${className}`}

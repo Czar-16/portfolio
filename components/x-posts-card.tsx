@@ -10,6 +10,7 @@ import { XIcon } from "@/components/icons";
 import { GracefulImage } from "@/components/graceful-image";
 import { useReducedMotion } from "@/components/use-reduced-motion";
 import { useDocumentVisible } from "@/components/use-document-visible";
+import { motionDuration, motionEase } from "@/components/motion-provider";
 import { isXPost, mergeXPosts, selectXPosts, shufflePostIds, type XPost } from "@/lib/x-posts";
 import styles from "./x-posts-card.module.css";
 
@@ -100,7 +101,7 @@ function PostSlide({ post, index, count, reduce, onHeightChange }: {
       initial={reduce ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: reduce ? 0 : -8 }}
-      transition={{ duration: reduce ? 0 : 0.175, ease: "easeOut" }}
+      transition={{ duration: reduce ? 0 : motionDuration.interaction, ease: motionEase }}
     ><PostContent post={post} /></motion.div>
   );
 }
@@ -171,7 +172,7 @@ export function XPostsCard() {
       className="card-lift-host min-w-0 self-start"
       initial={reduce ? false : { opacity: 0, y: 12 }}
       animate={entered || reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-      transition={{ duration: reduce ? 0 : 0.4, ease: "easeOut" }}
+      transition={{ duration: reduce ? 0 : motionDuration.enter, ease: motionEase }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onFocusCapture={() => setFocused(true)}
@@ -186,7 +187,7 @@ export function XPostsCard() {
           className={styles.viewport}
           initial={false}
           animate={{ height: post ? viewportHeight : DEFAULT_VIEWPORT_HEIGHT }}
-          transition={{ duration: reduce ? 0 : 0.3, ease: "easeInOut" }}
+          transition={{ duration: reduce ? 0 : motionDuration.interaction, ease: motionEase }}
           role="region"
           aria-roledescription="carousel"
           aria-label="My X posts"

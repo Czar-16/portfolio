@@ -168,7 +168,7 @@ function AppDemoArt() {
       />
       <div
         ref={scope}
-        className="relative h-[148px] w-[288px] overflow-hidden rounded-lg border border-white/10 bg-black text-[11px] text-zinc-200 shadow-2xl max-[420px]:scale-90"
+        className="relative h-[148px] w-full max-w-[288px] overflow-hidden rounded-lg border border-white/10 bg-black text-[11px] text-zinc-200 shadow-2xl"
       >
         <div className="flex h-6 items-center gap-1.5 border-b border-white/10 px-3">
           <span className="size-2 rounded-full bg-zinc-700" />
@@ -179,7 +179,7 @@ function AppDemoArt() {
           </span>
         </div>
 
-        <div className="absolute left-3 top-[36px] flex h-7 w-[176px] items-center rounded-md border border-white/10 bg-white/5 px-2">
+        <div className="absolute left-3 top-[36px] right-[92px] flex h-7 items-center rounded-md border border-white/10 bg-white/5 px-2">
           <span
             data-ph
             className="absolute text-zinc-500"

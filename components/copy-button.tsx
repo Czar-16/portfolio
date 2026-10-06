@@ -44,7 +44,7 @@ export function CopyButton({ text, label, iconOnly = false }: {
         </svg>
         {!iconOnly && (status === "copied" ? "Copied!" : label)}
       </button>
-      <span role="status" className={status === "error" ? "absolute right-0 top-full z-10 mt-2 w-52 rounded-lg border border-line bg-card p-3 text-xs leading-relaxed text-fg shadow-pop" : "sr-only"}>
+      <span role="status" className={status === "error" ? `absolute ${iconOnly ? "right-0" : "left-0"} top-full z-10 mt-2 w-52 rounded-lg border border-line bg-card p-3 text-xs leading-relaxed text-fg shadow-pop` : "sr-only"}>
         {message}
       </span>
     </span>

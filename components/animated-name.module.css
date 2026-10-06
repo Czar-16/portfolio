@@ -25,6 +25,11 @@
 
 .cursor[data-active="true"]::after {
   animation: blink 1s step-end infinite;
+  animation-play-state: paused;
+}
+
+.cursor[data-animate="true"]::after {
+  animation-play-state: running;
 }
 
 @keyframes blink {

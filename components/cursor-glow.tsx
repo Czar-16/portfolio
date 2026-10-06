@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 export function CursorGlow() {
   const glowRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const glow = glowRef.current;
@@ -14,15 +16,33 @@ export function CursorGlow() {
     let active = false;
     let x = 0;
     let y = 0;
+    const selector = "[data-cursor-glow-border]";
+    let targets = Array.from(document.querySelectorAll<HTMLElement>(selector));
+
+    // Include asynchronously mounted cards, without searching the page every frame.
+    const observer = new MutationObserver(records => {
+      const changed = records.some(record => [...record.addedNodes, ...record.removedNodes].some(node =>
+        node instanceof HTMLElement && (node.matches(selector) || node.querySelector(selector)),
+      ));
+      if (changed) {
+        targets = Array.from(document.querySelectorAll<HTMLElement>(selector));
+        schedule();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
 
     function paint() {
       frame = 0;
+      // Finish all layout reads before updating any styles.
+      const positions = targets.map(element => {
+        const bounds = element.getBoundingClientRect();
+        return { element, x: x - bounds.left, y: y - bounds.top };
+      });
       glow!.style.transform = `translate3d(${x - 320}px, ${y - 320}px, 0)`;
       glow!.dataset.active = "true";
-      document.querySelectorAll<HTMLElement>("[data-cursor-glow-border]").forEach(element => {
-        const bounds = element.getBoundingClientRect();
-        element.style.setProperty("--mouse-x", `${x - bounds.left}px`);
-        element.style.setProperty("--mouse-y", `${y - bounds.top}px`);
+      positions.forEach(({ element, x, y }) => {
+        element.style.setProperty("--mouse-x", `${x}px`);
+        element.style.setProperty("--mouse-y", `${y}px`);
       });
     }
 
@@ -66,6 +86,7 @@ export function CursorGlow() {
 
     return () => {
       hide();
+      observer.disconnect();
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerout", leave);
       window.removeEventListener("blur", hide);
@@ -74,7 +95,7 @@ export function CursorGlow() {
       document.removeEventListener("visibilitychange", visibilityChanged);
       enabled.removeEventListener("change", hide);
     };
-  }, []);
+  }, [pathname]);
 
   return <div ref={glowRef} className="cursor-glow" aria-hidden="true" />;
 }

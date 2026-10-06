@@ -120,7 +120,7 @@ html.lenis {
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
   --motion-press: 160ms;
   --motion-hover: 220ms;
-  --motion-enter: 400ms;
+  --motion-enter: 350ms;
 }
 
 /* ------------------------------------------------------------------ *
@@ -133,6 +133,7 @@ html.lenis {
   }
 
   html {
+    scrollbar-gutter: stable;
     scroll-behavior: smooth;
     scroll-padding-top: 92px;
     -webkit-tap-highlight-color: transparent;
@@ -583,4 +584,9 @@ html[data-theme-reveal] *::after {
   .card-lift:focus-visible .project-image {
     transform: scale(1.05);
   }
+}
+
+/* Player ornamentation follows the card width, including inside dashboard grids. */
+@container (min-width: 500px) {
+  .spotify-bars { display: flex; }
 }

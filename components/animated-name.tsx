@@ -76,6 +76,7 @@ export function AnimatedName({ variant }: { variant: "hero" | "about" }) {
                 className={styles.cursor}
                 data-name-cursor
                 data-active={typing.phase !== "holding"}
+                data-animate={inView && visible && !reduce}
               />
             )}
           </span>

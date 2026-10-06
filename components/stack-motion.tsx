@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
-import { motionEase } from "@/components/motion-provider";
+import { motionDuration, motionEase } from "@/components/motion-provider";
 import { useReducedMotion } from "@/components/use-reduced-motion";
 
 export function StackCard({ children, className, labelledBy }: {
@@ -17,17 +17,15 @@ export function StackCard({ children, className, labelledBy }: {
       className="card-lift-host h-full min-w-0"
       initial={reduce ? false : "hidden"}
       whileInView="visible"
-      viewport={{ once: true, amount: 0.15 }}
+      viewport={{ once: true, amount: "some" }}
       variants={{
         hidden: { opacity: 0, y: 20 },
         visible: {
           opacity: 1,
           y: 0,
           transition: {
-            duration: reduce ? 0 : 0.45,
+            duration: reduce ? 0 : motionDuration.enter,
             ease: motionEase,
-            delayChildren: reduce ? 0 : 0.1,
-            staggerChildren: reduce ? 0 : 0.045,
           },
         },
       }}
@@ -39,7 +37,7 @@ export function StackCard({ children, className, labelledBy }: {
   );
 }
 
-export function StackTile({ children, className }: { children: ReactNode; className: string }) {
+export function StackTile({ children, className, index = 0 }: { children: ReactNode; className: string; index?: number }) {
   const reduce = useReducedMotion();
 
   return (
@@ -47,7 +45,11 @@ export function StackTile({ children, className }: { children: ReactNode; classN
       className={className}
       variants={{
         hidden: { opacity: 0, y: 8 },
-        visible: { opacity: 1, y: 0, transition: { duration: reduce ? 0 : 0.3, ease: motionEase } },
+        visible: { opacity: 1, y: 0, transition: {
+          duration: reduce ? 0 : motionDuration.enter,
+          delay: reduce ? 0 : Math.min(index * 0.04, motionDuration.staggerMax),
+          ease: motionEase,
+        } },
       }}
     >
       {children}
