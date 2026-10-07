@@ -1,9 +1,31 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { isVisitorId, visitorKeys, registerVisitor, REGISTER_VISITOR_SCRIPT } from '../lib/visitor-store.mjs';
+import { isVisitorRequestAllowed } from '../lib/visitor-request.mjs';
 
 const visitorId = 'a2baf772-0153-49a1-8bda-268ba3d03f35';
 const env = { UPSTASH_REDIS_REST_URL: 'https://example.upstash.io', UPSTASH_REDIS_REST_TOKEN: 'test-token' };
+
+test('same-origin browser visits work when Netlify rewrites the request URL', () => {
+  const request = new Request('http://internal.netlify/api/visitors', {
+    headers: { origin: 'https://anoopbuilds.netlify.app', 'sec-fetch-site': 'same-origin' },
+  });
+  assert.equal(isVisitorRequestAllowed(request), true);
+});
+
+test('origin validation still rejects other sites and supports clients without fetch metadata', () => {
+  const url = 'https://anoopbuilds.netlify.app/api/visitors';
+  for (const headers of [
+    { origin: 'https://other.example', 'sec-fetch-site': 'cross-site' },
+    { origin: 'https://anoopbuilds.netlify.app', 'sec-fetch-site': 'cross-site' },
+    { origin: 'https://other.example', 'sec-fetch-site': 'same-site' },
+    { origin: 'https://other.example' },
+    { origin: 'null' },
+  ]) assert.equal(isVisitorRequestAllowed(new Request(url, { headers })), false);
+  for (const headers of [{}, { origin: 'https://anoopbuilds.netlify.app' }]) {
+    assert.equal(isVisitorRequestAllowed(new Request(url, { headers })), true);
+  }
+});
 
 test('identifiers are validated and daily keys change precisely at UTC midnight', () => {
   assert.equal(isVisitorId(visitorId), true);

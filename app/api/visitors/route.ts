@@ -1,12 +1,12 @@
 import { isVisitorId, registerVisitor } from "@/lib/visitor-store.mjs";
+import { isVisitorRequestAllowed } from "@/lib/visitor-request.mjs";
 
 export const runtime = "nodejs";
 
 const headers = { "Cache-Control": "no-store" };
 
 export async function POST(request: Request) {
-  const origin = request.headers.get("origin");
-  if ((origin && origin !== new URL(request.url).origin) || request.headers.get("sec-fetch-site") === "cross-site") {
+  if (!isVisitorRequestAllowed(request)) {
     return Response.json({ error: "Forbidden" }, { status: 403, headers });
   }
   // Local development and preview traffic must not change the public total.
