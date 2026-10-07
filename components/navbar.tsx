@@ -215,7 +215,7 @@ export function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: reduce ? 0 : 0.25, ease: motionEase }}
-            className="max-h-[calc(100dvh-65px)] overflow-x-hidden overflow-y-auto overscroll-contain border-b border-line bg-bg xl:hidden"
+            className="absolute inset-x-0 top-full max-h-[calc(100dvh-65px)] overflow-x-hidden overflow-y-auto overscroll-contain border-b border-line bg-bg xl:hidden"
           >
             <div className="shell flex flex-col gap-1 py-4">
               {navItems.map((item, index) => {

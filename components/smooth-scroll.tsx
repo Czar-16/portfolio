@@ -22,7 +22,9 @@ export function SmoothScroll() {
     const syncScrollLock = () => {
       const lenis = lenisRef.current;
       if (!lenis) return;
-      const overflow = getComputedStyle(document.body).overflowY;
+      // Read the explicit lock, not computed overflow from lenis-stopped;
+      // otherwise Lenis's own CSS could keep it stopped after unlocking.
+      const overflow = document.documentElement.style.overflowY;
       if (overflow === "hidden" || overflow === "clip") {
         lenis.stop();
       } else if (lenis.isStopped) {
@@ -45,11 +47,11 @@ export function SmoothScroll() {
       syncScrollLock();
     };
 
-    // Honor the mobile navigation's existing body scroll lock.
+    // Honor the shared viewport lock used by menus and dialogs.
     const observer = new MutationObserver(syncScrollLock);
-    observer.observe(document.body, {
+    observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ["style", "class"],
+      attributeFilter: ["style"],
     });
     reducedMotion.addEventListener("change", configure);
     // Cancel inertia before the browser restores a history entry's position.

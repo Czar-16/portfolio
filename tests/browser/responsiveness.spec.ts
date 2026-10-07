@@ -83,7 +83,7 @@ test('mobile menu navigation, history and resize release scroll lock', async ({ 
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   const menu = page.getByRole('button', { name: 'Open menu', exact: true });
   await menu.click();
-  await expect(page.locator('body')).toHaveCSS('overflow', 'hidden');
+  await expect(page.locator('html')).toHaveCSS('overflow', 'hidden');
   await page.locator('#mobile-menu').getByRole('link', { name: 'About', exact: true }).click();
   await expect(page).toHaveURL('/about');
   await expect(menu).toBeVisible();
@@ -100,10 +100,76 @@ test('mobile menu navigation, history and resize release scroll lock', async ({ 
   await expect(menu).toBeVisible();
 });
 
+test.describe('scrolled mobile navigation', () => {
+  test.use({ hasTouch: true });
+
+  async function tapMenuButton(page: Page, name: 'Open menu' | 'Close menu') {
+    const button = page.getByRole('button', { name, exact: true });
+    await expect(button).toBeInViewport();
+    const bounds = await button.boundingBox();
+    // Tap its onscreen coordinates, as a phone does. Locator.tap() first
+    // scrolls sticky elements into view and can change the position being tested.
+    await page.touchscreen.tap(bounds!.x + bounds!.width / 2, bounds!.y + bounds!.height / 2);
+  }
+
+  for (const reducedMotion of ['no-preference', 'reduce'] as const) {
+    test(`menu stays reachable after scrolling with ${reducedMotion} motion`, async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.emulateMedia({ reducedMotion });
+      await page.goto('/', { waitUntil: 'domcontentloaded' });
+      await expect(page.getByRole('button', { name: 'Open menu', exact: true })).toBeVisible();
+      await expect(page.locator('[data-page-entry]')).toHaveCSS('opacity', '1');
+      await expect(page.getByRole('list', { name: 'Featured repositories' })).toHaveAttribute('aria-busy', 'false');
+      await page.evaluate(() => window.scrollTo({ top: 1200, behavior: 'instant' }));
+      await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(500);
+      const scrollPosition = await page.evaluate(() => scrollY);
+
+      for (let attempt = 0; attempt < 2; attempt++) {
+        await tapMenuButton(page, 'Open menu');
+        const close = page.getByRole('button', { name: 'Close menu', exact: true });
+        await expect(close).toBeInViewport();
+        await expect(page.locator('#mobile-menu').getByRole('link', { name: 'Projects', exact: true })).toBeInViewport();
+        await expect(page.locator('html')).toHaveCSS('overflow', 'hidden');
+        await expect(page.locator('body')).not.toHaveCSS('overflow', 'hidden');
+        await expect.poll(() => page.getByRole('banner').evaluate(el => Math.round(el.getBoundingClientRect().top))).toBe(0);
+        await expect(page.locator('#mobile-menu')).toHaveCSS('opacity', '1');
+        await page.mouse.move(200, 800);
+        await page.mouse.wheel(0, 300);
+        await page.waitForTimeout(250);
+        await expect.poll(() => page.evaluate(() => scrollY)).toBe(scrollPosition);
+        await tapMenuButton(page, 'Close menu');
+        await expect(page.locator('#mobile-menu')).toHaveCount(0);
+        await expect(page.locator('html')).not.toHaveCSS('overflow', 'hidden');
+        await expect(page.locator('html')).not.toHaveClass(/lenis-stopped/);
+      }
+
+      await page.mouse.wheel(0, 300);
+      await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(scrollPosition + 100);
+      for (const [label, route] of [['Projects', '/projects'], ['Stack', '/stack']]) {
+        await page.evaluate(() => window.scrollTo({ top: 1200, behavior: 'instant' }));
+        await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(200);
+        await tapMenuButton(page, 'Open menu');
+        await page.locator('#mobile-menu').getByRole('link', { name: label, exact: true }).tap();
+        await expect(page).toHaveURL(route);
+        await expect(page.locator('#mobile-menu')).toHaveCount(0);
+        await expect(page.locator('html')).not.toHaveCSS('overflow', 'hidden');
+        await expect(page.locator('html')).not.toHaveClass(/lenis-stopped/);
+      }
+    });
+  }
+});
+
 test('short landscape menus and command search remain reachable', async ({ page }) => {
   await page.setViewportSize({ width: 667, height: 320 });
   await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.evaluate(() => window.scrollTo({ top: 1200, behavior: 'instant' }));
   await page.getByRole('button', { name: 'Open menu', exact: true }).click();
+  const menuPanel = page.locator('#mobile-menu');
+  await expect(menuPanel).toBeVisible();
+  await expect.poll(() => menuPanel.evaluate(el => el.clientHeight)).toBeGreaterThan(200);
+  await menuPanel.hover();
+  await page.mouse.wheel(0, 500);
+  await expect.poll(() => menuPanel.evaluate(el => el.scrollTop)).toBeGreaterThan(0);
   await page.locator('#mobile-menu').getByRole('link', { name: 'Watch', exact: true }).click();
   await expect(page).toHaveURL('/watch');
   await page.getByRole('button', { name: /Search commands/ }).filter({ visible: true }).click();
