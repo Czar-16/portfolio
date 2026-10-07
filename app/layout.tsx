@@ -9,6 +9,7 @@ import { SmoothScroll } from "@/components/smooth-scroll";
 import { MotionProvider } from "@/components/motion-provider";
 import { BackToTop } from "@/components/back-to-top";
 import { CursorGlow } from "@/components/cursor-glow";
+import { VisitorProvider } from "@/components/visitor-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,11 +57,13 @@ export default function RootLayout({
         />
         <MotionProvider>
           <ThemeProvider>
-            <SmoothScroll />
-            <Navbar />
-            <main id="page-top" tabIndex={-1} className="flex-1 focus:outline-none">{children}</main>
-            <BackToTop />
-            <CommandPaletteWrapper />
+            <VisitorProvider>
+              <SmoothScroll />
+              <Navbar />
+              <main id="page-top" tabIndex={-1} className="flex-1 focus:outline-none">{children}</main>
+              <BackToTop />
+              <CommandPaletteWrapper />
+            </VisitorProvider>
           </ThemeProvider>
         </MotionProvider>
         <CursorGlow />

@@ -35,6 +35,44 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
+## Visitor counter
+
+The homepage ends with a glowing blue eye and a shared visitor count. The eye
+blinks every five seconds, pauses in hidden tabs, and stays open for reduced
+motion. Visits anywhere on the portfolio count, even without scrolling down.
+
+Create a persistent Upstash Redis database and configure these server-only
+environment variables in your production deployment:
+
+```dotenv
+UPSTASH_REDIS_REST_URL=https://YOUR-DATABASE.upstash.io
+UPSTASH_REDIS_REST_TOKEN=YOUR-WRITE-TOKEN
+```
+
+Use the regular write token, not the read-only token. Redeploy after adding
+the variables. No Redis schema setup is needed; the total starts at zero on
+the first production visit. Keep this database dedicated to this portfolio.
+The total key is `portfolio:{visitors}:total` and has no expiry. Configure the
+database with no eviction so the total and deduplication keys are retained.
+
+An anonymous browser UUID is saved in local storage. An atomic Redis script
+counts that UUID once per UTC calendar day, with temporary deduplication keys
+expiring after 48 hours. This is cumulative daily browser visits, not lifetime
+unique people. Clearing storage or switching browsers counts separately.
+If local storage is blocked, the identifier lasts only for the current page
+session. No IP addresses or browser fingerprints are collected.
+
+Development, browser-test builds, and Vercel preview deployments do not change
+the production count. Missing credentials or storage errors show “Visitor
+count unavailable”; no placeholder total is invented. The counter is approximate
+and is not intended to resist visitors deliberately generating new identifiers.
+
+Run `npm run test:visitors` for storage tests and
+`npx playwright test tests/browser/visitors.spec.ts` after `npm run build:e2e`
+for browser checks. Before release, verify with the configured database that
+refreshing and concurrent requests for one UUID count once, and another UUID
+increments the total. Use a separate database for that smoke test.
+
 ## Verification
 
 ```bash

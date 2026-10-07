@@ -1,0 +1,57 @@
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.875rem;
+  max-width: 100%;
+  min-height: 76px;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--card);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.eye {
+  flex-shrink: 0;
+  color: var(--accent);
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 65%, transparent));
+}
+
+.lids {
+  transform-box: view-box;
+  transform-origin: center;
+  animation: blink 5s ease-in-out infinite;
+}
+
+.eye[data-paused="true"] .lids {
+  animation-play-state: paused;
+}
+
+.text {
+  min-width: 13rem;
+  color: var(--fg-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.number {
+  color: var(--fg);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes blink {
+  0%, 91%, 97%, 100% { transform: scaleY(1); }
+  94% { transform: scaleY(0.06); }
+}
+
+@media (max-width: 380px) {
+  .card { gap: 0.625rem; padding: 0.875rem 1rem; }
+  .text { min-width: 0; }
+  .eye { width: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lids { animation: none; }
+}

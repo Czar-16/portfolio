@@ -9,6 +9,7 @@
     "lint": "eslint",
     "import:x": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/import-x-archive.mjs",
     "test:x": "node --test tests/x-posts.test.mjs",
+    "test:visitors": "node --test tests/visitors.test.mjs",
     "test:e2e": "npm run build:e2e && playwright test",
     "typecheck": "tsc --noEmit",
     "build:e2e": "PLAYWRIGHT_TEST_BUILD=1 next build"

@@ -4,6 +4,7 @@ import { FeaturedProjects } from "@/components/featured-projects";
 import { DashboardSection } from "@/components/dashboard-section";
 import { AboutContact } from "@/components/about-contact";
 import { PlaylistCard } from "@/components/spotify/PlaylistCard";
+import { VisitorCounter } from "@/components/visitor-counter";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <DashboardSection />
       <PlaylistCard />
       <AboutContact />
+      <VisitorCounter />
     </div>
   );
 }
