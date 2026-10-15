@@ -7,9 +7,16 @@ import { projects } from "@/data/projects";
 import { GithubIcon, ExternalIcon, ArrowRightIcon } from "@/components/icons";
 import { SectionHeading } from "@/components/section-heading";
 import { ProjectTechStack } from "@/components/project-tech-stack";
+import { PrivateRepoButton } from "@/components/private-repo-button";
 
 export function FeaturedProjects() {
-  const featured = projects.slice(0, 6);
+  const featuredOrder = ["mailloop", "purepin", "formpilot"];
+  const featured = [
+    ...featuredOrder.flatMap((slug) =>
+      projects.filter((project) => project.slug === slug),
+    ),
+    ...projects.filter((project) => !featuredOrder.includes(project.slug)),
+  ].slice(0, 6);
 
   return (
     <section id="projects" className="py-16 sm:py-20">
@@ -24,11 +31,11 @@ export function FeaturedProjects() {
         <div className="mt-10 grid grid-cols-1 gap-6 sm:mt-12 md:grid-cols-2 lg:grid-cols-3">
           {featured.map((project) => {
             const liveLink =
-              project.links.find((l) => l.label === "Live")?.href ||
-              project.links[0]?.href;
+              project.links.find((l) => l.label === "Live" && !l.private)?.href ||
+              project.links.find((l) => !l.private)?.href;
             const repoLink = project.links.find(
               (l) => l.label === "GitHub",
-            )?.href;
+            );
 
             return (
               <Reveal key={project.slug} className="h-full">
@@ -51,7 +58,7 @@ export function FeaturedProjects() {
                       </p>
                       <ProjectTechStack tech={project.tech} projectName={project.name} className="mt-4 gap-2" />
                     </div>
-                    <div className="mt-6 flex gap-3">
+                    <div className="mt-6 flex flex-wrap gap-3">
                       {liveLink && (
                         <a
                           href={liveLink}
@@ -62,9 +69,11 @@ export function FeaturedProjects() {
                           View <ExternalIcon size={13} />
                         </a>
                       )}
-                      {repoLink && (
+                      {repoLink?.private ? (
+                        <PrivateRepoButton projectName={project.name} />
+                      ) : repoLink && (
                         <a
-                          href={repoLink}
+                          href={repoLink.href}
                           className="btn"
                           target="_blank"
                           rel="noopener noreferrer"

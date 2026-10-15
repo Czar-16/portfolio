@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
 import { TerminalCard } from "@/components/TerminalCard";
 import { AnimatedName } from "@/components/animated-name";
 import {
   GithubIcon,
   XIcon,
-  LinkedinIcon,
   ArrowRightIcon,
 } from "@/components/icons";
 import { socials } from "@/data/site";
@@ -17,9 +17,16 @@ const BANNER = "/banner/hero.png";
 const AVATAR = "/profile/profile.jpg";
 
 const ghostBtn =
-  "interactive inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-black/25 text-white/70 backdrop-blur-md hover:bg-white/10 hover:text-white";
+  "interactive inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/30 bg-black text-white hover:border-white/60 hover:bg-neutral-900 focus-visible:border-white/60 focus-visible:bg-neutral-900";
 
 export function Hero() {
+  useEffect(() => {
+    (async () => {
+      const cal = await getCalApi({ namespace: "30min" });
+      cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
+    })();
+  }, []);
+
   return (
     <section className="relative mx-auto w-[calc(100%-24px)] max-w-[2100px] rounded-[32px] border border-white/10">
       {/* Banner */}
@@ -111,13 +118,16 @@ export function Hero() {
             <div
               className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3"
             >
-              <Link
-                href="/projects"
-                className="interactive inline-flex h-11 items-center gap-2 rounded-lg bg-accent px-6 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(59,158,255,0.4)] hover:bg-accent/90 md:h-12 md:text-base"
+              <button
+                type="button"
+                data-cal-namespace="30min"
+                data-cal-link="czar16/30min"
+                data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
+                className="interactive inline-flex h-11 items-center gap-2 rounded-lg border border-white/30 bg-black px-6 text-sm font-semibold text-white hover:border-white/60 hover:bg-neutral-900 focus-visible:border-white/60 focus-visible:bg-neutral-900 md:h-12 md:text-base"
               >
-                View Projects
+                Hire Me
                 <ArrowRightIcon size={16} className="interaction-arrow" />
-              </Link>
+              </button>
 
               <div className="flex items-center gap-1">
                 <a
@@ -138,16 +148,6 @@ export function Hero() {
                   className={ghostBtn}
                 >
                   <XIcon size={18} />
-                </a>
-
-                <a
-                  href={socials.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn"
-                  className={ghostBtn}
-                >
-                  <LinkedinIcon size={18} />
                 </a>
               </div>
             </div>

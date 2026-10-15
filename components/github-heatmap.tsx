@@ -211,7 +211,6 @@ export function GitHubHeatmap() {
       tabIndex={0}
       role="region"
       aria-label="GitHub contribution calendar, scroll horizontally for earlier weeks"
-      data-lenis-prevent
       ref={(el) => { if (el) el.scrollLeft = el.scrollWidth; }}
       className="w-full overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-track]:bg-transparent"
     >

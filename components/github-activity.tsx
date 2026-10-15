@@ -236,7 +236,7 @@ export function GitHubActivity() {
       <div className="flex flex-1 flex-col">
         <p className="text-xs font-semibold text-fg">Featured Repositories</p>
 
-        <ul aria-label="Featured repositories" aria-busy={isLoading} data-lenis-prevent className="mt-2 flex max-h-[320px] flex-col divide-y divide-line overflow-y-auto overscroll-contain rounded-lg border border-line bg-card">
+        <ul aria-label="Featured repositories" aria-busy={isLoading} className="mt-2 flex max-h-[320px] flex-col divide-y divide-line overflow-y-auto rounded-lg border border-line bg-card">
           {isLoading ? (
             Array.from({ length: 8 }).map((_, index) => (
               <li key={index} className="flex items-center gap-3 px-3 py-2.5">

@@ -150,7 +150,6 @@ export default function CommandPalette() {
       {isOpen && (
         <motion.div
           key="command-palette"
-          data-lenis-prevent
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

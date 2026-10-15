@@ -247,7 +247,7 @@ export function TerminalCard() {
         break;
       case "whoami": print(`${site.name} — full-stack AI developer`); break;
       case "projects":
-        projects.forEach((project) => print(`${project.name} — ${project.tagline}`, project.links));
+        projects.forEach((project) => print(`${project.name} — ${project.tagline}`, project.links.filter((link) => !link.private)));
         break;
       case "resume": print("→ opening resume ..."); queueResume(); break;
       case "contact":
@@ -323,7 +323,7 @@ export function TerminalCard() {
           ) : <span aria-hidden="true" className="text-[10px] text-white/35">⌨</span>}
         </div>
 
-        <div ref={scrollRef} data-lenis-prevent className={`${styles.scroll} min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain px-3.5 py-3 sm:px-4`}>
+        <div ref={scrollRef} className={`${styles.scroll} min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-3.5 py-3 sm:px-4`}>
           {showIntro && (
             <div aria-hidden="true" className={styles.intro} data-instant={skipped || reduceMotion}>
               {INTRO_LINES.map((line, index) => {

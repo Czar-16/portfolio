@@ -185,7 +185,6 @@ export function ProjectTechStack({
               id={id}
               role="region"
               tabIndex={0}
-              data-lenis-prevent
               aria-label={`More technologies for ${projectName}`}
               className="overflow-y-auto rounded-xl border border-line bg-elevated p-4 text-fg shadow-pop"
               style={{ maxHeight: "calc(100dvh - 24px)" }}

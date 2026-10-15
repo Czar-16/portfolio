@@ -1,4 +1,9 @@
-export type ProjectLink = { label: string; href: string; external?: boolean };
+export type ProjectLink = {
+  label: string;
+  href: string;
+  external?: boolean;
+  private?: boolean;
+};
 
 export type Project = {
   slug: string;
@@ -16,6 +21,76 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+  {
+    slug: "formpilot",
+    name: "FormPilot",
+    tagline: "Saved profiles and files, ready for the next form.",
+    description:
+      "Chrome and Firefox extension that stores profiles and files locally, fills matching form fields from a side panel, and attaches saved files without submitting forms.",
+    image: "/projects/formpilot.png",
+    imageAlt:
+      "FormPilot side panel with saved profile cards and automatic form-filling controls",
+    period: "2026",
+    role: "Design, build, ship",
+    status: "Shipped",
+    tech: ["JavaScript", "HTML", "CSS", "Browser Extension APIs", "IndexedDB"],
+    highlights: [
+      "Multiple saved profiles",
+      "Automatic filling that preserves existing answers",
+      "Saved file attachments",
+      "JSON backups including files",
+      "Local storage with no cloud sync",
+      "Chrome and Firefox support",
+    ],
+    links: [
+      {
+        label: "GitHub",
+        href: "https://github.com/Czar-16/formpilot",
+        external: true,
+      },
+    ],
+  },
+  {
+    slug: "mailloop",
+    name: "MailLoop",
+    tagline: "Personalized job outreach from your own Gmail.",
+    description:
+      "Gmail outreach app with personalized templates, contact imports, per-recipient previews, resume attachments, and delivery and reply tracking.",
+    image: "/projects/mailloop.png",
+    imageAlt:
+      "MailLoop landing page showing personalized Gmail outreach and a batch delivery progress demo",
+    period: "2026",
+    role: "Design, build, ship",
+    status: "Live",
+    tech: [
+      "Next.js",
+      "TypeScript",
+      "PostgreSQL",
+      "Prisma",
+      "Auth.js",
+      "Inngest",
+      "Gmail API",
+      "Tailwind CSS",
+      "Vercel Blob",
+    ],
+    highlights: [
+      "Personalized templates and recipient previews",
+      "CSV and pasted contact imports",
+      "Resume PDF attachments",
+      "Durable send queue and delivery tracking",
+      "Scheduled and manual reply detection",
+      "Manual follow-up reminders",
+    ],
+    links: [
+      { label: "Live", href: "https://mailloop.in", external: true },
+      {
+        label: "GitHub",
+        href: "https://github.com/Czar-16/mailloop",
+        external: true,
+        private: true,
+      },
+    ],
+  },
   {
     slug: "designarena",
     name: "DesignArena",
@@ -130,11 +205,12 @@ export const projects: Project[] = [
       "Production deployment",
     ],
     links: [
-      { label: "Live", href: "https://purepin.vercel.app", external: true },
+      { label: "Live", href: "https://purepin.site", external: true },
       {
         label: "GitHub",
         href: "https://github.com/Czar-16/PurePin",
         external: true,
+        private: true,
       },
     ],
   },
@@ -209,6 +285,7 @@ export const projects: Project[] = [
       },
     ],
   },
+
   {
     slug: "blackout",
     name: "Blackout",
@@ -237,6 +314,44 @@ export const projects: Project[] = [
       {
         label: "Live",
         href: "https://addons.mozilla.org/en-US/firefox/addon/blackout-toggle/",
+        external: true,
+      },
+    ],
+  },
+  {
+    slug: "orbit",
+    name: "Orbit",
+    tagline: "Your job search workspace: discover, match, prepare and track.",
+    description:
+      "Local-first job search and application workspace with public API discovery, deterministic profile matching, editable application drafts and manual application tracking.",
+    image: "/projects/orbit.png",
+    imageAlt:
+      "Orbit job search dashboard showing job matches, application tracking and follow-ups",
+    period: "2026",
+    role: "Design, build, ship",
+    status: "Shipped",
+    tech: [
+      "Next.js",
+      "TypeScript",
+      "PostgreSQL",
+      "Prisma",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "Zod",
+      "Inngest",
+    ],
+    highlights: [
+      "Public API job discovery",
+      "Resume and verified profile management",
+      "Deterministic job matching",
+      "Editable application drafts",
+      "Application and follow-up tracking",
+      "CSV and JSON import/export",
+    ],
+    links: [
+      {
+        label: "GitHub",
+        href: "https://github.com/Czar-16/orbit",
         external: true,
       },
     ],

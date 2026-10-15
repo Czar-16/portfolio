@@ -5,6 +5,7 @@ import { Reveal, StaggerChildren, StaggerItem } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { ProjectTechStack } from "@/components/project-tech-stack";
 import { GithubIcon, ExternalIcon, ArrowRightIcon } from "@/components/icons";
+import { PrivateRepoButton } from "@/components/private-repo-button";
 
 const GITHUB_REPOS_URL = "https://github.com/Czar-16?tab=repositories";
 
@@ -12,6 +13,10 @@ function ProjectLinks({ project }: { project: Project }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
       {project.links.map((link) => {
+        if (link.private) {
+          return <PrivateRepoButton key={link.href} projectName={project.name} />;
+        }
+
         const icon =
           link.label === "GitHub" ? (
             <GithubIcon size={14} />

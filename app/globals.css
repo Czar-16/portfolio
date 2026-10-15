@@ -295,7 +295,7 @@ html.lenis {
       color 0.22s var(--ease-premium);
   }
 
-  .btn:hover {
+  .btn:not(:disabled):hover {
     border-color: var(--line-strong);
     background-color: var(--card-elevated);
   }
@@ -307,7 +307,7 @@ html.lenis {
     box-shadow: var(--sh-accent);
   }
 
-  .btn-primary:hover {
+  .btn-primary:not(:disabled):hover {
     background-color: color-mix(in oklab, var(--accent) 88%, white);
     border-color: transparent;
     box-shadow: 0 14px 40px -14px color-mix(in oklab, var(--accent-glow) 85%, transparent);

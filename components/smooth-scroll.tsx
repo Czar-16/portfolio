@@ -10,6 +10,7 @@ export function SmoothScroll() {
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const desktopPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 
     const dispose = () => {
       // Settle native-scroll state before destruction so a pending Lenis velocity
@@ -34,13 +35,16 @@ export function SmoothScroll() {
 
     const configure = () => {
       dispose();
-      if (reducedMotion.matches) return;
+      if (reducedMotion.matches || !desktopPointer.matches) return;
 
       lenisRef.current = new Lenis({
         autoRaf: true,
         smoothWheel: true,
         syncTouch: false,
-        lerp: 0.1,
+        // Match buildwithyash.com's easing and wheel sensitivity.
+        lerp: 0.08,
+        wheelMultiplier: 0.9,
+        // Keep menus and dialogs scrollable while the viewport is locked.
         allowNestedScroll: true,
         stopInertiaOnNavigate: true,
       });
@@ -54,6 +58,7 @@ export function SmoothScroll() {
       attributeFilter: ["style"],
     });
     reducedMotion.addEventListener("change", configure);
+    desktopPointer.addEventListener("change", configure);
     // Cancel inertia before the browser restores a history entry's position.
     const settleScroll = () => lenisRef.current?.scrollTo(window.scrollY, { immediate: true });
     window.addEventListener("popstate", settleScroll);
@@ -87,6 +92,7 @@ export function SmoothScroll() {
     return () => {
       observer.disconnect();
       reducedMotion.removeEventListener("change", configure);
+      desktopPointer.removeEventListener("change", configure);
       window.removeEventListener("popstate", settleScroll);
       window.removeEventListener("click", scrollToAnchor);
       dispose();

@@ -100,6 +100,81 @@ test('mobile menu navigation, history and resize release scroll lock', async ({ 
   await expect(menu).toBeVisible();
 });
 
+for (const reducedMotion of ['no-preference', 'reduce'] as const) {
+  test(`scrolling continues past embedded cards with ${reducedMotion} motion`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion });
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.getByRole('region', { name: 'Interactive terminal' }).scrollIntoViewIfNeeded();
+    await page.keyboard.press('Shift');
+    await expect(page.getByRole('textbox', { name: 'Terminal command' })).toBeVisible();
+    await expect(page.getByRole('list', { name: 'Featured repositories' })).toHaveAttribute('aria-busy', 'false');
+
+    // Page gestures are smoothed unless reduced motion is requested; nested
+    // lists consume input natively until they reach their scroll boundary.
+    await page.evaluate(() => {
+      window.addEventListener('wheel', event => {
+        document.documentElement.dataset.wheelPrevented = String(event.defaultPrevented);
+      }, { passive: true });
+    });
+
+    // Trackpads send many small wheel deltas rather than a mouse's large steps.
+    await page.locator('h1').hover();
+    await page.waitForTimeout(600);
+    const trackpadStart = await page.evaluate(() => scrollY);
+    for (let step = 0; step < 8; step++) await page.mouse.wheel(0, 12);
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(trackpadStart + 50);
+    await expect(page.locator('html')).toHaveAttribute('data-wheel-prevented', String(reducedMotion === 'no-preference'));
+    await expect(page.locator('html')).not.toHaveClass(/lenis-smooth/);
+    await expect(page.locator('html')).not.toHaveClass(/lenis-scrolling/);
+
+    for (const width of [390, 1280]) {
+      await page.setViewportSize({ width, height: 900 });
+      const terminal = page.getByRole('region', { name: 'Interactive terminal' }).locator('[class*="overflow-y-auto"]');
+      const repositories = page.getByRole('list', { name: 'Featured repositories' });
+      const calendar = page.getByRole('region', { name: /GitHub contribution calendar/ });
+
+      for (const scroller of [terminal, repositories, calendar]) {
+        await scroller.evaluate(element => {
+          element.scrollIntoView({ behavior: 'instant', block: 'center' });
+          element.scrollTop = element.scrollHeight;
+        });
+        await scroller.hover();
+        // End the previous wheel gesture before targeting another scroller;
+        // browsers can otherwise keep wheel input latched to its old target.
+        await page.waitForTimeout(600);
+        const before = await page.evaluate(() => scrollY);
+        await page.mouse.wheel(0, 300);
+        await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before + 100);
+        await expect(page.locator('html')).toHaveAttribute('data-wheel-prevented', String(reducedMotion === 'no-preference'));
+        await expect(page.locator('html')).not.toHaveClass(/lenis-scrolling/);
+      }
+
+      // The repository list must still scroll internally before its edge.
+      await repositories.evaluate(element => {
+        element.scrollIntoView({ behavior: 'instant', block: 'center' });
+        element.scrollTop = 0;
+      });
+      await repositories.hover();
+      await page.waitForTimeout(600);
+      const before = await page.evaluate(() => scrollY);
+      await page.mouse.wheel(0, 100);
+      await expect.poll(() => repositories.evaluate(element => element.scrollTop)).toBeGreaterThan(0);
+      await expect(page.locator('html')).toHaveAttribute('data-wheel-prevented', 'false');
+      expect(await page.evaluate(() => scrollY)).toBe(before);
+
+      await calendar.evaluate(element => {
+        element.scrollIntoView({ behavior: 'instant', block: 'center' });
+        element.scrollLeft = 0;
+      });
+      await calendar.hover();
+      await page.waitForTimeout(600);
+      await page.mouse.wheel(100, 0);
+      await expect.poll(() => calendar.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
+    }
+  });
+}
+
 test.describe('scrolled mobile navigation', () => {
   test.use({ hasTouch: true });
 
@@ -120,6 +195,7 @@ test.describe('scrolled mobile navigation', () => {
       await expect(page.getByRole('button', { name: 'Open menu', exact: true })).toBeVisible();
       await expect(page.locator('[data-page-entry]')).toHaveCSS('opacity', '1');
       await expect(page.getByRole('list', { name: 'Featured repositories' })).toHaveAttribute('aria-busy', 'false');
+      await expect(page.locator('html')).not.toHaveClass(/lenis/);
       await page.evaluate(() => window.scrollTo({ top: 1200, behavior: 'instant' }));
       await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(500);
       const scrollPosition = await page.evaluate(() => scrollY);
