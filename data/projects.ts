@@ -14,7 +14,7 @@ export type Project = {
   imageAlt: string;
   period: string;
   role: string;
-  status: "Live" | "In progress" | "Shipped";
+  status: "Live" | "In progress" | "Still building" | "Shipped";
   tech: string[];
   highlights: string[];
   links: ProjectLink[];
@@ -61,7 +61,7 @@ export const projects: Project[] = [
       "MailLoop landing page showing personalized Gmail outreach and a batch delivery progress demo",
     period: "2026",
     role: "Design, build, ship",
-    status: "Live",
+    status: "Still building",
     tech: [
       "Next.js",
       "TypeScript",
@@ -82,7 +82,6 @@ export const projects: Project[] = [
       "Manual follow-up reminders",
     ],
     links: [
-      { label: "Live", href: "https://mailloop.in", external: true },
       {
         label: "GitHub",
         href: "https://github.com/Czar-16/mailloop",

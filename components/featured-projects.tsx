@@ -53,6 +53,11 @@ export function FeaturedProjects() {
                   <div className="flex flex-1 flex-col justify-between p-6">
                     <div>
                       <h3 className="text-xl font-bold">{project.name}</h3>
+                      {project.status === "Still building" && (
+                        <span className="badge mt-2 text-fg-muted">
+                          {project.status}
+                        </span>
+                      )}
                       <p className="mt-2 text-sm text-fg-secondary">
                         {project.description}
                       </p>
