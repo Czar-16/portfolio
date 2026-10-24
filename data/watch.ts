@@ -61,4 +61,5 @@ export const watchItems: WatchItem[] = [
   { rank: 51, title: "Tumse Na Ho Payega", year: 2023, slug: "tumse-na-ho-payega", type: "Film" },
   { rank: 52, title: "Don't F**k with Cats: Hunting an Internet Killer", year: 2019, slug: "dont-fuck-with-cats", type: "Docuseries" },
   { rank: 53, title: "FYRE: The Greatest Party That Never Happened", year: 2019, slug: "fyre", type: "Documentary" },
+  { rank: 54, title: "MobLand", year: 2025, slug: "mobland", type: "Series" },
 ];
