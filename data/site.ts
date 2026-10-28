@@ -34,7 +34,7 @@ export const contact = {
 } as const;
 
 export const resume = {
-  href: "https://drive.google.com/file/d/1O81ugIeCdc5JTUM_OPJg2E3sN4ly3x5u/view?usp=sharing",
+  href: "https://drive.google.com/file/d/1alN4hLG1PnINCAz-Qqcf020Pa6Rmk4dZ/view?usp=sharing",
   available: true,
 } as const;
 
