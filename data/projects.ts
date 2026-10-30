@@ -15,41 +15,13 @@ export type Project = {
   period: string;
   role: string;
   status: "Live" | "In progress" | "Still building" | "Shipped";
+  cli?: boolean;
   tech: string[];
   highlights: string[];
   links: ProjectLink[];
 };
 
 export const projects: Project[] = [
-  {
-    slug: "formpilot",
-    name: "FormPilot",
-    tagline: "Saved profiles and files, ready for the next form.",
-    description:
-      "Chrome and Firefox extension that stores profiles and files locally, fills matching form fields from a side panel, and attaches saved files without submitting forms.",
-    image: "/projects/formpilot.png",
-    imageAlt:
-      "FormPilot side panel with saved profile cards and automatic form-filling controls",
-    period: "2026",
-    role: "Design, build, ship",
-    status: "Shipped",
-    tech: ["JavaScript", "HTML", "CSS", "Browser Extension APIs", "IndexedDB"],
-    highlights: [
-      "Multiple saved profiles",
-      "Automatic filling that preserves existing answers",
-      "Saved file attachments",
-      "JSON backups including files",
-      "Local storage with no cloud sync",
-      "Chrome and Firefox support",
-    ],
-    links: [
-      {
-        label: "GitHub",
-        href: "https://github.com/Czar-16/formpilot",
-        external: true,
-      },
-    ],
-  },
   {
     slug: "mailloop",
     name: "MailLoop",
@@ -87,6 +59,62 @@ export const projects: Project[] = [
         href: "https://github.com/Czar-16/mailloop",
         external: true,
         private: true,
+      },
+    ],
+  },
+  {
+    slug: "toki",
+    name: "Toki",
+    tagline: "Study, pause, and take a proportional break in your terminal.",
+    description:
+      "Local study timer with pause/resume, proportional breaks, and monthly statistics, right in the terminal.",
+    image: "/projects/toki.png",
+    imageAlt:
+      "Toki running in a terminal with local study statistics, a countdown progress bar, and pause/resume controls",
+    period: "2026",
+    role: "Design, build, ship",
+    status: "Shipped",
+    cli: true,
+    tech: ["Python", "Fish"],
+    highlights: [
+      "Countdown and open-ended study sessions",
+      "Pause/resume with proportional breaks",
+      "Local monthly study statistics",
+    ],
+    links: [
+      {
+        label: "GitHub",
+        href: "https://github.com/Czar-16/Toki",
+        external: true,
+      },
+    ],
+  },
+  {
+    slug: "formpilot",
+    name: "FormPilot",
+    tagline: "Saved profiles and files, ready for the next form.",
+    description:
+      "Chrome and Firefox extension that stores profiles and files locally, fills matching form fields from a side panel, and attaches saved files without submitting forms.",
+    image: "/projects/formpilot.png",
+    imageAlt:
+      "FormPilot side panel with saved profile cards and automatic form-filling controls",
+    period: "2026",
+    role: "Design, build, ship",
+    status: "Shipped",
+    tech: ["JavaScript", "HTML", "CSS", "Browser Extension APIs", "IndexedDB"],
+    highlights: [
+      "Multiple saved profiles",
+      "Automatic filling that preserves existing answers",
+      "Saved file attachments",
+      "JSON backups including files",
+      "Local storage with no cloud sync",
+      "Chrome and Firefox support",
+    ],
+    links: [
+      {
+        label: "GitHub",
+        href: "https://github.com/Czar-16/formpilot",
+        external: true,
       },
     ],
   },

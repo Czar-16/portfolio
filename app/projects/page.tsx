@@ -12,6 +12,7 @@ const GITHUB_REPOS_URL = "https://github.com/Czar-16?tab=repositories";
 function ProjectLinks({ project }: { project: Project }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
+      {project.cli && <span className="badge">CLI / Terminal app</span>}
       {project.links.map((link) => {
         if (link.private) {
           return <PrivateRepoButton key={link.href} projectName={project.name} />;
@@ -56,7 +57,7 @@ function ProjectCard({ project }: { project: Project }) {
           src={project.image}
           alt={project.imageAlt}
           sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
-          className="project-image object-cover object-top"
+          className={`project-image ${project.cli ? "object-contain" : "object-cover object-top"}`}
         />
       </div>
 

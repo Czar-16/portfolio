@@ -45,7 +45,7 @@ export function FeaturedProjects() {
                       src={project.image}
                       alt={project.imageAlt}
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                      className="project-image object-cover object-top"
+                      className={`project-image ${project.cli ? "object-contain" : "object-cover object-top"}`}
                     />
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent" />
                   </div>
@@ -64,7 +64,9 @@ export function FeaturedProjects() {
                       <ProjectTechStack tech={project.tech} projectName={project.name} className="mt-4 gap-2" />
                     </div>
                     <div className="mt-6 flex flex-wrap gap-3">
-                      {liveLink && (
+                      {project.cli ? (
+                        <span className="badge self-center">CLI / Terminal app</span>
+                      ) : liveLink && (
                         <a
                           href={liveLink}
                           className="btn btn-primary"
@@ -83,7 +85,7 @@ export function FeaturedProjects() {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <GithubIcon size={14} /> Code
+                          <GithubIcon size={14} /> {project.cli ? "GitHub" : "Code"}
                         </a>
                       )}
                     </div>
