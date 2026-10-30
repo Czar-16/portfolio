@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
+import { useInteraction } from "@/components/interaction-provider";
 import { useReducedMotion } from "@/components/use-reduced-motion";
 import { CloseIcon, SearchIcon } from "@/components/icons";
 import { motionEase } from "@/components/motion-provider";
@@ -25,6 +26,7 @@ export default function CommandPalette() {
   const listId = useId();
   const router = useRouter();
   const reduce = useReducedMotion();
+  const { playClick } = useInteraction();
   const dialogRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
@@ -196,7 +198,10 @@ export default function CommandPalette() {
                   } else if (event.key === "Enter") {
                     event.preventDefault();
                     const selected = results[activeIndex];
-                    if (selected) activate(selected);
+                    if (selected) {
+                      playClick();
+                      activate(selected);
+                    }
                   }
                 }}
                 className="min-w-0 flex-1 bg-transparent py-4 text-fg focus:outline-none"

@@ -8,6 +8,7 @@ import { useReducedMotion } from "@/components/use-reduced-motion";
 import { motionEase, motionSpring } from "@/components/motion-provider";
 import { lockBodyScroll } from "@/components/body-scroll-lock";
 import { navItems, socials, resume } from "@/data/site";
+import { SoundToggle } from "@/components/interaction-provider";
 import { ThemeToggle } from "@/components/theme-provider";
 import {
   GithubIcon,
@@ -68,7 +69,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-bg-veil backdrop-blur-xl">
-      <nav className="shell flex h-16 items-center justify-between gap-4" aria-label="Main">
+      <nav className="shell flex h-16 items-center justify-between gap-2 sm:gap-4" aria-label="Main">
         {/* Logo */}
         <Link
           href="/"
@@ -123,6 +124,7 @@ export function Navbar() {
           </button>
 
           <ThemeToggle />
+          <SoundToggle />
 
           <span className="mx-1 h-5 w-px bg-line" aria-hidden="true" />
 
@@ -174,13 +176,14 @@ export function Navbar() {
             onClick={openPalette}
             aria-label={`Search commands (${shortcut})`}
             aria-haspopup="dialog"
-            className="btn h-9 gap-2 px-2.5 text-xs"
+            className="btn h-9 min-w-11 gap-2 px-2.5 text-xs"
           >
             <SearchIcon size={14} />
-            Search
+            <span className="hidden min-[400px]:inline">Search</span>
             <kbd className="hidden rounded border border-line bg-bg-soft px-1.5 py-0.5 font-mono text-[10px] text-fg-secondary md:inline">{shortcut}</kbd>
           </button>
           <ThemeToggle />
+          <SoundToggle />
           <button
             ref={menuButtonRef}
             onClick={() => setOpen(!open)}

@@ -17,6 +17,7 @@ function ConcealedQuote({ quote }: { quote: Quote }) {
     <li>
       <figure
         className={`quote-card card-lift relative flex h-full flex-col p-6 ${styles.quote}`}
+        data-click-sound="on"
         data-quote-id={quote.id}
         data-revealed={revealed}
         onPointerEnter={(event) => {
