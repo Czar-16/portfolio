@@ -16,34 +16,25 @@ export function CursorGlow() {
     let active = false;
     let x = 0;
     let y = 0;
+    let target: HTMLElement | null = null;
+    let needsHitTest = false;
     const selector = "[data-cursor-glow-border]";
-    let targets = Array.from(document.querySelectorAll<HTMLElement>(selector));
-
-    // Include asynchronously mounted cards, without searching the page every frame.
-    const observer = new MutationObserver(records => {
-      const changed = records.some(record => [...record.addedNodes, ...record.removedNodes].some(node =>
-        node instanceof HTMLElement && (node.matches(selector) || node.querySelector(selector)),
-      ));
-      if (changed) {
-        targets = Array.from(document.querySelectorAll<HTMLElement>(selector));
-        schedule();
-      }
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
 
     function paint() {
       frame = 0;
-      // Finish all layout reads before updating any styles.
-      const positions = targets.map(element => {
-        const bounds = element.getBoundingClientRect();
-        return { element, x: x - bounds.left, y: y - bounds.top };
-      });
+      // Only the hovered card displays a border glow. Read its bounds once,
+      // before writing styles, instead of measuring every card on the page.
+      if (needsHitTest) {
+        target = document.elementFromPoint(x, y)?.closest<HTMLElement>(selector) ?? null;
+        needsHitTest = false;
+      }
+      const bounds = target?.isConnected ? target.getBoundingClientRect() : null;
       glow!.style.transform = `translate3d(${x - 320}px, ${y - 320}px, 0)`;
       glow!.dataset.active = "true";
-      positions.forEach(({ element, x, y }) => {
-        element.style.setProperty("--mouse-x", `${x}px`);
-        element.style.setProperty("--mouse-y", `${y}px`);
-      });
+      if (bounds && target) {
+        target.style.setProperty("--mouse-x", `${x - bounds.left}px`);
+        target.style.setProperty("--mouse-y", `${y - bounds.top}px`);
+      }
     }
 
     function schedule() {
@@ -52,19 +43,28 @@ export function CursorGlow() {
 
     function hide() {
       active = false;
+      target = null;
       glow!.dataset.active = "false";
       window.cancelAnimationFrame(frame);
       frame = 0;
     }
 
     function move(event: PointerEvent) {
-      if (!enabled.matches || event.pointerType !== "mouse" || document.hidden) {
+      if (!enabled.matches || event.pointerType !== "mouse" || document.hidden ||
+        document.documentElement.dataset.theme !== "dark") {
         hide();
         return;
       }
       x = event.clientX;
       y = event.clientY;
+      target = event.target instanceof Element ? event.target.closest<HTMLElement>(selector) : null;
+      needsHitTest = false;
       active = true;
+      schedule();
+    }
+
+    function viewportChanged() {
+      needsHitTest = true;
       schedule();
     }
 
@@ -79,19 +79,18 @@ export function CursorGlow() {
     window.addEventListener("pointermove", move, { passive: true });
     window.addEventListener("pointerout", leave);
     window.addEventListener("blur", hide);
-    window.addEventListener("scroll", schedule, { passive: true, capture: true });
-    window.addEventListener("resize", schedule, { passive: true });
+    window.addEventListener("scroll", viewportChanged, { passive: true, capture: true });
+    window.addEventListener("resize", viewportChanged, { passive: true });
     document.addEventListener("visibilitychange", visibilityChanged);
     enabled.addEventListener("change", hide);
 
     return () => {
       hide();
-      observer.disconnect();
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerout", leave);
       window.removeEventListener("blur", hide);
-      window.removeEventListener("scroll", schedule, true);
-      window.removeEventListener("resize", schedule);
+      window.removeEventListener("scroll", viewportChanged, true);
+      window.removeEventListener("resize", viewportChanged);
       document.removeEventListener("visibilitychange", visibilityChanged);
       enabled.removeEventListener("change", hide);
     };

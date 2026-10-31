@@ -10,8 +10,8 @@ export default function Template({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
       data-page-entry
-      initial={reduce ? false : { opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={reduce ? false : { opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: reduce ? 0 : motionDuration.page, ease: motionEase }}
     >
       {children}

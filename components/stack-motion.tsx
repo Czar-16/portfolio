@@ -17,9 +17,9 @@ export function StackCard({ children, className, labelledBy }: {
       className="card-lift-host h-full min-w-0"
       initial={reduce ? false : "hidden"}
       whileInView="visible"
-      viewport={{ once: true, amount: "some" }}
+      viewport={{ once: true, amount: "some", margin: "80px 0px" }}
       variants={{
-        hidden: { opacity: 0, y: 20 },
+        hidden: { opacity: 0, y: 10 },
         visible: {
           opacity: 1,
           y: 0,

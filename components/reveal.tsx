@@ -8,7 +8,7 @@ import { motionDuration, motionEase } from "@/components/motion-provider";
 export function Reveal({
   children,
   delay = 0,
-  y = 16,
+  y = 10,
   className = "",
 }: {
   children: ReactNode;
@@ -24,7 +24,7 @@ export function Reveal({
     <motion.div
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: "some" }}
+      viewport={{ once: true, amount: "some", margin: "80px 0px" }}
       transition={{ duration: motionDuration.enter, delay: Math.min(delay, motionDuration.staggerMax), ease: motionEase }}
       className={`card-lift-host ${className}`}
     >
@@ -50,7 +50,7 @@ export function StaggerChildren({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: "some" }}
+      viewport={{ once: true, amount: "some", margin: "80px 0px" }}
       variants={{
         hidden: {},
         visible: {},
@@ -82,7 +82,7 @@ export function StaggerItem({
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0, y: 16 },
+        hidden: { opacity: 0, y: 10 },
         visible: {
           opacity: 1,
           y: 0,

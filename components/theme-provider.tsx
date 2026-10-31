@@ -58,7 +58,7 @@ function applyTheme(theme: Theme, animate = true) {
   root.dataset.theme = theme;
   themeAnimationTimeout = window.setTimeout(
     () => root.removeAttribute("data-theme-anim"),
-    550,
+    300,
   );
 }
 
