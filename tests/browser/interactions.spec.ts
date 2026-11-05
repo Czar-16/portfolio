@@ -68,9 +68,10 @@ test('one sound per nested button or link activation, keyboard activation has no
   await expect.poll(async () => (await audioState(page)).starts).toBe(3);
   await expect(page.locator('[data-click-sparks]')).toHaveAttribute('data-active', 'false');
   await page.getByRole('button', { name: 'Close command palette' }).click();
+  await page.getByRole('button', { name: 'Open menu', exact: true }).click();
   await page.getByRole('navigation', { name: 'Main', exact: true }).getByRole('link', { name: 'Projects', exact: true }).click();
   await expect(page).toHaveURL('/projects');
-  await expect.poll(async () => (await audioState(page)).starts).toBe(5);
+  await expect.poll(async () => (await audioState(page)).starts).toBe(6);
   expect((await audioState(page)).contexts).toBe(1);
 });
 
@@ -80,6 +81,7 @@ test('mute is silent, persists across routes and reloads, and enabling previews 
   await page.getByRole('button', { name: 'Mute click sounds' }).click();
   await expect(page.getByRole('button', { name: 'Enable click sounds' })).toHaveAttribute('aria-pressed', 'false');
   expect((await audioState(page)).starts).toBe(0);
+  await page.getByRole('button', { name: 'Open menu', exact: true }).click();
   await page.getByRole('navigation', { name: 'Main', exact: true }).getByRole('link', { name: 'Projects', exact: true }).click();
   await expect(page).toHaveURL('/projects');
   expect((await audioState(page)).starts).toBe(0);
@@ -139,7 +141,7 @@ test('mobile taps burst once, swipes do not burst, and navigation fits at 320px'
   const context = await browser.newContext({ hasTouch: true, viewport: { width: 320, height: 750 } });
   const page = await context.newPage();
   await trackAudio(page);
-  await page.goto('http://127.0.0.1:3100/about');
+  await page.goto(`${test.info().project.use.baseURL}/about`);
   const sound = page.getByRole('button', { name: 'Mute click sounds' });
   await expect(sound).toBeVisible();
   await expect(page.locator('[data-click-sparks]')).toHaveAttribute('width', '320');

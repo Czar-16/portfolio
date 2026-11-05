@@ -25,7 +25,7 @@ const test = base.extend<{ appErrors: string[] }>({
 });
 
 async function noOverflow(page: Page) {
-  await expect(page.getByRole('navigation', { name: 'Main', exact: true })).toHaveCSS('display', 'flex');
+  await expect(page.locator('.compact-toolbar')).toBeVisible();
   const overflow = await page.evaluate(() => {
     const width = document.documentElement.clientWidth;
     if (document.documentElement.scrollWidth <= width + 1) return [];
@@ -37,11 +37,11 @@ async function noOverflow(page: Page) {
   expect(overflow, 'elements causing horizontal page overflow').toEqual([]);
 }
 
-for (const theme of ['dark', 'light']) {
+for (const theme of ['dark']) {
   for (const width of widths) {
     test(`${theme}: all routes at ${width}px`, async ({ context }) => {
       await context.addInitScript(value => {
-        if (location.origin === 'http://127.0.0.1:3100') localStorage.setItem('czar-theme', value);
+        if (location.hostname === '127.0.0.1') localStorage.setItem('czar-theme', value);
       }, theme);
       // Each layout gets a fresh document; route transitions are exercised below.
       // This also avoids canceling Next's background prefetches with hard reloads.
@@ -58,7 +58,7 @@ for (const theme of ['dark', 'light']) {
           await expect(page.getByRole('region', { name: /GitHub contribution calendar/ })).toBeVisible();
         }
         await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-        await expect(page.getByRole('navigation', { name: 'Main', exact: true })).toBeVisible();
+        await expect(page.locator('.compact-toolbar')).toBeVisible();
         await noOverflow(page);
         // Reveal content lower down and detect overflow after images/async cards settle.
         await page.locator('main').evaluate(el => el.scrollIntoView({ block: 'end' }));
@@ -106,7 +106,7 @@ for (const reducedMotion of ['no-preference', 'reduce'] as const) {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.getByRole('region', { name: 'Interactive terminal' }).scrollIntoViewIfNeeded();
-    await page.keyboard.press('Shift');
+    if (reducedMotion === 'no-preference') await page.getByRole('button', { name: 'Skip terminal introduction' }).click();
     await expect(page.getByRole('textbox', { name: 'Terminal command' })).toBeVisible();
     await expect(page.getByRole('list', { name: 'Featured repositories' })).toHaveAttribute('aria-busy', 'false');
 
@@ -134,7 +134,7 @@ for (const reducedMotion of ['no-preference', 'reduce'] as const) {
       const repositories = page.getByRole('list', { name: 'Featured repositories' });
       const calendar = page.getByRole('region', { name: /GitHub contribution calendar/ });
 
-      for (const scroller of [terminal, repositories, calendar]) {
+      for (const [label, scroller] of [['terminal', terminal], ['repositories', repositories], ['calendar', calendar]] as const) {
         await scroller.evaluate(element => {
           element.scrollIntoView({ behavior: 'instant', block: 'center' });
           element.scrollTop = element.scrollHeight;
@@ -144,8 +144,19 @@ for (const reducedMotion of ['no-preference', 'reduce'] as const) {
         // browsers can otherwise keep wheel input latched to its old target.
         await page.waitForTimeout(600);
         const before = await page.evaluate(() => scrollY);
-        await page.mouse.wheel(0, 300);
-        await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before + 100);
+        // The terminal is now near the footer. At the page bottom, check the
+        // upward boundary instead so there is room for the viewport to move.
+        const atPageEnd = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight - scrollY < 150);
+        if (atPageEnd) await scroller.evaluate(element => { element.scrollTop = 0; });
+        // After responsive reflow, Chromium can keep the first wheel gesture
+        // latched to the nested element. Verify a fresh gesture also escapes.
+        await expect(async () => {
+          await scroller.evaluate((element, upward) => { element.scrollTop = upward ? 0 : element.scrollHeight; }, atPageEnd);
+          await page.waitForTimeout(600);
+          await page.mouse.wheel(0, atPageEnd ? -300 : 300);
+          if (atPageEnd) await expect.poll(() => page.evaluate(() => scrollY), { timeout: 1000 }).toBeLessThan(before - 100);
+          else await expect.poll(() => page.evaluate(() => scrollY), { timeout: 1000 }).toBeGreaterThan(before + 100);
+        }, `${label} at ${width}px scrolls past its boundary`).toPass({ timeout: 8000 });
         await expect(page.locator('html')).toHaveAttribute('data-wheel-prevented', String(reducedMotion === 'no-preference'));
         await expect(page.locator('html')).not.toHaveClass(/lenis-scrolling/);
       }
@@ -169,8 +180,12 @@ for (const reducedMotion of ['no-preference', 'reduce'] as const) {
       });
       await calendar.hover();
       await page.waitForTimeout(600);
-      await page.mouse.wheel(100, 0);
-      await expect.poll(() => calendar.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
+      if (await calendar.evaluate(element => element.scrollWidth > element.clientWidth)) {
+        await page.mouse.wheel(100, 0);
+        await expect.poll(() => calendar.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
+      } else {
+        await expect(calendar.locator('.heatmap-grid')).toBeVisible();
+      }
     }
   });
 }
@@ -268,13 +283,12 @@ test('short landscape menus and command search remain reachable', async ({ page 
   await noOverflow(page);
 });
 
-test('theme persists and palette traps and restores keyboard focus', async ({ page }) => {
+test('palette traps and restores keyboard focus in dark mode', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/about', { waitUntil: 'domcontentloaded' });
-  await page.getByRole('button', { name: 'Switch to light mode' }).filter({ visible: true }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await page.reload();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   const trigger = page.getByRole('button', { name: /Search commands/ }).filter({ visible: true });
   await trigger.click();
   const search = page.getByRole('combobox');
@@ -405,8 +419,8 @@ test('every navigation destination works on mobile and desktop', async ({ page }
     await page.setViewportSize({ width, height: 800 });
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     for (const [label, route] of [['Projects', '/projects'], ['Stack', '/stack'], ['Watch', '/watch'], ['Quotes', '/quotes'], ['About', '/about'], ['Home', '/']]) {
-      if (width < 1280) await page.getByRole('button', { name: 'Open menu', exact: true }).click();
-      const navigation = width < 1280 ? page.locator('#mobile-menu') : page.getByRole('navigation', { name: 'Main', exact: true });
+      await page.getByRole('button', { name: 'Open menu', exact: true }).click();
+      const navigation = page.locator('#mobile-menu');
       await navigation.getByRole('link', { name: label, exact: true }).click();
       await expect(page).toHaveURL(route);
       await expect(page.locator('h1')).toBeVisible();

@@ -33,7 +33,7 @@ export default function AboutPage() {
               className="pointer-events-none absolute -right-24 -top-32 size-96 rounded-full bg-accent/6 blur-3xl"
             />
 
-            <div className="relative grid items-center gap-10 p-6 sm:p-10 md:grid-cols-[1fr_280px] md:gap-12 lg:p-12">
+            <div className="relative grid items-center gap-6 p-5">
               <div className="min-w-0">
                 <span className="eyebrow">
                   <span className="eyebrow-dot" />
@@ -43,9 +43,9 @@ export default function AboutPage() {
                   id="about-heading"
                   className="mt-6 text-4xl font-semibold leading-[1.05] tracking-[-0.04em] text-fg sm:text-5xl lg:text-6xl"
                 >
-                  <AnimatedName variant="about" />
+                  <AnimatedName />
                 </h1>
-                <p className="mt-4 text-lg font-medium tracking-tight text-fg-secondary sm:text-xl">
+                <p className="mt-4 text-sm font-medium tracking-tight text-fg-secondary">
                   Full-stack developer.
                 </p>
                 <p className="mt-5 max-w-md text-sm leading-relaxed text-fg-secondary sm:text-[15px]">
@@ -103,7 +103,7 @@ export default function AboutPage() {
                 </div>
               </div>
 
-              <div className="order-first mx-auto w-full max-w-[220px] md:order-last md:max-w-none">
+              <div className="order-first mx-auto w-full max-w-[220px] ">
                 <div className="relative aspect-square overflow-hidden rounded-2xl border border-line bg-bg-soft">
                   <Image
                     src="/profile/profile.jpg"

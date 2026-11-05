@@ -38,7 +38,7 @@ export const resume = {
   available: true,
 } as const;
 
-export type NavItem = { label: string; href: string };
+type NavItem = { label: string; href: string };
 
 export const navItems: NavItem[] = [
   { label: "Home", href: "/" },

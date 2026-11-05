@@ -32,10 +32,15 @@ export function DashboardSection() {
   const reduce = useReducedMotion();
   const transition = { duration: reduce ? 0 : 0.25, ease: motionEase };
   return (
-    <section className="py-20 bg-bg-soft">
-      <div className="shell grid grid-cols-1 items-stretch gap-8 lg:grid-cols-2">
-        <div className="card card-lift min-w-0 p-7 lg:p-8">
-          <h3 className="text-lg font-semibold">
+    <div className="dashboard">
+      <div>
+        <section id="github" className="section-frame">
+          <GitHubActivity />
+        </section>
+
+        <section id="leetcode" className="section-frame"><LeetCodeStatsCard /></section>
+        <section id="tech-stack" className="section-frame">
+          <h2 className="text-lg font-semibold">
             <button
               type="button"
               className="flex min-h-11 w-full cursor-pointer items-center justify-between gap-3 text-left"
@@ -58,7 +63,7 @@ export function DashboardSection() {
                 <path d="m6 9 6 6 6-6" />
               </motion.svg>
             </button>
-          </h3>
+          </h2>
           <p className="mt-1 text-sm text-fg-secondary">
             Languages, frameworks and tools I use to ship products.
           </p>
@@ -92,15 +97,9 @@ export function DashboardSection() {
               ))}
             </div>
           </motion.div>
-        </div>
-
-        <div className="card card-lift min-w-0 p-6 lg:p-7">
-          <GitHubActivity />
-        </div>
-
-        <LeetCodeStatsCard />
-        <XPostsCard />
+        </section>
+        <section id="posts" className="section-frame"><XPostsCard /></section>
       </div>
-    </section>
+    </div>
   );
 }

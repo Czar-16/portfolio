@@ -1,58 +1,19 @@
 "use client";
-
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useState, useEffect, useRef, useSyncExternalStore } from "react";
-import { AnimatePresence, motion } from "motion/react";
-import { useReducedMotion } from "@/components/use-reduced-motion";
-import { motionEase, motionSpring } from "@/components/motion-provider";
-import { lockBodyScroll } from "@/components/body-scroll-lock";
-import { navItems, socials, resume } from "@/data/site";
+import { useEffect, useRef, useState } from "react";
+import { navItems } from "@/data/site";
 import { SoundToggle } from "@/components/interaction-provider";
-import { ThemeToggle } from "@/components/theme-provider";
-import {
-  GithubIcon,
-  XIcon,
-  LinkedinIcon,
-  MenuIcon,
-  CloseIcon,
-  SearchIcon,
-  DownloadIcon,
-} from "@/components/icons";
-
-const subscribeToPlatform = () => () => {};
-const getShortcut = () => /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? "Cmd+K" : "Ctrl+K";
-const getServerShortcut = () => "Ctrl+K";
-
+import { MenuIcon, CloseIcon, SearchIcon } from "@/components/icons";
+import { lockBodyScroll } from "@/components/body-scroll-lock";
+const sections = [
+  ["projects", "Projects"], ["github", "GitHub"], ["tech-stack", "Stack"],
+  ["watch", "Watch"], ["quotes", "Quotes"], ["contact", "Contact"],
+];
 export function Navbar() {
   const pathname = usePathname();
-  const shortcut = useSyncExternalStore(subscribeToPlatform, getShortcut, getServerShortcut);
   const [open, setOpen] = useState(false);
-  const reduce = useReducedMotion();
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const unlock = lockBodyScroll();
-    const desktop = window.matchMedia("(min-width: 1280px)");
-    const closeOnDesktop = () => { if (desktop.matches) setOpen(false); };
-    closeOnDesktop();
-    desktop.addEventListener("change", closeOnDesktop);
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setOpen(false);
-        menuButtonRef.current?.focus();
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      desktop.removeEventListener("change", closeOnDesktop);
-      unlock();
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open]);
-
-  // Route changes can also come from history or the command palette.
+  const [active, setActive] = useState("profile");
   const previousPath = useRef(pathname);
   useEffect(() => {
     if (previousPath.current !== pathname) {
@@ -60,235 +21,39 @@ export function Navbar() {
       setOpen(false);
     }
   }, [pathname]);
-
-  const closeMenu = () => setOpen(false);
-  const openPalette = () => {
-    setOpen(false);
-    window.dispatchEvent(new CustomEvent("open-command-palette"));
-  };
-
-  return (
-    <header className="sticky top-0 z-50 border-b border-line bg-bg-veil backdrop-blur-xl">
-      <nav className="shell flex h-16 items-center justify-between gap-2 sm:gap-4" aria-label="Main">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="shrink-0 text-lg font-semibold tracking-tight text-fg transition-colors hover:text-accent"
-        >
-          Czar16<span className="text-accent">.</span>
-        </Link>
-
-        {/* Desktop nav links */}
-        <ul className="hidden items-center gap-1 xl:flex">
-          {navItems.map((item) => {
-            const active =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href);
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={`interactive relative isolate inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-[13px] font-medium ${
-                    active
-                      ? "text-accent"
-                      : "text-fg-secondary hover:text-fg"
-                  }`}
-                >
-                  {active && (
-                    <motion.span
-                      layoutId="nav-active"
-                      className="absolute inset-0 -z-10 rounded-lg bg-accent/10"
-                      transition={reduce ? { duration: 0 } : motionSpring}
-                    />
-                  )}
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-
-        {/* Desktop right side */}
-        <div className="hidden items-center gap-1 xl:flex">
-          <button
-            type="button"
-            onClick={openPalette}
-            aria-label={`Search commands (${shortcut})`}
-            aria-haspopup="dialog"
-            className="btn h-9 gap-2 px-3 text-xs"
-          >
-            <SearchIcon size={14} />
-            Search
-            <kbd className="rounded border border-line bg-bg-soft px-1.5 py-0.5 font-mono text-[10px] text-fg-secondary">{shortcut}</kbd>
-          </button>
-
-          <ThemeToggle />
-          <SoundToggle />
-
-          <span className="mx-1 h-5 w-px bg-line" aria-hidden="true" />
-
-          <a
-            href={socials.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            className="icon-btn"
-          >
-            <GithubIcon size={16} />
-          </a>
-          <a
-            href={socials.x}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="X (Twitter)"
-            className="icon-btn"
-          >
-            <XIcon size={15} />
-          </a>
-          <a
-            href={socials.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="icon-btn"
-          >
-            <LinkedinIcon size={16} />
-          </a>
-
-          <span className="mx-1 h-5 w-px bg-line" aria-hidden="true" />
-
-          <a
-            href={resume.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-primary h-9 px-4 text-xs font-medium"
-          >
-            <DownloadIcon size={13} />
-            Resume
-          </a>
-        </div>
-
-        {/* Mobile right side */}
-        <div className="flex items-center gap-1 xl:hidden">
-          <button
-            type="button"
-            onClick={openPalette}
-            aria-label={`Search commands (${shortcut})`}
-            aria-haspopup="dialog"
-            className="btn h-9 min-w-11 gap-2 px-2.5 text-xs"
-          >
-            <SearchIcon size={14} />
-            <span className="hidden min-[400px]:inline">Search</span>
-            <kbd className="hidden rounded border border-line bg-bg-soft px-1.5 py-0.5 font-mono text-[10px] text-fg-secondary md:inline">{shortcut}</kbd>
-          </button>
-          <ThemeToggle />
-          <SoundToggle />
-          <button
-            ref={menuButtonRef}
-            onClick={() => setOpen(!open)}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            aria-label={open ? "Close menu" : "Open menu"}
-            className="icon-btn"
-          >
-            <AnimatePresence initial={false} mode="wait">
-              <motion.span
-                key={open ? "close" : "menu"}
-                initial={reduce ? false : { opacity: 0, rotate: -45, scale: 0.8 }}
-                animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                exit={{ opacity: 0, rotate: reduce ? 0 : 45, scale: reduce ? 1 : 0.8 }}
-                transition={{ duration: reduce ? 0 : 0.12 }}
-                className="flex items-center justify-center"
-              >
-                {open ? <CloseIcon size={20} /> : <MenuIcon size={20} />}
-              </motion.span>
-            </AnimatePresence>
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            id="mobile-menu"
-            initial={{ opacity: 0, y: reduce ? 0 : -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: reduce ? 0 : -6 }}
-            transition={{ duration: reduce ? 0 : 0.18, ease: motionEase }}
-            className="absolute inset-x-0 top-full max-h-[calc(100dvh-65px)] overflow-x-hidden overflow-y-auto overscroll-contain border-b border-line bg-bg xl:hidden"
-          >
-            <div className="shell flex flex-col gap-1 py-4">
-              {navItems.map((item, index) => {
-                const active =
-                  item.href === "/"
-                    ? pathname === "/"
-                    : pathname.startsWith(item.href);
-                return (
-                  <motion.div
-                    key={item.href}
-                    initial={reduce ? false : { opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: reduce ? 0 : 0.2, delay: reduce ? 0 : Math.min(index * 0.025, 0.12), ease: motionEase }}
-                  >
-                  <Link
-                    href={item.href}
-                    onClick={closeMenu}
-                    className={`interactive block rounded-lg px-4 py-3 text-sm font-medium ${
-                      active
-                        ? "bg-accent/10 text-accent"
-                        : "text-fg-secondary hover:bg-fg/5 hover:text-fg"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                  </motion.div>
-                );
-              })}
-              <div className="mt-3 flex items-center gap-2 border-t border-line pt-4">
-                <a
-                  href={socials.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="GitHub"
-                  className="icon-btn"
-                >
-                  <GithubIcon size={17} />
-                </a>
-                <a
-                  href={socials.x}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="X (Twitter)"
-                  className="icon-btn"
-                >
-                  <XIcon size={16} />
-                </a>
-                <a
-                  href={socials.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn"
-                  className="icon-btn"
-                >
-                  <LinkedinIcon size={17} />
-                </a>
-                <a
-                  href={resume.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={closeMenu}
-                  className="btn btn-primary ml-auto h-9 px-4 text-xs"
-                >
-                  <DownloadIcon size={13} />
-                  Resume
-                </a>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
-  );
+  const trigger = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const unlock = lockBodyScroll();
+    const desktop = window.matchMedia("(min-width: 1280px)");
+    const close = () => { if (desktop.matches) setOpen(false); };
+    const keydown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setOpen(false); trigger.current?.focus(); }
+    };
+    desktop.addEventListener("change", close);
+    document.addEventListener("keydown", keydown);
+    return () => { unlock(); desktop.removeEventListener("change", close); document.removeEventListener("keydown", keydown); };
+  }, [open]);
+  useEffect(() => {
+    if (pathname !== "/") return;
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) if (entry.isIntersecting) setActive(entry.target.id);
+    }, { rootMargin: "-10% 0px -65% 0px" });
+    for (const [id] of sections) { const element = document.getElementById(id); if (element) observer.observe(element); }
+    return () => observer.disconnect();
+  }, [pathname]);
+  return <header className="site-header">
+    <div className="compact-toolbar">
+      <Link href="/" className="text-sm font-semibold" onClick={() => setOpen(false)}>Czar16.</Link>
+      <div className="flex items-center gap-1">
+        <button type="button" className="icon-btn" aria-label="Search commands" aria-haspopup="dialog" title="Search commands (Ctrl+K / ⌘K)" onClick={() => { setOpen(false); window.dispatchEvent(new CustomEvent("open-command-palette")); }}><SearchIcon size={16} /></button>
+        <SoundToggle />
+        <button ref={trigger} type="button" className="icon-btn mobile-menu-trigger" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen(!open)}>{open ? <CloseIcon size={18} /> : <MenuIcon size={18} />}</button>
+      </div>
+    </div>
+    <aside className="desktop-index">
+      <nav aria-label="Section index"><p className="index-label">Index</p>{sections.map(([id, label]) => <a key={id} href={pathname === "/" ? `#${id}` : `/#${id}`} aria-current={active === id ? "location" : undefined}>{label}</a>)}</nav>
+    </aside>
+    {open && <nav id="mobile-menu" aria-label="Main">{navItems.map(item => <Link key={item.href} href={item.href} onClick={() => setOpen(false)} aria-current={pathname === item.href ? "page" : undefined}>{item.label}</Link>)}</nav>}
+  </header>;
 }

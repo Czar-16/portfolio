@@ -62,7 +62,7 @@ function InteractionEffects({ playClick }: { playClick: () => void }) {
     function draw(now: number) {
       ctx!.clearRect(0, 0, window.innerWidth, window.innerHeight);
       bursts = bursts.filter(burst => now - burst.start < 400);
-      ctx!.strokeStyle = document.documentElement.dataset.theme === "light" ? "#171717" : "#ffffff";
+      ctx!.strokeStyle = "#ffffff";
       ctx!.lineWidth = 2;
       for (const burst of bursts) {
         const progress = Math.min((now - burst.start) / 400, 1);

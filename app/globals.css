@@ -1,37 +1,6 @@
 @import "tailwindcss";
 @import "lenis/dist/lenis.css";
 
-.cursor-glow {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 70;
-  width: 640px;
-  height: 640px;
-  pointer-events: none;
-  opacity: 0;
-  background: radial-gradient(320px circle at center, color-mix(in oklab, var(--accent) 7%, transparent), transparent 75%);
-  transition: opacity 220ms ease-out;
-}
-
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  [data-theme="dark"] .cursor-glow {
-    display: block;
-  }
-
-  [data-theme="dark"] .cursor-glow[data-active="true"] {
-    opacity: 1;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cursor-glow {
-    display: none;
-    transition: none;
-  }
-}
-
 /* Lenis animates native scroll positions; disable the browser's competing
    smooth-scroll animation while it is active. */
 html.lenis {
@@ -40,54 +9,30 @@ html.lenis {
 
 /* ------------------------------------------------------------------ *
  *  Design tokens
- *  Dark (AMOLED) is the default theme. Light mode is designed, not
- *  inverted: it uses its own surfaces, borders and accent weight.
+ *  Dark-only surfaces, borders and restrained accents.
  * ------------------------------------------------------------------ */
 
 :root,
-[data-theme="light"] {
-  color-scheme: light;
-
-  --bg: #f5f7fa;
-  --bg-soft: #eef2f8;
-  --bg-veil: rgba(244, 247, 251, 0.82);
-  --card: #ffffff;
-  --card-elevated: #f8fafc;
-  --fg: #0f172a;
-  --fg-secondary: #475569;
-  --fg-muted: #94a3b8;
-  --accent: #0b6bcb;
-  --accent-glow: #2563eb;
-  --accent-contrast: #ffffff;
-  --line: #e2e8f0;
-  --line-strong: #cbd5e1;
-  --success: #16a34a;
-  --grid-line: rgba(15, 23, 42, 0.035);
-  --sh-card: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 24px -12px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.02);
-  --sh-pop: 0 12px 40px -12px rgba(15, 23, 42, 0.18), 0 4px 16px -4px rgba(15, 23, 42, 0.08);
-  --sh-accent: 0 8px 24px -8px color-mix(in oklab, var(--accent-glow) 40%, transparent);
-}
-
 [data-theme="dark"] {
   color-scheme: dark;
 
   --bg: #000000;
-  --bg-soft: #05070a;
-  --card: #080c12;
-  --card-elevated: #0c111a;
+  --bg-veil: rgba(0, 0, 0, 0.94);
+  --bg-soft: #080808;
+  --card: #090909;
+  --card-elevated: #111111;
   --fg: #ffffff;
   --fg-secondary: #a1a1aa;
   --fg-muted: #71717a;
-  --accent: #3b9eff;
+  --accent: #e5e5e5;
   --accent-glow: #2563eb;
-  --accent-contrast: #04121f;
+  --accent-contrast: #171717;
   --line: rgba(255, 255, 255, 0.1);
   --line-strong: rgba(255, 255, 255, 0.18);
   --success: #22c55e;
-  --grid-line: rgba(255, 255, 255, 0.045);
-  --sh-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 18px 40px -30px rgba(0, 0, 0, 0.9);
-  --sh-pop: 0 30px 80px -40px rgba(0, 0, 0, 1);
-  --sh-accent: 0 10px 34px -14px color-mix(in oklab, var(--accent-glow) 70%, transparent);
+  --sh-card: none;
+  --sh-pop: 0 3px 12px rgb(0 0 0 / 6%);
+  --sh-accent: none;
 }
 
 @theme inline {
@@ -108,10 +53,9 @@ html.lenis {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-hand: var(--font-hand), "Segoe Script", cursive;
 
-  --radius-card: 14px;
-  --radius-control: 9px;
+  --radius-card: 6px;
+  --radius-control: 4px;
 
   --shadow-card: var(--sh-card);
   --shadow-pop: var(--sh-pop);
@@ -197,41 +141,12 @@ html.lenis {
  * ------------------------------------------------------------------ */
 
 @layer components {
-  .shell {
-    width: 100%;
-    margin-inline: auto;
-    max-width: 1480px;
-    padding-inline: 20px;
-  }
-
-  @media (min-width: 640px) {
-    .shell {
-      padding-inline: 28px;
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .shell {
-      padding-inline: 40px;
-    }
-  }
 
   .card {
     background-color: var(--card);
     border: 1px solid var(--line);
     border-radius: var(--radius-card);
     box-shadow: var(--sh-card);
-  }
-
-  .card-elevated {
-    background-color: var(--card-elevated);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-card);
-    box-shadow: var(--sh-card);
-  }
-
-  .hairline {
-    border-color: var(--line);
   }
 
   /* Eyebrow: "● Section" */
@@ -363,13 +278,6 @@ html.lenis {
     scale var(--motion-press) var(--ease-premium);
 }
 
-.motion-card {
-  transition:
-    border-color var(--motion-hover) var(--ease-premium),
-    background-color var(--motion-hover) var(--ease-premium),
-    box-shadow var(--motion-hover) var(--ease-premium);
-}
-
 .quote-card {
   background-image: radial-gradient(ellipse at top right, color-mix(in oklab, var(--accent) 5%, transparent), transparent 65%);
 }
@@ -378,22 +286,8 @@ html.lenis {
   transition: opacity 200ms var(--ease-premium), transform 400ms var(--ease-premium);
 }
 
-.artwork[data-art-active="false"] * {
-  animation-play-state: paused !important;
-}
-
 .interaction-arrow {
   transition: translate var(--motion-hover) var(--ease-premium);
-}
-
-.search-field {
-  transition: border-color var(--motion-hover) var(--ease-premium),
-    box-shadow var(--motion-hover) var(--ease-premium);
-}
-
-.search-field:focus-visible {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 14%, transparent);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -403,8 +297,7 @@ html.lenis {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  :where(button, a):not(:disabled):not([aria-disabled="true"]):active,
-  .interactive-card:active {
+  :where(button, a):not(:disabled):not([aria-disabled="true"]):active, .interactive-card:active {
     scale: 0.97;
   }
 
@@ -422,7 +315,6 @@ html.lenis {
 @media (prefers-reduced-motion: reduce) {
   .interaction-arrow,
   .group:hover .image-reveal,
-  .motion-card,
   .interactive-card,
   .interactive {
     translate: none !important;
@@ -431,111 +323,11 @@ html.lenis {
   }
 }
 
-/* Reveal a complete snapshot of the new theme from the toggle's position. */
-html[data-theme-reveal]::view-transition-group(root),
-html[data-theme-reveal]::view-transition-old(root),
-html[data-theme-reveal]::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-html[data-theme-reveal]::view-transition-old(root) {
-  z-index: 1;
-}
-
-html[data-theme-reveal]::view-transition-new(root) {
-  z-index: 2;
-  animation: theme-reveal 0.5s var(--ease-premium) both;
-}
-
-html[data-theme-reveal] *,
-html[data-theme-reveal] *::before,
-html[data-theme-reveal] *::after {
-  transition-duration: 0s !important;
-}
-
-@keyframes theme-reveal {
-  from {
-    clip-path: circle(0px at var(--theme-reveal-x) var(--theme-reveal-y));
-  }
-  to {
-    clip-path: circle(var(--theme-reveal-radius) at var(--theme-reveal-x) var(--theme-reveal-y));
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html[data-theme-reveal]::view-transition-new(root) {
-    animation: none;
-  }
-}
-
-/* Fallback for browsers without View Transitions. Only override color
-   transitions during a theme switch. Outside this brief
-   window, each component keeps its own hover and interaction timing. */
-@media (prefers-reduced-motion: no-preference) {
-  html[data-theme-anim],
-  html[data-theme-anim] *,
-  html[data-theme-anim] *::before,
-  html[data-theme-anim] *::after {
-    transition-property: background-color, color, border-color, outline-color,
-      text-decoration-color, box-shadow, fill, stroke !important;
-    transition-duration: 0.25s !important;
-    transition-timing-function: var(--ease-premium) !important;
-    transition-delay: 0s !important;
-  }
-}
-
-@layer utilities {
-  .text-gradient-name {
-    background-image: linear-gradient(
-      100deg,
-      var(--accent) 0%,
-      color-mix(in oklab, var(--accent) 55%, #a855f7) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .grid-lines {
-    background-image:
-      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-    background-size: 68px 68px;
-    background-position: center top;
-  }
-
-  .mask-fade-b {
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 100%);
-    mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 100%);
-  }
-
-  .mask-fade-radial {
-    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 10%, transparent 78%);
-    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 10%, transparent 78%);
-  }
-
-  .noise-overlay::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.5;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
-  }
-}
-
 /* One opt-in effect for standalone card surfaces across every route. */
 .card-lift.card-lift {
   position: relative;
   transition: transform var(--motion-hover) var(--ease-premium),
     box-shadow var(--motion-hover), border-color var(--motion-hover);
-}
-
-:root,
-[data-theme="light"] {
-  --card-lift-shadow: 0 12px 40px -12px color-mix(in oklab, color-mix(in oklab, var(--accent-glow) 65%, var(--fg-secondary)) 18%, transparent);
 }
 
 [data-theme="dark"] {
@@ -585,7 +377,73 @@ html[data-theme-reveal] *::after {
   }
 }
 
-/* Player ornamentation follows the card width, including inside dashboard grids. */
-@container (min-width: 500px) {
-  .spotify-bars { display: flex; }
+/* Compact portfolio frame shared by all routes. */
+body { font-size: 14px; }
+.portfolio-column {
+  width: min(100%, 576px);
+  margin-inline: auto;
+  border-inline: 1px dotted var(--line);
+  min-width: 0;
 }
+.shell { width: 100%; max-width: 576px; margin-inline: auto; padding-inline: 16px; }
+.portfolio-column > .shell { padding-block: 32px; }
+h1 { font-size: 24px; line-height: 1.3; }
+h2 { font-size: 18px; line-height: 1.5; }
+.portfolio-column h1 { font-size: 24px; }
+.portfolio-column h2 { font-size: 18px; }
+.section-frame { position: relative; padding: 28px 16px; }
+.section-frame::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc((100% - 100vw) / 2);
+  width: 100vw;
+  border-top: 1px dotted var(--line);
+  pointer-events: none;
+}
+.section-frame .shell { padding-inline: 0; }
+.section-heading .eyebrow { display: none; }
+.section-heading > div { gap: 6px; }
+.section-heading a { font-size: 12px; }
+.profile-banner { width: 100%; aspect-ratio: 576 / 220; }
+.availability { display: flex; align-items: center; gap: 7px; margin-top: 20px; font-size: 11px; color: var(--fg-secondary); }
+.availability span { width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: var(--success); }
+.btn { min-height: 32px; height: auto; padding: 6px 10px; font-size: 12px; border-radius: 4px; box-shadow: none; }
+.btn-primary { color: var(--accent-contrast); }
+.icon-btn { width: 32px; height: 32px; border-radius: 4px; }
+.card-lift.card-lift { border-radius: 6px; box-shadow: none; background-image: none; }
+.card-lift:hover { box-shadow: none; transform: none; }
+.site-header { position: sticky; top: 0; z-index: 50; height: 49px; background: var(--bg-veil); }
+.compact-toolbar { width: min(100%, 576px); height: 49px; margin-inline: auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; border-inline: 1px dotted var(--line); border-bottom: 1px dotted var(--line); }
+.desktop-index { display: none; }
+#mobile-menu { position: absolute; top: 49px; left: max(0px, calc(50% - 288px)); width: min(100%, 576px); max-height: calc(100dvh - 49px); overflow-y: auto; padding: 12px 16px; border-bottom: 1px dotted var(--line); background: var(--bg); }
+#mobile-menu a { display: block; padding: 12px; border-radius: 4px; color: var(--fg-secondary); }
+#mobile-menu a[aria-current] { background: var(--bg-soft); color: var(--fg); }
+.watch-preview { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 12px; }
+.featured-projects .mt-10 { margin-top: 20px; }
+.featured-projects .shadow-card { padding: 16px; border-radius: 6px; }
+.featured-projects .shadow-card .bg-accent { color: var(--accent-contrast); box-shadow: none; padding: 8px 12px; }
+.dashboard .section-frame > .card { border: 0; padding: 0; background: transparent; border-radius: 0; }
+.contact-section .blur-3xl { display: none; }
+.closing-quote { padding-block: 40px; text-align: center; }
+.closing-quote blockquote { max-width: 400px; min-height: 84px; margin-inline: auto; font-size: 16px; font-style: italic; line-height: 1.8; color: var(--fg-secondary); animation: quote-arrive 400ms ease both; }
+.closing-quote > p { margin-top: 16px; font-size: 10px; letter-spacing: 2px; color: var(--fg-muted); }
+@keyframes quote-arrive { from { opacity: 0; } to { opacity: 1; } }
+@media (min-width: 1280px) {
+  .desktop-index { display: block; position: fixed; left: calc(50% + 312px); top: 110px; width: 150px; max-height: calc(100dvh - 140px); overflow-y: auto; font-size: 12px; }
+  .desktop-index a { display: block; padding: 5px 0 5px 12px; border-left: 1px solid transparent; color: var(--fg-muted); }
+  .desktop-index a:hover, .desktop-index a[aria-current] { border-left-color: var(--fg-secondary); color: var(--fg); }
+  .index-label { margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; font-size: 10px; color: var(--fg-muted); }
+}
+@media (pointer: coarse) { .icon-btn { min-width: 36px; min-height: 44px; } .btn { min-height: 40px; } }
+@media (prefers-reduced-motion: reduce) { .closing-quote blockquote { animation: none; } }
+
+.contribution-cell { opacity: .8; transition: opacity 160ms ease; }
+[data-theme="dark"] .contribution-cell { opacity: .7; }
+.contribution-cell:hover { opacity: 1; }
+
+.heatmap-calendar { width: 100%; min-width: 360px; padding-block: 2px; }
+.heatmap-months, .heatmap-grid { display: grid; grid-template-columns: repeat(53, minmax(0, 1fr)); gap: 2px; }
+.heatmap-months { height: 18px; font-size: 9px; color: var(--fg-muted); }
+.heatmap-week { display: flex; flex-direction: column; gap: 2px; }
+.heatmap-week .contribution-cell { width: 100%; aspect-ratio: 1; border-radius: 2px; }

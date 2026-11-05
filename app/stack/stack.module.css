@@ -1,7 +1,7 @@
 .card {
   position: relative;
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: 6px;
   background: var(--card);
   box-shadow: var(--sh-card);
 }
@@ -12,7 +12,7 @@
   inset: 0 15% auto;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  opacity: 0.3;
+  opacity: 0;
   transition: opacity 380ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -23,7 +23,7 @@
   min-width: 0;
   padding: 12px;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 4px;
   background: var(--card-elevated);
   transition: background-color 240ms ease, border-color 240ms ease;
 }

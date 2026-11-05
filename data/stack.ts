@@ -1,4 +1,4 @@
-export type StackCategory = { id: string; label: string; items: string[] };
+type StackCategory = { id: string; label: string; items: string[] };
 
 /**
  * Compact, icon-led stack rows. No percentage bars — proficiency bars would

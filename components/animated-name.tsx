@@ -9,7 +9,7 @@ import styles from "./animated-name.module.css";
 
 const names = [site.name, "Czar16"] as const;
 
-export function AnimatedName({ variant }: { variant: "hero" | "about" }) {
+export function AnimatedName() {
   const [typing, setTyping] = useState({
     index: 0,
     length: names[0].length,
@@ -43,11 +43,7 @@ export function AnimatedName({ variant }: { variant: "hero" | "about" }) {
 
   const renderName = (name: (typeof names)[number], length = name.length) => {
     const text = name.slice(0, length);
-    if (variant === "about") {
-      return <>{text}{length === name.length && <span className="text-accent">.</span>}</>;
-    }
-    const accentStart = name === "Czar16" ? 4 : name.indexOf(" ") + 1;
-    return <>{text.slice(0, accentStart)}<span className="text-gradient-name">{text.slice(accentStart)}</span></>;
+    return <>{text}{length === name.length && <span className="text-accent">.</span>}</>;
   };
 
   const name = reduce ? names[0] : names[typing.index];

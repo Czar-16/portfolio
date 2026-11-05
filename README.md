@@ -37,7 +37,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Visitor counter
 
-The homepage ends with a glowing blue eye and a shared visitor count. The eye
+The homepage ends with an animated eye and a shared visitor count. The eye
 blinks every five seconds, pauses in hidden tabs, and stays open for reduced
 motion. Visits anywhere on the portfolio count, even without scrolling down.
 
@@ -87,7 +87,7 @@ The browser suite builds the production app into `.next-test`, starts it on port
 3100, and checks all seven page types in Chromium, Firefox, and WebKit. The
 separate build directory allows the development server to keep running.
 
-Coverage includes 320–1920px widths and breakpoint boundaries, both themes,
+Coverage includes 320–1920px widths and breakpoint boundaries, dark mode,
 short landscape layouts, touch and keyboard interactions, reduced motion,
 external-content failure and timeout states, and 200% zoom-equivalent reflow.
 Native browser zoom is not exposed by Playwright, so the zoom check uses the

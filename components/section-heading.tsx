@@ -20,17 +20,17 @@ export function SectionHeading({
   id?: string;
 }) {
   return (
-    <Reveal className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <Reveal className="section-heading flex flex-wrap items-center justify-between gap-3">
       <div className="flex flex-col gap-3">
         <span className="eyebrow">
           <span className="eyebrow-dot" />
           {eyebrow}
         </span>
-        <Heading id={id} className="text-2xl font-semibold tracking-tight text-fg sm:text-3xl lg:text-[2.25rem]">
+        <Heading id={id} className="font-semibold tracking-tight text-fg">
           {title}
         </Heading>
         {subtitle && (
-          <p className="max-w-xl text-sm leading-relaxed text-fg-secondary sm:text-base">
+          <p className="max-w-xl text-sm leading-relaxed text-fg-secondary">
             {subtitle}
           </p>
         )}

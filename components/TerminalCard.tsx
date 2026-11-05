@@ -307,20 +307,20 @@ export function TerminalCard() {
       <div
         role="region"
         aria-label="Interactive terminal"
-        className={`card-lift ${styles.card} flex h-[280px] w-full min-w-0 flex-col overflow-hidden rounded-xl border border-white/12 bg-black/50 font-mono text-[12px] leading-[1.65] text-white/65 backdrop-blur-md sm:h-[300px] sm:text-[13px] lg:text-[14px]`}
+        className={`card-lift ${styles.card} flex h-[280px] w-full min-w-0 flex-col overflow-hidden rounded-xl border border-line bg-bg-soft font-mono text-[12px] leading-[1.65] text-fg-secondary backdrop-blur-md sm:h-[300px] sm:text-[13px] lg:text-[14px]`}
         onClick={(event) => focusTerminal(event.target)}
       >
         <p className="sr-only">Terminal introduction: {INTRO_LINES.map((line) => line.kind === "command" ? `$ ${line.text}` : line.text).join(". ")}. Type help for commands. Use arrow keys for command history, Tab to complete a partial command, and Control L to clear.</p>
-        <div className="relative flex h-10 shrink-0 items-center justify-between border-b border-white/10 px-3.5">
+        <div className="relative flex h-10 shrink-0 items-center justify-between border-b border-line px-3.5">
           <div aria-hidden="true" className="flex gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-red-400/75" />
             <span className="h-2.5 w-2.5 rounded-full bg-amber-300/75" />
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/75" />
           </div>
-          <span className="pointer-events-none absolute inset-x-16 text-center text-[11px] text-white/50">czar16 — zsh</span>
+          <span className="pointer-events-none absolute inset-x-16 text-center text-[11px] text-fg-secondary">czar16 — zsh</span>
           {!finished ? (
-            <button type="button" onClick={() => setSkipped(true)} className="rounded px-1.5 py-0.5 text-[10px] text-white/50 transition-colors hover:text-white focus-visible:text-white" aria-label="Skip terminal introduction">skip</button>
-          ) : <span aria-hidden="true" className="text-[10px] text-white/35">⌨</span>}
+            <button type="button" onClick={() => setSkipped(true)} className="rounded px-1.5 py-0.5 text-[10px] text-fg-secondary transition-colors hover:text-fg focus-visible:text-fg" aria-label="Skip terminal introduction">skip</button>
+          ) : <span aria-hidden="true" className="text-[10px] text-fg-muted">⌨</span>}
         </div>
 
         <div ref={scrollRef} className={`${styles.scroll} min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-3.5 py-3 sm:px-4`}>
@@ -335,7 +335,7 @@ export function TerminalCard() {
                     key={`intro-${index}`}
                     data-intro-line={index}
                     data-intro-kind={line.kind}
-                    className={`${line.kind === "output" ? styles.line : ""} whitespace-pre-wrap break-words ${line.kind !== "output" ? "text-white" : `pl-4 ${line.text.includes("✓") ? "text-success" : ""}`}`}
+                    className={`${line.kind === "output" ? styles.line : ""} whitespace-pre-wrap break-words ${line.kind !== "output" ? "text-fg" : `pl-4 ${line.text.includes("✓") ? "text-success" : ""}`}`}
                   >
                     {line.kind !== "output" && <span className="text-success">${" "}</span>}
                     <span data-intro-text>{complete ? line.text : line.text.slice(0, progress.length)}</span>
@@ -348,7 +348,7 @@ export function TerminalCard() {
 
           <div aria-live="polite" aria-relevant="additions" aria-atomic="false">
             {lines.map((line) => (
-              <div key={line.id} className={`${line.kind === "output" ? styles.line : ""} whitespace-pre-wrap [overflow-wrap:anywhere] ${line.kind === "command" ? "flex gap-1 text-white" : line.text.includes("✓") ? "pl-4 text-success" : "pl-4"}`}>
+              <div key={line.id} className={`${line.kind === "output" ? styles.line : ""} whitespace-pre-wrap [overflow-wrap:anywhere] ${line.kind === "command" ? "flex gap-1 text-fg" : line.text.includes("✓") ? "pl-4 text-success" : "pl-4"}`}>
                 {line.kind === "command" && <Prompt />}
                 <span>{line.text}
                   {line.links && <span className="mt-0.5 flex flex-wrap gap-x-3 gap-y-1">{line.links.map((link) => (
@@ -371,7 +371,7 @@ export function TerminalCard() {
                 value={value}
                 onChange={(event) => { setValue(event.target.value); setHistoryIndex(history.length); }}
                 onKeyDown={handleKeyDown}
-                className={`${styles.input} w-full min-w-0 bg-transparent font-mono text-[16px] leading-[1.65] text-white placeholder:text-white/40 sm:text-[13px] lg:text-[14px]`}
+                className={`${styles.input} w-full min-w-0 bg-transparent font-mono text-[16px] leading-[1.65] text-fg placeholder:text-fg-muted sm:text-[13px] lg:text-[14px]`}
                 autoComplete="off"
                 autoCapitalize="off"
                 spellCheck={false}
@@ -380,8 +380,8 @@ export function TerminalCard() {
             </div>
           </form>
         </div>
-        <div className="flex h-10 shrink-0 items-center border-t border-white/10 px-3.5 sm:px-4">
-          <p id={hintId} className="text-[11px] leading-relaxed text-white/50">
+        <div className="flex h-10 shrink-0 items-center border-t border-line px-3.5 sm:px-4">
+          <p id={hintId} className="text-[11px] leading-relaxed text-fg-secondary">
             {finished ? <>Type <code className="text-accent">help</code> to explore. Press Enter.</> : "Click or press any key to skip."}
           </p>
         </div>

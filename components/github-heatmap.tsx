@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useTheme } from "@/components/theme-provider";
 
 type Contribution = {
   date: string;
@@ -23,9 +22,7 @@ type Cell = {
 const WEEKS = 53;
 const DAYS = 7;
 
-const DARK_COLORS = ["#161b22", "#0e2e5c", "#1a4fb5", "#2563eb", "#3b82f6"];
-
-const LIGHT_COLORS = ["#ebedf0", "#6fd695", "#3cb35e", "#2d8f4b", "#216e39"];
+const COLORS = ["#27272a", "#52525b", "#71717a", "#d4d4d8", "#f4f4f5"];
 
 function buildCalendar(contributions: Contribution[]): Cell[][] {
   const sorted = [...contributions].sort((a, b) =>
@@ -99,8 +96,6 @@ export function GitHubHeatmap() {
     null,
   );
 
-  const { theme } = useTheme();
-
   useEffect(() => {
     let cancelled = false;
     const controller = new AbortController();
@@ -158,7 +153,7 @@ export function GitHubHeatmap() {
     return getMonthLabels(weeks);
   }, [weeks]);
 
-  const colors = theme === "dark" ? DARK_COLORS : LIGHT_COLORS;
+  const colors = COLORS;
 
   /*
    * Loading state
@@ -178,9 +173,7 @@ export function GitHubHeatmap() {
               }).map((_, day) => (
                 <div
                   key={day}
-                  className={`h-[11px] w-[11px] rounded-[2px] ${
-                    theme === "dark" ? "bg-[#2b3038]" : "bg-[#eef1f4]"
-                  }`}
+                  className="h-[11px] w-[11px] rounded-[2px] bg-[#27272a]"
                 />
               ))}
             </div>
@@ -197,9 +190,7 @@ export function GitHubHeatmap() {
     return (
       <div
         role="status"
-        className={`flex h-[96px] items-center justify-center text-xs ${
-          theme === "dark" ? "text-white/35" : "text-slate-400"
-        }`}
+        className="flex h-[96px] items-center justify-center text-xs text-fg-muted"
       >
         GitHub activity unavailable
       </div>
@@ -207,77 +198,38 @@ export function GitHubHeatmap() {
   }
 
   return (
-    <div
-      tabIndex={0}
-      role="region"
-      aria-label="GitHub contribution calendar, scroll horizontally for earlier weeks"
-      ref={(el) => { if (el) el.scrollLeft = el.scrollWidth; }}
-      className="w-full overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-track]:bg-transparent"
-    >
-      <div className="min-w-max">
-        {/* Month labels */}
-        <div className="flex h-[16px]">
-          <div className="w-[27px] shrink-0" />
-
-          <div className="flex gap-[3px]">
-            {months.map((month, index) => (
-              <span
-                key={index}
-                className={`w-[11px] shrink-0 text-[9px] leading-none ${
-                  theme === "dark" ? "text-white/35" : "text-slate-400"
-                }`}
-              >
-                {month}
-              </span>
-            ))}
+    <div>
+      <div
+        tabIndex={0}
+        role="region"
+        aria-label="GitHub contribution calendar, scroll horizontally for earlier weeks"
+        ref={(el) => { if (el) el.scrollLeft = el.scrollWidth; }}
+        className="w-full overflow-x-auto overflow-y-hidden"
+      >
+        <div className="heatmap-calendar">
+          <div className="heatmap-months" aria-hidden="true">
+            {months.map((month, index) => <span key={index}>{month}</span>)}
           </div>
-        </div>
-
-        {/* Grid */}
-        <div className="mt-[2px] flex">
-          {/* Day labels */}
-          <div
-            className={`flex w-[27px] shrink-0 flex-col gap-[3px] pt-[1px] text-[9px] leading-[11px] ${
-              theme === "dark" ? "text-white/35" : "text-slate-400"
-            }`}
-          >
-            <span>Mon</span>
-            <span className="invisible">Tue</span>
-            <span>Wed</span>
-            <span className="invisible">Thu</span>
-            <span>Fri</span>
-            <span className="invisible">Sat</span>
-            <span className="invisible">Sun</span>
-          </div>
-
-          {/* Contribution weeks */}
-          <div className="flex gap-[3px]">
+          <div className="heatmap-grid">
             {weeks.map((week, weekIndex) => (
-              <div key={weekIndex} className="flex shrink-0 flex-col gap-[3px]">
-                {week.map((cell, dayIndex) => {
-                  const level = Math.min(cell.level, 4);
-
-                  return (
-                    <div
-                      key={`${weekIndex}-${dayIndex}`}
-                      className={`h-[11px] w-[11px] rounded-[2px] border ${
-                        theme === "dark"
-                          ? "border-white/[0.035]"
-                          : "border-black/[0.04]"
-                      }`}
-                      style={{
-                        backgroundColor: colors[level],
-                      }}
-                      title={`${cell.count} contribution${
-                        cell.count === 1 ? "" : "s"
-                      } on ${cell.date}`}
-                    />
-                  );
-                })}
+              <div key={weekIndex} className="heatmap-week">
+                {week.map((cell, dayIndex) => (
+                  <div
+                    key={`${weekIndex}-${dayIndex}`}
+                    className="contribution-cell"
+                    style={{ backgroundColor: colors[Math.min(cell.level, 4)] }}
+                    title={`${cell.count} contribution${cell.count === 1 ? "" : "s"} on ${cell.date}`}
+                  />
+                ))}
               </div>
             ))}
           </div>
         </div>
+      </div>
+      <div className="mt-3 flex items-center justify-end gap-1.5 text-[10px] text-fg-muted" aria-label="Contribution intensity, from less active to more active">
+        <span className="mr-1">Less active</span>
+        {colors.map((color, level) => <span key={color} className="contribution-cell size-2.5" style={{ backgroundColor: color }} title={`Activity level ${level}`} />)}
+        <span className="ml-1">More active</span>
       </div>
     </div>
   );

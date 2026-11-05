@@ -61,7 +61,7 @@ function ProjectCard({ project }: { project: Project }) {
         />
       </div>
 
-      <div className="flex flex-1 flex-col gap-4 p-6">
+      <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2.5">
             <h2 className="text-lg font-semibold tracking-tight text-fg">
@@ -122,7 +122,7 @@ function SeeMoreBox() {
         aria-hidden="true"
       />
 
-      <div className="relative grid items-center gap-10 p-8 sm:p-12 lg:grid-cols-2 lg:gap-14">
+      <div className="relative grid items-center gap-6 p-5">
         {/* Left: text + button */}
         <div className="flex flex-col items-start gap-5">
           <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-fg-muted">
@@ -148,7 +148,7 @@ function SeeMoreBox() {
 
         {/* Right: fake terminal */}
         <div
-          className="overflow-hidden rounded-xl border border-line bg-black/30 shadow-card"
+          className="overflow-hidden rounded-xl border border-line bg-bg-soft shadow-card"
           aria-hidden="true"
         >
           <div className="flex items-center gap-1.5 border-b border-line px-4 py-3">
@@ -197,7 +197,7 @@ export default function ProjectsPage() {
         subtitle="Selected products I've designed, built and shipped."
       />
 
-      <StaggerChildren className="mt-10 grid grid-cols-1 gap-6 sm:mt-12 md:grid-cols-2 lg:grid-cols-3">
+      <StaggerChildren className="mt-10 grid grid-cols-1 gap-6 sm:mt-12 min-[480px]:grid-cols-2">
         {projects.map((project) => (
           <StaggerItem key={project.slug} className="h-full">
             <ProjectCard project={project} />

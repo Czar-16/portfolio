@@ -6,7 +6,6 @@ import type { ReactNode } from "react";
 
 export const motionEase = [0.22, 1, 0.36, 1] as const;
 export const motionDuration = { interaction: 0.18, page: 0.16, enter: 0.28, staggerMax: 0.08 } as const;
-export const motionSpring = { type: "spring", stiffness: 420, damping: 34 } as const;
 
 export function MotionProvider({ children }: { children: ReactNode }) {
   const reduce = useReducedMotion();

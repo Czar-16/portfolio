@@ -1,5 +1,5 @@
 /** Editable collection: replace posters in public/watch/<slug>.jpg. */
-export type WatchItem = {
+type WatchItem = {
   rank: number;
   title: string;
   year: number;

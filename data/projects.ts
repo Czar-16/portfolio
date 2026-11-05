@@ -1,4 +1,4 @@
-export type ProjectLink = {
+type ProjectLink = {
   label: string;
   href: string;
   external?: boolean;
@@ -459,7 +459,3 @@ export const projects: Project[] = [
     ],
   },
 ];
-
-export function getProject(slug: string): Project | undefined {
-  return projects.find((project) => project.slug === slug);
-}

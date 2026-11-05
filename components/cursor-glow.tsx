@@ -1,16 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 export function CursorGlow() {
-  const glowRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
   useEffect(() => {
-    const glow = glowRef.current;
-    if (!glow) return;
-
     const enabled = window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
     let frame = 0;
     let active = false;
@@ -29,8 +25,6 @@ export function CursorGlow() {
         needsHitTest = false;
       }
       const bounds = target?.isConnected ? target.getBoundingClientRect() : null;
-      glow!.style.transform = `translate3d(${x - 320}px, ${y - 320}px, 0)`;
-      glow!.dataset.active = "true";
       if (bounds && target) {
         target.style.setProperty("--mouse-x", `${x - bounds.left}px`);
         target.style.setProperty("--mouse-y", `${y - bounds.top}px`);
@@ -44,14 +38,12 @@ export function CursorGlow() {
     function hide() {
       active = false;
       target = null;
-      glow!.dataset.active = "false";
       window.cancelAnimationFrame(frame);
       frame = 0;
     }
 
     function move(event: PointerEvent) {
-      if (!enabled.matches || event.pointerType !== "mouse" || document.hidden ||
-        document.documentElement.dataset.theme !== "dark") {
+      if (!enabled.matches || event.pointerType !== "mouse" || document.hidden) {
         hide();
         return;
       }
@@ -96,5 +88,5 @@ export function CursorGlow() {
     };
   }, [pathname]);
 
-  return <div ref={glowRef} className="cursor-glow" aria-hidden="true" />;
+  return null;
 }

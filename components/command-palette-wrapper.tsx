@@ -1,10 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-const CommandPalette = dynamic(() => import("@/components/command-palette"), {
-  ssr: false,
-});
+import CommandPalette from "@/components/command-palette";
 
 export function CommandPaletteWrapper() {
   return <CommandPalette />;

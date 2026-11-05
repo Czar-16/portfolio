@@ -7,15 +7,15 @@
   min-height: 76px;
   padding: 1rem 1.5rem;
   border: 1px solid var(--line);
-  border-radius: 1rem;
+  border-radius: 6px;
   background: var(--card);
-  box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 8%, transparent);
+  box-shadow: none;
 }
 
 .eye {
   flex-shrink: 0;
   color: var(--accent);
-  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 65%, transparent));
+
 }
 
 .lids {

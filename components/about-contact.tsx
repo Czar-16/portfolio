@@ -13,12 +13,12 @@ const socialLinks = [
 
 export function AboutContact() {
   return (
-    <section className="py-16 sm:py-20" aria-labelledby="about-contact-heading">
+    <section id="contact" className="section-frame contact-section" aria-labelledby="about-contact-heading">
       <div className="shell">
         <Reveal className="mx-auto max-w-5xl">
-          <div className="card card-lift relative overflow-hidden p-6 sm:p-10 lg:p-12">
+          <div className="relative">
             <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-20 size-72 rounded-full bg-accent/8 blur-3xl" />
-            <div className="relative grid items-center gap-7 lg:grid-cols-[1fr_auto] lg:gap-12">
+            <div className="relative grid items-center gap-5">
               <SectionHeading
                 id="about-contact-heading"
                 eyebrow="Get in touch"

@@ -19,7 +19,7 @@ export function FeaturedProjects() {
   ].slice(0, 6);
 
   return (
-    <section id="projects" className="py-16 sm:py-20">
+    <section id="projects" className="section-frame featured-projects">
       <div className="shell">
         <SectionHeading
           eyebrow="Selected work"
@@ -28,7 +28,7 @@ export function FeaturedProjects() {
           action="All projects"
           actionHref="/projects"
         />
-        <div className="mt-10 grid grid-cols-1 gap-6 sm:mt-12 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-5 grid grid-cols-1 gap-4 min-[480px]:grid-cols-2">
           {featured.map((project) => {
             const liveLink =
               project.links.find((l) => l.label === "Live" && !l.private)?.href ||
@@ -44,15 +44,15 @@ export function FeaturedProjects() {
                     <GracefulImage
                       src={project.image}
                       alt={project.imageAlt}
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      sizes="(min-width: 576px) 260px, 100vw"
                       className={`project-image ${project.cli ? "object-contain" : "object-cover object-top"}`}
                     />
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent" />
                   </div>
 
-                  <div className="flex flex-1 flex-col justify-between p-6">
+                  <div className="flex flex-1 flex-col justify-between p-4">
                     <div>
-                      <h3 className="text-xl font-bold">{project.name}</h3>
+                      <h3 className="text-sm font-semibold">{project.name}</h3>
                       {project.status === "Still building" && (
                         <span className="badge mt-2 text-fg-muted">
                           {project.status}

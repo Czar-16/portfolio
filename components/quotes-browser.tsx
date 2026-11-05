@@ -80,7 +80,7 @@ export function QuotesBrowser() {
       <p className="mb-5 text-sm leading-6 text-fg-secondary">
         Pick a category. <span className={styles.mouseHint}>Hover a box</span><span className={styles.touchHint}>Tap a box</span> to uncover a little perspective.
       </p>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5" role="group" aria-label="Quote categories">
+      <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2" role="group" aria-label="Quote categories">
         {quoteCategories.map((item) => (
           <button
             key={item.id}
@@ -88,7 +88,7 @@ export function QuotesBrowser() {
             aria-pressed={selected === item.id}
             aria-controls="category-quotes"
             onClick={() => setSelected(item.id)}
-            className={`card card-lift flex min-h-44 flex-col items-start p-5 text-left ${styles.category}`}
+            className={`card card-lift flex min-h-36 flex-col items-start p-5 text-left ${styles.category}`}
           >
             <span className="mb-5 flex w-full items-center justify-between">
               <span className="font-mono text-2xl text-accent" aria-hidden="true">{item.symbol}</span>
@@ -110,7 +110,7 @@ export function QuotesBrowser() {
               <h2 className="text-lg font-semibold text-fg">{category.label}</h2>
               <p className="font-mono text-[11px] text-fg-muted">{filtered.length} boxes · Open the ones you need</p>
             </div>
-            <ol className="grid list-none grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3" aria-label={`${category.label}: ${filtered.length} quotes`}>
+            <ol className="grid list-none grid-cols-1 gap-4 min-[480px]:grid-cols-2" aria-label={`${category.label}: ${filtered.length} quotes`}>
               {filtered.map((quote) => <ConcealedQuote key={quote.id} quote={quote} />)}
             </ol>
           </div>

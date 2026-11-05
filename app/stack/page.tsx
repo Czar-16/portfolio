@@ -39,7 +39,7 @@ export default function StackPage() {
         subtitle="Every layer, from idea to deployment."
       />
 
-      <div className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 min-[480px]:grid-cols-2">
         {stack.map((category, index) => {
           const detail = categoryDetails[category.id];
           return (

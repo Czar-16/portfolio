@@ -51,10 +51,10 @@ export default function WatchPage() {
         </p>
       </Reveal>
 
-      <StaggerChildren className="mt-6 grid grid-cols-2 gap-x-3 gap-y-5 sm:mt-7 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 xl:grid-cols-5">
+      <StaggerChildren className="mt-6 grid grid-cols-2 gap-x-3 gap-y-5 sm:mt-7 sm:grid-cols-3 sm:gap-4">
         {watchItems.map((movie) => (
           <StaggerItem key={movie.slug} className="h-full">
-            <article className="card-lift group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
+            <article id={movie.slug} className="card-lift group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
               <div className="relative overflow-hidden">
                 <WatchPoster
                   slug={movie.slug}
