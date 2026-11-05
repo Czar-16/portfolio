@@ -5,7 +5,18 @@
 .layer[data-mode="inactive"] .controls { display: none; }
 .controls button, .replay { display: inline-block; margin-top: 20px; color: var(--fg-secondary); background: none; border: 0; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; font-size: 12px; padding: 10px; }
 .layer :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-@media (max-width: 600px) { .controls { bottom: max(12px, env(safe-area-inset-bottom)); flex-direction: row; gap: 5px; padding: 6px; } .controls button { min-height: 44px; } .controls kbd { display: none; } .replay { min-height: 44px; } }
+.controlIcon { display: none; }
+.mutedSlash { display: none; }
+[data-muted="true"] .mutedSlash { display: block; }
+@media (max-width: 600px) {
+  .controls { bottom: calc(12px + env(safe-area-inset-bottom)); gap: 8px; padding: 0; border: 0; background: transparent; box-shadow: none; }
+  .controls .controlButton { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: var(--bg); color: var(--fg-secondary); box-shadow: 0 4px 16px #0002; text-decoration: none; }
+  .controlIcon { display: block; }
+  .controlLabel { display: none; }
+  .controls kbd { display: none; }
+  .controls .volumePanel button { margin-top: 0; min-height: 44px; }
+  .replay { min-height: 44px; }
+}
 .controls button[hidden], .volumePanel[hidden] { display: none; }
 .music { position: relative; }
 .volumePanel { position: absolute; bottom: calc(100% + 12px); right: 0; width: min(190px, calc(100vw - 32px)); display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); box-shadow: 0 4px 24px #0002; color: var(--fg); font-size: 11px; }

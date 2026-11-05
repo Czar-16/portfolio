@@ -154,7 +154,10 @@ function SwarmExperience() {
       mute.setAttribute("aria-pressed", String(muted));
       musicControl.setAttribute("aria-label", musicBlocked ? "Enable music" : "Music volume");
       musicControl.setAttribute("aria-expanded", String(!panel.hidden));
-      musicControl.textContent = musicBlocked ? "Enable music" : muted || volume === 0 ? "♪ Off" : "♫ Music";
+      const label = musicControl.querySelector(`.${styles.controlLabel}`);
+      if (label) label.textContent = musicBlocked ? "Enable music" : muted || volume === 0 ? "♪ Off" : "♫ Music";
+      musicControl.dataset.muted = String(muted || volume === 0);
+      musicControl.title = musicBlocked ? "Enable music" : muted || volume === 0 ? "Music volume (muted)" : "Music volume";
       musicControl.hidden = musicFailed || !musicEnabled || (!running && !musicOnly);
     }
     function closeVolumePanel() {
@@ -681,9 +684,15 @@ function SwarmExperience() {
       <canvas ref={canvas} className={styles.canvas} aria-hidden="true" hidden />
       <audio ref={audio} src="/audio/swarm-background.mp3" preload="none" aria-hidden="true" />
       <div className={styles.controls} role="group" aria-label="Animation controls">
-        <button ref={skip} type="button" data-click-sound="off">Skip animation <kbd>Esc</kbd></button>
+        <button ref={skip} className={styles.controlButton} type="button" aria-label="Skip animation" title="Skip animation" data-click-sound="off">
+          <svg className={styles.controlIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m5 5 10 7L5 19Z" /><path d="M19 5v14" /></svg>
+          <span className={styles.controlLabel}>Skip animation <kbd>Esc</kbd></span>
+        </button>
         <div className={styles.music}>
-          <button ref={musicButton} type="button" aria-label="Music volume" aria-controls="swarm-volume-panel" aria-expanded="false" data-click-sound="off" hidden>♫ Music</button>
+          <button ref={musicButton} className={styles.controlButton} type="button" aria-label="Music volume" title="Music volume" aria-controls="swarm-volume-panel" aria-expanded="false" data-click-sound="off" hidden>
+            <svg className={styles.controlIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13M9 8l12-2" /><ellipse cx="6" cy="18" rx="3" ry="3" /><ellipse cx="18" cy="16" rx="3" ry="3" /><path className={styles.mutedSlash} d="m3 3 18 18" /></svg>
+            <span className={styles.controlLabel}>♫ Music</span>
+          </button>
           <div ref={volumePanel} id="swarm-volume-panel" className={styles.volumePanel} hidden>
             <label htmlFor="swarm-volume">Volume</label><output ref={volumeValue} htmlFor="swarm-volume">60%</output>
             <input ref={volumeSlider} id="swarm-volume" type="range" min="0" max="100" defaultValue="60" aria-label="Music volume" />
