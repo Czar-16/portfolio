@@ -5,6 +5,8 @@ import styles from "./swarm-tour.module.css";
 
 const SEEN = "czar-swarm-seen";
 const MUSIC_VOLUME = "czar-swarm-music-volume";
+const PACE = 1.2;
+const CURSOR_FADE_MS = 180;
 const COLORS = ["#f06478", "#9975ed", "#3c9de8", "#20ac9b", "#d49a27", "#ed8054", "#c866c0", "#6ca944", "#e95ca1", "#637ce6", "#00a8bd", "#bc8538", "#af64e5", "#e26450", "#389a70", "#cfad32", "#7788ba", "#df7cb7"];
 const TARGETS = [
   ".compact-toolbar > a", ".toolbar-controls > *", ".desktop-index nav a",
@@ -27,7 +29,7 @@ type Task = {
 };
 type Cursor = Point & {
   task: Task | null; from: Point; bend: number; started: number; travel: number;
-  phase: "idle" | "travel" | "work"; speed: number; ready: number;
+  phase: "idle" | "travel" | "work"; speed: number; ready: number; opacity: number;
 };
 const clamp = (n: number, lo = 0, hi = 1) => Math.max(lo, Math.min(hi, n));
 const ease = (n: number) => n * n * (3 - 2 * n);
@@ -90,7 +92,7 @@ export function SwarmTour() {
     let scrollTravel: { from: number; to: number; started: number } | null = null;
     let running = false, disposed = false, dirty = false, blocked = false;
     let musicAttempt = 0, musicFailed = false, musicBlocked = false;
-    let volume = 0.3, muted = false;
+    let volume = 0.6, muted = false;
     try { const saved = Number(localStorage.getItem(MUSIC_VOLUME)); if (Number.isFinite(saved) && saved >= 0 && saved <= 1 && localStorage.getItem(MUSIC_VOLUME) !== null) volume = saved; } catch {}
     function updateMusicUI() {
       music.volume = volume; music.muted = muted;
@@ -120,7 +122,6 @@ export function SwarmTour() {
     }
     updateMusicUI();
     let width = innerWidth, height = innerHeight;
-    let pointerPosition: Point | null = null;
     let intersection: IntersectionObserver | null = null;
     let startupInteraction = false;
     const decorations: { task: Task; until: number }[] = [];
@@ -247,7 +248,7 @@ export function SwarmTour() {
         const physics = Math.min(elapsed, 40);
         if (dirty) measure();
         if (scrollTravel) {
-          const p = clamp((clock - scrollTravel.started) / 850);
+          const p = clamp((clock - scrollTravel.started) / (850 * PACE));
           window.scrollTo({ top: scrollTravel.from + (scrollTravel.to - scrollTravel.from) * ease(p), behavior: "instant" });
           if (p === 1) scrollTravel = null;
         }
@@ -277,7 +278,7 @@ export function SwarmTour() {
               task.owner = index; cursor.task = task; cursor.phase = "travel";
               cursor.from = { x: cursor.x, y: cursor.y }; cursor.started = clock;
               const dest = workPoint(task, task.elapsed / task.duration);
-              cursor.travel = clamp(Math.hypot(dest.x - cursor.x, dest.y - cursor.y) / cursor.speed, 250, 800);
+              cursor.travel = clamp(Math.hypot(dest.x - cursor.x, dest.y - cursor.y) / cursor.speed, 250, 800) * PACE;
               cursor.bend = (index % 2 ? 1 : -1) * Math.min(100, cursor.travel / 6);
             }
           }
@@ -299,11 +300,10 @@ export function SwarmTour() {
             if (cursor.phase === "work") { selection(task, progress, 0.65); }
           } else {
             // Golden-angle formation plus pairwise separation, never a parking column.
-            const center = pointerPosition ?? { x: width * 0.66, y: height * 0.48 };
-            const angle = index * 2.39996 + clock / 9000;
-            const radius = 42 + Math.sqrt(index + 1) * 22;
-            let x = clamp(center.x + Math.cos(angle) * radius, 24, width - 34);
-            let y = clamp(center.y + Math.sin(angle) * radius * 0.7, 80, height - 90);
+            // Spread idle cursors across the viewport instead of following the visitor.
+            const column = index % 6, row = Math.floor(index / 6);
+            let x = clamp(width * (column + 0.5 + (row % 2 ? 0.25 : 0)) / 6 + Math.sin(clock / 2200 + index * 2.4) * 24, 24, width - 34);
+            let y = clamp(height * (row + 0.5) / 3 + Math.cos(clock / 2600 + index * 1.7) * 20, 80, height - 90);
             for (const other of cursors) {
               if (other === cursor) continue;
               const dx = cursor.x - other.x, dy = cursor.y - other.y, d = Math.hypot(dx, dy);
@@ -312,7 +312,12 @@ export function SwarmTour() {
             const alpha = 1 - Math.exp(-physics / 180);
             cursor.x += (x - cursor.x) * alpha; cursor.y += (y - cursor.y) * alpha;
           }
-          drawCursor(cursor, index);
+          cursor.opacity = clamp(cursor.opacity + (cursor.task ? 1 : -1) * elapsed / CURSOR_FADE_MS);
+          if (cursor.opacity > 0) {
+            ctx.save(); ctx.globalAlpha *= cursor.opacity;
+            drawCursor(cursor, index);
+            ctx.restore();
+          }
         });
         for (let i = decorations.length - 1; i >= 0; i--) {
           const d = decorations[i];
@@ -381,8 +386,6 @@ export function SwarmTour() {
       if (document.hidden) { cancelAnimationFrame(frame); frame = 0; musicAttempt++; music.pause(); }
       else { schedule(); if (running && !blocked && !musicBlocked && !musicFailed) void playMusic(true); }
     }
-    function move(event: PointerEvent) { if (event.pointerType === "mouse") pointerPosition = { x: event.clientX, y: event.clientY }; }
-    function leave() { pointerPosition = null; }
     function mediaChange() { finish(); }
     function collect(): Task[] {
       const candidates = Array.from(document.querySelectorAll<HTMLElement>(TARGETS));
@@ -397,7 +400,7 @@ export function SwarmTour() {
       candidates.filter(element => !candidates.some(parent => parent !== element && parent.contains(element))).forEach(element => split(element));
       const create = (element: HTMLElement, kind: Task["kind"]): Task => ({ element, kind, x: 0, y: 0, width: 0, height: 0,
         fixed: !!element.closest(".site-header"), clip: element.style.getPropertyValue("clip-path"), priority: element.style.getPropertyPriority("clip-path"),
-        geometryKey: "", lines: [], visible: false, nearby: false, elapsed: 0, duration: kind === "border" ? 500 : kind === "type" ? clamp((element.textContent?.length ?? 0) * 20, 850, 2400) : 1150,
+        geometryKey: "", lines: [], visible: false, nearby: false, elapsed: 0, duration: (kind === "border" ? 500 : kind === "type" ? clamp((element.textContent?.length ?? 0) * 20, 850, 2400) : 1150) * PACE,
         done: false, owner: null,
       });
       const result = [...new Set(leaves)].map(element => create(element, element.matches('img,.project-preview') || !!element.querySelector('img') ? "image" : element.textContent?.trim() ? "type" : "box"));
@@ -425,9 +428,9 @@ export function SwarmTour() {
         if (!tasks.length) return;
         root.dataset.swarmReveals = "";
         measure();
-        clock = 0; last = 0; ending = null; pointerPosition = null;
+        clock = 0; last = 0; ending = null;
         viewportDoneAt = null; scrollTravel = null;
-        cursors = COLORS.map((_, i) => ({ x: width * 0.5 + Math.cos(i * 2.4) * 50, y: height + 35 + i * 6, task: null, from: { x: 0, y: 0 }, bend: 0, started: 0, travel: 0, phase: "idle", speed: i % 5 === 0 ? 2.5 : 0.7 + (i % 4) * 0.3, ready: 180 + i * 95 }));
+        cursors = COLORS.map((_, i) => ({ x: width * 0.5 + Math.cos(i * 2.4) * 50, y: height + 35 + i * 6, task: null, from: { x: 0, y: 0 }, bend: 0, started: 0, travel: 0, phase: "idle", speed: i % 5 === 0 ? 2.5 : 0.7 + (i % 4) * 0.3, ready: 180 + i * 95, opacity: 0 }));
         const ratio = Math.min(devicePixelRatio || 1, 2);
         surface.width = width * ratio; surface.height = height * ratio; ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
         const byElement = new Map<HTMLElement, Task[]>();
@@ -452,7 +455,7 @@ export function SwarmTour() {
       } catch { finish(); }
       finally { clearStartup(); }
     }
-    const replayClick = () => { void start(true); };
+    const replayClick = () => { window.scrollTo({ top: 0, behavior: "instant" }); void start(true); };
     const musicClick = () => { if (musicBlocked) void playMusic(true); panel.hidden = false; updateMusicUI(); };
     const volumeInput = () => { volume = Number(slider.value) / 100; music.volume = volume; value.value = `${slider.value}%`; try { localStorage.setItem(MUSIC_VOLUME, String(volume)); } catch {} updateMusicUI(); };
     const muteClick = () => { muted = !muted; updateMusicUI(); };
@@ -465,8 +468,6 @@ export function SwarmTour() {
     window.addEventListener("resize", finish);
     window.addEventListener("pagehide", finish);
     window.addEventListener("popstate", finish);
-    window.addEventListener("pointermove", move, { passive: true });
-    document.addEventListener("pointerleave", leave);
     document.addEventListener("focusin", focus, true);
     document.addEventListener("click", navigate, true);
     document.addEventListener("visibilitychange", visibility);
@@ -483,7 +484,6 @@ export function SwarmTour() {
       window.removeEventListener("keydown", key, true); window.removeEventListener("resize", finish);
       window.removeEventListener("scroll", invalidate, true);
       window.removeEventListener("pagehide", finish); window.removeEventListener("popstate", finish);
-      window.removeEventListener("pointermove", move); document.removeEventListener("pointerleave", leave);
       document.removeEventListener("focusin", focus, true); document.removeEventListener("click", navigate, true);
       document.removeEventListener("visibilitychange", visibility);
       reduced.removeEventListener("change", mediaChange); pointer.removeEventListener("change", mediaChange);
@@ -501,8 +501,8 @@ export function SwarmTour() {
       <div className={styles.music}>
         <button ref={musicButton} type="button" aria-label="Music volume" aria-controls="swarm-volume-panel" aria-expanded="false" data-click-sound="off" hidden>♫ Music</button>
         <div ref={volumePanel} id="swarm-volume-panel" className={styles.volumePanel} hidden>
-          <label htmlFor="swarm-volume">Volume</label><output ref={volumeValue} htmlFor="swarm-volume">30%</output>
-          <input ref={volumeSlider} id="swarm-volume" type="range" min="0" max="100" defaultValue="30" aria-label="Music volume" />
+          <label htmlFor="swarm-volume">Volume</label><output ref={volumeValue} htmlFor="swarm-volume">60%</output>
+          <input ref={volumeSlider} id="swarm-volume" type="range" min="0" max="100" defaultValue="60" aria-label="Music volume" />
           <button ref={muteButton} type="button" aria-pressed="false" data-click-sound="off">Mute</button>
         </div>
       </div>
