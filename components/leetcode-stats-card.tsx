@@ -5,6 +5,7 @@ import { animate, motion, useInView, useMotionValue, useTransform } from "framer
 import { useReducedMotion } from "@/components/use-reduced-motion";
 import { isLeetCodeStats, type LeetCodeStats } from "@/lib/leetcode-stats";
 import styles from "./leetcode-stats-card.module.css";
+import { useAutoRefresh } from "@/components/use-auto-refresh";
 
 // Editable offline snapshot, used only if live data and a saved snapshot are unavailable.
 const FALLBACK_STATS: LeetCodeStats = {
@@ -170,6 +171,7 @@ function LeetCodeCardSkeleton() {
 }
 
 export function LeetCodeStatsCard() {
+  const revision = useAutoRefresh();
   const cardRef = useRef<HTMLElement>(null);
   const started = useInView(cardRef, { once: true, amount: 0.25 });
   const reduce = useReducedMotion();
@@ -199,7 +201,7 @@ export function LeetCodeStatsCard() {
         let saved: unknown;
         try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null"); } catch { /* Use offline snapshot. */ }
         const snapshot = isLeetCodeStats(saved) ? saved : null;
-        setStats(snapshot ?? FALLBACK_STATS);
+        setStats(current => current ?? snapshot ?? FALLBACK_STATS);
         setSource(snapshot ? "saved" : "fallback");
       } finally {
         window.clearTimeout(timeout);
@@ -208,7 +210,7 @@ export function LeetCodeStatsCard() {
 
     void load();
     return () => { disposed = true; controller.abort(); window.clearTimeout(timeout); };
-  }, []);
+  }, [revision]);
 
   return (
     <article ref={cardRef} className={`card card-lift rounded-2xl ${styles.card}`} data-cursor-glow-border aria-label="LeetCode problem-solving statistics" aria-busy={stats === null}>

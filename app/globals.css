@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "lenis/dist/lenis.css";
+@source "../components/TerminalIntro.tsx";
 
 /* Lenis animates native scroll positions; disable the browser's competing
    smooth-scroll animation while it is active. */
@@ -670,3 +671,31 @@ html[data-swarm-active] {
 html[data-swarm-active] [data-swarm-pending] { transition: none !important; }
 html[data-swarm-active] [data-cursor-companion] { visibility: hidden !important; }
 html[data-swarm-active] [data-cursor-glow-border]::after { opacity: 0 !important; }
+
+/* Keep existing floating effects below the z-50 intro without changing them
+   outside the entrance. The intro is portalled outside the page transition. */
+html[data-terminal-intro] [data-swarm-tour] { z-index: 40; }
+html[data-terminal-intro] :is([data-click-sparks], [data-cursor-companion], [data-project-tech-panel]) { visibility: hidden !important; }
+
+html[data-terminal-intro] [aria-label="Portfolio intro"] { overflow-y: auto; overflow-anchor: none; align-items: safe center; }
+
+/* Match the intro's title sizing despite the compact page-wide h2 rule. */
+[aria-label="Portfolio intro"] h2 { font-size: 26px; line-height: 1.2; }
+@media (min-width: 640px) { [aria-label="Portfolio intro"] h2 { font-size: 30px; } }
+
+/* Background work stays still while the foreground experience owns motion. */
+html:is([data-terminal-intro], [data-swarm-active]) :is(.availability > span, .profile-intro, .closing-quote blockquote) { animation-play-state: paused; }
+html[data-motion="off"] *, html[data-motion="off"] *::before, html[data-motion="off"] *::after { animation-duration: 0s !important; }
+html[data-terminal-intro] [data-cursor-glow-border]::after { opacity: 0 !important; }
+
+@media (max-width: 359px) {
+  .site-header { height: auto; }
+  .compact-toolbar { height: auto; min-height: 49px; flex-wrap: wrap; }
+  .toolbar-controls { max-width: 100%; flex-wrap: wrap; justify-content: flex-end; margin-left: auto; }
+}
+
+html:is([data-terminal-intro], [data-swarm-active]) [data-intro-replay] { visibility: hidden; }
+/* Leave room for the optional floating music controls below Replay intro. */
+.closing-quote:has([data-intro-replay]) { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+
+html[data-swarm-active] :is(button:not(:disabled), a[href], summary, [role="button"], [role="link"]) { cursor: pointer; }

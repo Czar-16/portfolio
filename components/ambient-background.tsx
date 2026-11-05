@@ -3,6 +3,7 @@
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import { useDocumentVisible } from "@/components/use-document-visible";
 import { useReducedMotion } from "@/components/use-reduced-motion";
+import { useEffectsPaused } from "./use-effects-paused";
 import styles from "./ambient-background.module.css";
 
 type Background = "aurora" | "particles" | "constellation" | "bokeh" | "spotlight";
@@ -45,6 +46,7 @@ export function AmbientBackground() {
   const background = useBackground();
   const visible = useDocumentVisible();
   const reduced = useReducedMotion();
+  const paused = useEffectsPaused();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const elapsedRef = useRef(0);
 
@@ -79,8 +81,9 @@ export function AmbientBackground() {
           for (let j = i + 1; j < points.length && connections[i] < 2; j++) {
             if (connections[j] >= 2) continue;
             const distance = Math.hypot(points[i].x - points[j].x, points[i].y - points[j].y);
-            if (distance >= 110) continue;
-            ctx!.globalAlpha = (1 - distance / 110) * .28;
+            const reach = width < 640 ? 135 : 110;
+            if (distance >= reach) continue;
+            ctx!.globalAlpha = (1 - distance / reach) * (width < 640 ? .38 : .28);
             ctx!.beginPath();
             ctx!.moveTo(points[i].x, points[i].y);
             ctx!.lineTo(points[j].x, points[j].y);
@@ -111,7 +114,7 @@ export function AmbientBackground() {
     function resize() {
       width = window.innerWidth;
       height = window.innerHeight;
-      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      const ratio = Math.min(window.devicePixelRatio || 1, matchMedia("(pointer: fine)").matches ? 1.5 : 1);
       canvas!.width = Math.round(width * ratio);
       canvas!.height = Math.round(height * ratio);
       ctx!.setTransform(ratio, 0, 0, ratio, 0, 0);
@@ -122,12 +125,12 @@ export function AmbientBackground() {
         return (seed >>> 0) / 4294967296;
       };
       // Stable placement avoids hydration differences and random jumps on theme changes.
-      particles = Array.from({ length: constellation ? (width < 640 ? 24 : 48) : (width < 640 ? 32 : 80) }, (_, i) => ({
+      particles = Array.from({ length: constellation ? (width < 640 ? 38 : 48) : (width < 640 ? 54 : 80) }, (_, i) => ({
         x: constellation ? random() : ((i * 73 + 19) % 997) / 997,
         y: constellation ? random() : ((i * 137 + 47) % 991) / 991,
-        radius: .7 + (i % 4) * .35,
+        radius: (width < 640 ? .95 : .7) + (i % 4) * .35,
         speed: 2 + (i % 5) * .7,
-        opacity: .18 + (i % 5) * .09,
+        opacity: (width < 640 ? .3 : .18) + (i % 5) * .09,
       }));
       draw();
     }
@@ -140,9 +143,9 @@ export function AmbientBackground() {
     resize();
     canvas.dataset.ready = "true";
     const observer = new MutationObserver(themeChanged);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "data-accent"] });
     window.addEventListener("resize", resize, { passive: true });
-    if (visible && !reduced) frame = requestAnimationFrame(tick);
+    if (visible && !reduced && !paused) frame = requestAnimationFrame(tick);
     return () => {
       elapsedRef.current = elapsed;
       cancelAnimationFrame(frame);
@@ -150,9 +153,9 @@ export function AmbientBackground() {
       window.removeEventListener("resize", resize);
       delete canvas.dataset.ready;
     };
-  }, [background, reduced, visible]);
+  }, [background, reduced, visible, paused]);
 
-  return <div className={styles.background} aria-hidden="true" data-ambient-background data-paused={!visible}>
+  return <div className={styles.background} aria-hidden="true" data-ambient-background data-paused={!visible || reduced || paused}>
     <div className={styles.aurora}><div /><div /><div /></div>
     <div className={styles.points} data-point-background><canvas ref={canvasRef} /></div>
     <div className={styles.bokeh} data-bokeh-background>{Array.from({ length: 6 }, (_, i) => <div key={i} />)}</div>

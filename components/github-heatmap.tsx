@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAutoRefresh } from "@/components/use-auto-refresh";
 
 type Contribution = {
   date: string;
@@ -91,7 +92,8 @@ function getMonthLabels(weeks: Cell[][]) {
   });
 }
 
-export function GitHubHeatmap() {
+export function GitHubHeatmap({ onTotal }: { onTotal?: (total: number) => void }) {
+  const revision = useAutoRefresh();
   const [contributions, setContributions] = useState<Contribution[] | null>(
     null,
   );
@@ -124,10 +126,11 @@ export function GitHubHeatmap() {
             Number.isInteger(item.level) && item.level >= 0 && item.level <= 4
           )) throw new Error("Invalid contributions");
           setContributions(data.contributions);
+          onTotal?.(data.contributions.reduce((total, day) => total + day.count, 0));
         }
       } catch {
         if (!cancelled) {
-          setContributions([]);
+          setContributions(current => current ?? []);
         }
       } finally {
         window.clearTimeout(timeout);
@@ -141,7 +144,7 @@ export function GitHubHeatmap() {
       controller.abort();
       window.clearTimeout(timeout);
     };
-  }, []);
+  }, [revision, onTotal]);
 
   const weeks = useMemo(() => {
     if (!contributions) return [];

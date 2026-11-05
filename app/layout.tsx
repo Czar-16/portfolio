@@ -10,6 +10,7 @@ import { MotionProvider } from "@/components/motion-provider";
 import { BackToTop } from "@/components/back-to-top";
 import { CursorGlow } from "@/components/cursor-glow";
 import { InteractionProvider } from "@/components/interaction-provider";
+import { INTRO_BOOTSTRAP } from "@/components/intro-preferences";
 import { VisitorProvider } from "@/components/visitor-provider";
 
 const instrumentSans = Instrument_Sans({
@@ -48,7 +49,7 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${instrumentSans.variable} ${publicSans.variable} ${manrope.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <head><script dangerouslySetInnerHTML={{ __html: `(()=>{let t,b,f;try{t=localStorage.getItem('czar-theme');b=localStorage.getItem('czar-background');f=localStorage.getItem('czar-font')}catch{}document.documentElement.dataset.font=['contrast','developer'].includes(f)?f:'clean';document.documentElement.dataset.background=['aurora','constellation','bokeh','spotlight'].includes(b)?b:'particles';document.documentElement.dataset.theme=t==='light'||t==='dark'?t:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'})()` }} /></head>
+      <head><script dangerouslySetInnerHTML={{ __html: `(()=>{let t,b,f;try{t=localStorage.getItem('czar-theme');b=localStorage.getItem('czar-background');f=localStorage.getItem('czar-font')}catch{}document.documentElement.dataset.font=['contrast','developer'].includes(f)?f:'clean';document.documentElement.dataset.background=['aurora','constellation','bokeh','spotlight'].includes(b)?b:'particles';document.documentElement.dataset.theme=t==='light'||t==='dark'?t:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'})()` }} /><script dangerouslySetInnerHTML={{ __html: INTRO_BOOTSTRAP }} /></head>
       <body className="min-h-dvh flex flex-col">
         <AmbientBackground />
         <MotionProvider>

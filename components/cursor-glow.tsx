@@ -43,7 +43,7 @@ export function CursorGlow() {
     }
 
     function move(event: PointerEvent) {
-      if (document.documentElement.hasAttribute("data-swarm-active") || !enabled.matches || event.pointerType !== "mouse" || document.hidden) {
+      if (document.documentElement.matches("[data-swarm-active], [data-terminal-intro], [data-motion=off]") || !enabled.matches || event.pointerType !== "mouse" || document.hidden) {
         hide();
         return;
       }
@@ -69,9 +69,9 @@ export function CursorGlow() {
     }
 
     const swarmObserver = new MutationObserver(() => {
-      if (document.documentElement.hasAttribute("data-swarm-active")) hide();
+      if (document.documentElement.matches("[data-swarm-active], [data-terminal-intro], [data-motion=off]")) hide();
     });
-    swarmObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-swarm-active"] });
+    swarmObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-swarm-active", "data-terminal-intro", "data-motion"] });
     window.addEventListener("pointermove", move, { passive: true });
     window.addEventListener("pointerout", leave);
     window.addEventListener("blur", hide);

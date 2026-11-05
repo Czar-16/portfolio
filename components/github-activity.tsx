@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useAutoRefresh } from "@/components/use-auto-refresh";
 
 import { github } from "@/data/site";
 import { GithubIcon } from "@/components/icons";
@@ -13,9 +14,13 @@ const STATS_FALLBACK = {
 };
 
 export function GitHubActivity() {
+  const revision = useAutoRefresh();
   const [stats, setStats] = useState(STATS_FALLBACK);
   const [unavailable, setUnavailable] = useState(false);
   const [loading, setLoading] = useState(true);
+  const updateContributions = useCallback((total: number) => {
+    setStats(current => ({ ...current, contributions: total.toLocaleString("en-US") }));
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -40,15 +45,15 @@ export function GitHubActivity() {
 
         if (cancelled) return;
 
-        if (!userRes.ok || !reposRes.ok) setUnavailable(true);
+        setUnavailable(!userRes.ok || !reposRes.ok);
         const user = userRes.ok ? await userRes.json() as { public_repos?: number } : null;
         const list = reposRes.ok ? await reposRes.json() as Array<{ stargazers_count?: number }> : null;
         if (cancelled) return;
-        setStats({
-          repos: typeof user?.public_repos === "number" ? user.public_repos : STATS_FALLBACK.repos,
-          stars: list ? list.reduce((total, repo) => total + (repo.stargazers_count ?? 0), 0) : STATS_FALLBACK.stars,
-          contributions: STATS_FALLBACK.contributions,
-        });
+        setStats(current => ({
+          repos: typeof user?.public_repos === "number" ? user.public_repos : current.repos,
+          stars: list ? list.reduce((total, repo) => total + (repo.stargazers_count ?? 0), 0) : current.stars,
+          contributions: current.contributions,
+        }));
       } catch {
         if (cancelled) return;
         setUnavailable(true);
@@ -63,7 +68,7 @@ export function GitHubActivity() {
       controller.abort();
       window.clearTimeout(timeout);
     };
-  }, []);
+  }, [revision]);
 
   return (
     <div className="flex h-full min-w-0 flex-col gap-4">
@@ -86,7 +91,7 @@ export function GitHubActivity() {
         data-heatmap-wrapper
         className="github-calendar-panel"
       >
-        <GitHubHeatmap />
+        <GitHubHeatmap onTotal={updateContributions} />
       </div>
 
       {/* Stats */}

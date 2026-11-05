@@ -11,7 +11,9 @@ export function SmoothScroll() {
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const desktopPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    let frame = 0;
     const dispose = () => {
+      cancelAnimationFrame(frame); frame = 0;
       // Settle native-scroll state before destruction so a pending Lenis velocity
       // timer cannot restore its CSS classes after reduced motion is enabled.
       lenisRef.current?.stop();
@@ -19,25 +21,31 @@ export function SmoothScroll() {
       lenisRef.current = null;
     };
 
+    const tick = (time: number) => {
+      lenisRef.current?.raf(time);
+      frame = requestAnimationFrame(tick);
+    };
     const syncScrollLock = () => {
       const lenis = lenisRef.current;
       if (!lenis) return;
       // Read the explicit lock, not computed overflow from lenis-stopped;
       // otherwise Lenis's own CSS could keep it stopped after unlocking.
       const overflow = document.documentElement.style.overflowY;
-      if (document.hidden || overflow === "hidden" || overflow === "clip") {
+      if (document.hidden || overflow === "hidden" || overflow === "clip" || document.documentElement.hasAttribute("data-swarm-active")) {
         lenis.stop();
-      } else if (lenis.isStopped) {
-        lenis.start();
+        cancelAnimationFrame(frame); frame = 0;
+      } else {
+        if (lenis.isStopped) lenis.start();
+        if (!frame) frame = requestAnimationFrame(tick);
       }
     };
 
     const configure = () => {
       dispose();
-      if (reducedMotion.matches || !desktopPointer.matches) return;
+      if (reducedMotion.matches || document.documentElement.dataset.motion === "off" || !desktopPointer.matches) return;
 
       lenisRef.current = new Lenis({
-        autoRaf: true,
+        autoRaf: false,
         smoothWheel: true,
         syncTouch: false,
         // Follow input promptly, with a shorter settling tail.
@@ -51,10 +59,13 @@ export function SmoothScroll() {
     };
 
     // Honor the shared viewport lock used by menus and dialogs.
-    const observer = new MutationObserver(syncScrollLock);
+    const observer = new MutationObserver(records => {
+      if (records.some(record => record.attributeName === "data-motion")) configure();
+      else syncScrollLock();
+    });
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ["style"],
+      attributeFilter: ["style", "data-swarm-active", "data-motion"],
     });
     reducedMotion.addEventListener("change", configure);
     desktopPointer.addEventListener("change", configure);
@@ -63,6 +74,13 @@ export function SmoothScroll() {
       lenisRef.current?.scrollTo(window.scrollY, { immediate: true });
     };
     window.addEventListener("popstate", settleScroll);
+    const resetScroll = () => {
+      const lenis = lenisRef.current;
+      lenis?.resize();
+      lenis?.scrollTo(0, { immediate: true, force: true });
+      syncScrollLock();
+    };
+    window.addEventListener("portfolio-scroll-reset", resetScroll);
     const visibilityChanged = () => {
       syncScrollLock();
     };
@@ -106,6 +124,7 @@ export function SmoothScroll() {
       reducedMotion.removeEventListener("change", configure);
       desktopPointer.removeEventListener("change", configure);
       window.removeEventListener("popstate", settleScroll);
+      window.removeEventListener("portfolio-scroll-reset", resetScroll);
       document.removeEventListener("visibilitychange", visibilityChanged);
       window.removeEventListener("click", scrollToAnchor);
       dispose();

@@ -105,7 +105,7 @@ function InteractionEffects({ playClick }: { playClick: () => void }) {
         const excluded = target.closest('[data-click-sound="off"], [inert], [aria-disabled="true"], :disabled, input, textarea, select, [contenteditable]:not([contenteditable="false"])');
         if (!excluded && target.closest('button, a[href], summary, [role="button"], [role="link"], [role="option"], [data-click-sound="on"]')) playClick();
       }
-      if (!ctx || !valid || event.detail === 0 || reduced.matches || document.hidden) return;
+      if (!ctx || !valid || event.detail === 0 || reduced.matches || document.hidden || document.documentElement.matches("[data-terminal-intro], [data-swarm-active], [data-motion=off]")) return;
       bursts.push({ x: event.clientX, y: event.clientY, start: performance.now() });
       bursts = bursts.slice(-24);
       canvas!.dataset.active = "true";
@@ -113,6 +113,8 @@ function InteractionEffects({ playClick }: { playClick: () => void }) {
     }
     function visibility() { if (document.hidden) { cancel(); clear(); } }
 
+    const effectsObserver = new MutationObserver(clear);
+    effectsObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-terminal-intro", "data-swarm-active", "data-motion"] });
     resize();
     document.addEventListener("pointerdown", down, true);
     document.addEventListener("pointermove", move, { capture: true, passive: true });
@@ -124,6 +126,7 @@ function InteractionEffects({ playClick }: { playClick: () => void }) {
     reduced.addEventListener("change", clear);
     return () => {
       clear();
+      effectsObserver.disconnect();
       document.removeEventListener("pointerdown", down, true);
       document.removeEventListener("pointermove", move, true);
       document.removeEventListener("pointercancel", cancel, true);

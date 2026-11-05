@@ -105,7 +105,21 @@
   to { transform: rotate(9deg); opacity: 1; }
 }
 @media (max-width: 639px) {
-  .bokeh > div:nth-child(n+4) { display: none; animation: none; }
+  .aurora > div { width: 115vw; height: 75vh; }
+  .aurora > div:nth-child(1) { left: -38%; top: -12%; }
+  .aurora > div:nth-child(2) { right: -42%; top: 20%; }
+  .aurora > div:nth-child(3) { left: -12%; bottom: -30%; }
+
+  .bokeh > div { width: clamp(170px, 52vw, 250px); filter: blur(14px); }
+  .bokeh > div:nth-child(1) { left: -18%; top: 4%; }
+  .bokeh > div:nth-child(2) { right: -22%; top: 24%; }
+  .bokeh > div:nth-child(3) { left: 4%; bottom: 5%; }
+  .bokeh > div:nth-child(4) { left: 27%; top: 8%; width: 150px; }
+  .bokeh > div:nth-child(5) { right: -12%; bottom: 7%; width: 180px; }
+  .bokeh > div:nth-child(6) { left: -16%; top: 52%; width: 155px; }
+
+  .spotlight > div { left: -48%; top: -12%; width: 115%; height: 115%; filter: blur(24px); }
+  .spotlight > div:nth-child(2) { left: auto; right: -48%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .aurora > div, .bokeh > div, .spotlight > div { animation: none; }
