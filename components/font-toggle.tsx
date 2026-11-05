@@ -3,7 +3,7 @@
 import { useEffect, useSyncExternalStore } from "react";
 
 const presets = ["clean", "contrast", "developer"] as const;
-const names = { clean: "Clean", contrast: "Contrast", developer: "Developer" };
+const names = { clean: "Instrument Sans", contrast: "Public Sans", developer: "Manrope" };
 const normalize = (value: string | null | undefined) => presets.find(preset => preset === value) ?? "clean";
 const snapshot = () => normalize(document.documentElement.dataset.font);
 const subscribe = (notify: () => void) => {

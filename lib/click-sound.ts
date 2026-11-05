@@ -1,3 +1,5 @@
+const CLICK_GAIN = 0.7;
+
 /** Short filtered noise click, matching ramx.in's Web Audio timbre. */
 export class ClickSound {
   private context?: AudioContext;
@@ -13,7 +15,7 @@ export class ClickSound {
         this.filter.type = "bandpass";
         this.filter.Q.value = 8;
         this.gain = this.context.createGain();
-        this.gain.gain.value = 0.35;
+        this.gain.gain.value = CLICK_GAIN;
         this.filter.connect(this.gain);
         this.gain.connect(this.context.destination);
       }
@@ -42,7 +44,7 @@ export class ClickSound {
   }
 
   enable() {
-    if (this.gain) this.gain.gain.value = 0.35;
+    if (this.gain) this.gain.gain.value = CLICK_GAIN;
   }
 
   dispose() {

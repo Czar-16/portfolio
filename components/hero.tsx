@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { getCalApi } from "@calcom/embed-react";
 import { useEffect } from "react";
-import { GithubIcon, XIcon, LinkedinIcon, MailIcon, DownloadIcon, ArrowRightIcon } from "@/components/icons";
+import { GithubIcon, XIcon, LinkedinIcon, MailIcon, DownloadIcon, ArrowRightIcon, CalendarIcon } from "@/components/icons";
 import { contact, resume, site, socials } from "@/data/site";
 export function Hero() {
   useEffect(() => {
@@ -19,7 +19,7 @@ export function Hero() {
       <p className="mt-5 leading-7">I turn complex ideas into simple, useful products — from the first interaction to the systems behind it.</p>
       <p className="mt-2 text-fg-secondary leading-7">{site.positioning}</p>
       <div className="mt-5 flex flex-wrap gap-2">
-        <button type="button" data-cal-namespace="30min" data-cal-link="czar16/30min" data-cal-config='{ "layout":"month_view","useSlotsViewOnSmallScreen":"true" }' className="btn btn-primary">Book an intro call <ArrowRightIcon size={13} /></button>
+        <button type="button" data-cal-namespace="30min" data-cal-link="czar16/30min" data-cal-config='{ "layout":"month_view","useSlotsViewOnSmallScreen":"true" }' className="btn btn-primary"><CalendarIcon size={13} /> Book an intro call <ArrowRightIcon size={13} /></button>
         <a href={contact.mailto} className="btn"><MailIcon size={13} /> Send an email</a>
         <a href={resume.href} target="_blank" rel="noopener noreferrer" className="btn"><DownloadIcon size={13} /> Resume</a>
       </div>

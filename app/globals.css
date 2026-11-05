@@ -46,18 +46,19 @@ html.lenis {
 }
 
 :root {
-  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-control: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-control: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
 }
 [data-font="contrast"] {
-  --font-body: var(--font-lora), Georgia, serif;
-  --font-heading: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-control: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
 }
 [data-font="developer"] {
-  --font-body: var(--font-plex-mono), ui-monospace, monospace;
-  --font-heading: var(--font-plex-mono), ui-monospace, monospace;
-  --font-control: var(--font-plex-mono), ui-monospace, monospace;
+  --font-body: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-control: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 }
 
 @theme inline {
@@ -111,7 +112,6 @@ html.lenis {
     background-color: var(--bg);
     color: var(--fg);
     font-family: var(--font-sans);
-    font-feature-settings: "cv11", "ss01";
     font-variant-ligatures: none;
     text-rendering: optimizeLegibility;
   }
@@ -354,6 +354,33 @@ html.lenis {
     scale: none !important;
     transform: none !important;
   }
+}
+
+/* Keep the sheen inside its own box so tooltips and focus rings stay visible. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :where(button, .btn) {
+    position: relative;
+  }
+
+  :where(button, .btn):not(:disabled):not([aria-disabled="true"]):hover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background-image: linear-gradient(110deg,
+      transparent 40%,
+      color-mix(in oklab, currentColor 18%, transparent) 50%,
+      transparent 60%);
+    background-size: 250% 100%;
+    background-repeat: no-repeat;
+    animation: button-shine 650ms ease-out both;
+  }
+}
+
+@keyframes button-shine {
+  from { background-position: 140% 50%; }
+  to { background-position: -40% 50%; }
 }
 
 /* One opt-in effect for standalone card surfaces across every route. */

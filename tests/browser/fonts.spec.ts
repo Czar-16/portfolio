@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 const presets = ['clean', 'contrast', 'developer'] as const;
-const names = ['Clean', 'Contrast', 'Developer'];
+const names = ['Instrument Sans', 'Public Sans', 'Manrope'];
 
 test.beforeEach(async ({ context }) => {
   await context.route('https://api.github.com/**', route => route.fulfill({ headers: { 'access-control-allow-origin': '*' }, json: route.request().url().includes('/repos?') ? [{ stargazers_count: 7 }] : { public_repos: 30 } }));
@@ -20,7 +20,7 @@ test('font cycle, keyboard, persistence, navigation and tab synchronization', as
     await expect(page.locator('html')).toHaveAttribute('data-font', presets[(i + 1) % 3]);
   }
   await button.click();
-  await expect(page.getByRole('status').filter({ hasText: 'Font preset: Contrast' })).toHaveCount(1);
+  await expect(page.getByRole('status').filter({ hasText: 'Font preset: Public Sans' })).toHaveCount(1);
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-font', 'contrast');
   await page.getByRole('button', { name: 'Open menu', exact: true }).click();
@@ -62,7 +62,9 @@ test('touch control moves into the menu below 400px and keeps 44px targets', asy
   await expect(page.getByRole('button', { name: /^Font:/ })).toHaveCount(0);
   await page.getByRole('button', { name: 'Open menu', exact: true }).tap();
   const button = page.getByRole('button', { name: /^Font:/ });
+  await expect(button).toHaveAccessibleName('Font: Instrument Sans. Switch to Public Sans');
   await button.tap();
+  await expect(button).toHaveAccessibleName('Font: Public Sans. Switch to Manrope');
   await expect(page.locator('html')).toHaveAttribute('data-font', 'contrast');
   for (const control of await page.locator('.compact-toolbar button, #mobile-menu button').all()) {
     if (!await control.isVisible()) continue;
@@ -83,12 +85,14 @@ for (const [index, preset] of presets.entries()) {
     await page.evaluate(() => document.fonts.ready);
     const fonts = await page.evaluate(() => {
       const family = (selector: string) => getComputedStyle(document.querySelector(selector)!).fontFamily;
-      return { heading: family('h1'), title: family('.project-title'), prose: family('.project-description'), control: family('.compact-toolbar button'), terminal: family('[aria-label="Terminal command"]') };
+      return { body: family('body'), navigation: family('.compact-toolbar a'), heading: family('h1'), title: family('.project-title'), prose: family('.project-description'), control: family('.compact-toolbar button'), terminal: family('[aria-label="Terminal command"]') };
     });
-    expect(fonts.heading).toMatch([/Inter/i, /Space Grotesk/i, /IBM Plex Mono/i][index]);
+    expect(fonts.heading).toMatch([/Instrument Sans/i, /Public Sans/i, /Manrope/i][index]);
+    expect(fonts.body).toBe(fonts.heading);
+    expect(fonts.navigation).toBe(fonts.heading);
     expect(fonts.title).toBe(fonts.heading);
-    expect(fonts.prose).toMatch([/Inter/i, /Lora/i, /IBM Plex Mono/i][index]);
-    expect(fonts.control).toMatch(index === 2 ? /IBM Plex Mono/i : /Inter/i);
+    expect(fonts.prose).toBe(fonts.heading);
+    expect(fonts.control).toBe(fonts.heading);
     expect(fonts.terminal).toMatch(/Geist Mono/i);
     await expect(page.getByText('Featured Repositories')).toHaveCount(0);
     await expect(page.getByRole('group', { name: 'GitHub statistics' })).toHaveAttribute('aria-busy', 'false');
@@ -116,8 +120,10 @@ for (const theme of ['dark', 'light'] as const) {
           expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1), `${preset} ${route}`).toBe(true);
           const toolbar = page.locator('.compact-toolbar');
           if (route === '/quotes') {
-            await page.getByRole('button', { name: 'Search commands' }).click();
-            await expect(page.getByRole('combobox')).toBeInViewport();
+            await expect(async () => {
+              await page.getByRole('button', { name: 'Search commands' }).click();
+              await expect(page.getByRole('combobox')).toBeInViewport({ timeout: 1_000 });
+            }).toPass({ timeout: 10_000 });
             await page.getByRole('combobox').press('Escape');
           }
           for (const button of await toolbar.locator('button').all()) {
