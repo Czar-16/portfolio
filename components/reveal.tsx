@@ -22,6 +22,7 @@ export function Reveal({
 
   return (
     <motion.div
+      data-swarm-reveal
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: "some", margin: "80px 0px" }}
@@ -48,6 +49,7 @@ export function StaggerChildren({
 
   return (
     <motion.div
+      data-swarm-reveal
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: "some", margin: "80px 0px" }}
@@ -81,6 +83,7 @@ export function StaggerItem({
 
   return (
     <motion.div
+      data-swarm-reveal
       variants={{
         hidden: { opacity: 0, y: 10 },
         visible: {

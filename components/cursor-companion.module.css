@@ -1,0 +1,53 @@
+.picker { position: relative; flex-shrink: 0; }
+.trigger { width: 44px; height: 44px; }
+.paw, .staticPreview { align-items: center; justify-content: center; }
+.paw { display: flex; }
+.staticPreview { display: none; }
+.panel { position: fixed; z-index: 70; width: 272px; max-width: calc(100vw - 16px); max-height: calc(100dvh - 16px); overflow-y: auto; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: var(--fg); box-shadow: var(--sh-pop); }
+.panel p { margin: 0 0 10px; font-size: 12px; font-weight: 600; }
+.options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.options button { min-height: 76px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 1px solid transparent; border-radius: 9px; font-size: 11px; cursor: pointer; color: var(--fg-secondary); background: var(--card-elevated); }
+.options button:hover { color: var(--fg); border-color: var(--line-strong); }
+.options button[aria-pressed="true"] { border-color: var(--accent); color: var(--fg); background: color-mix(in srgb, var(--accent) 10%, var(--card)); }
+.off { height: 40px; display: grid; place-items: center; font-size: 28px; }
+.character { display: block; overflow: visible; image-rendering: pixelated; }
+.follower { position: fixed; top: 0; left: 0; width: 40px; height: 40px; pointer-events: none; user-select: none; z-index: 60; contain: layout style; }
+.follower[hidden] { display: none; }
+.view, .pose { display: none; }
+.view[data-view="side"], .pose[data-pose="idle"] { display: inline; }
+.follower[data-direction] .view { display: none; }
+.follower:is([data-direction="e"], [data-direction="w"]) .view[data-view="side"],
+.follower[data-direction="s"] .view[data-view="front"],
+.follower[data-direction="n"] .view[data-view="back"],
+.follower:is([data-direction="se"], [data-direction="sw"]) .view[data-view="toward"],
+.follower:is([data-direction="ne"], [data-direction="nw"]) .view[data-view="away"] { display: inline; }
+.follower:is([data-direction="w"], [data-direction="sw"], [data-direction="nw"]) .character { transform: scaleX(-1); }
+.follower[data-state] .pose { display: none; }
+.follower[data-state="walk"][data-step="0"] .pose[data-pose="0"],
+.follower[data-state="walk"][data-step="1"] .pose[data-pose="1"],
+.follower[data-state="idle"] .pose[data-pose="idle"],
+.follower[data-state="alert"] .pose[data-pose="alert"],
+.follower[data-state="look"] .pose[data-pose="look"],
+.follower[data-state="groom"] .pose[data-pose="groom"],
+.follower[data-state="tired"] .pose[data-pose="tired"],
+.follower[data-state="sleep"][data-idle-step="0"] .pose[data-pose="sleep0"],
+.follower[data-state="sleep"][data-idle-step="1"] .pose[data-pose="sleep1"] { display: inline; }
+.follower:is([data-state="sleep"], [data-state="tired"], [data-blink="true"]) .eyes { transform: scaleY(.25); transform-box: fill-box; transform-origin: center; }
+.follower[data-state="look"] .eyes { transform: translateX(-1px); }
+.follower [data-kind="ghost"] .eyes { filter: drop-shadow(0 0 2px #ff163f); }
+@media (max-width: 399px) {
+  .picker { position: fixed; right: calc(1rem + env(safe-area-inset-right)); bottom: calc(4.5rem + env(safe-area-inset-bottom)); }
+  .trigger { border: 1px solid var(--line); border-radius: 50%; background: var(--card); box-shadow: var(--sh-pop); }
+}
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .paw { display: none; }
+  .staticPreview { display: flex; }
+  .follower { display: none; }
+  .follower * { animation: none !important; }
+}
+
+
+.companionButton { display: block; width: 40px; height: 40px; padding: 0; border: 0; background: transparent; cursor: pointer; pointer-events: auto; touch-action: manipulation; }
+.companionButton:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.speech { display: none; position: absolute; bottom: 48px; left: 0; width: max-content; max-width: min(210px, calc(100vw - 56px)); padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 12px 12px 12px 3px; background: var(--card); color: var(--fg); box-shadow: var(--sh-pop); font-size: 12px; line-height: 1.45; text-align: left; }
+.follower[data-chatting="true"] .speech { display: block; }

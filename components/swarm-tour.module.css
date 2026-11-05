@@ -1,0 +1,18 @@
+.layer { position: fixed; inset: 0; z-index: 90; pointer-events: none; }
+.canvas { width: 100%; height: 100%; pointer-events: none; }
+.canvas[hidden], .replay[hidden] { display: none; }
+.controls { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; padding: 5px 12px 5px 5px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); box-shadow: 0 4px 24px #0002; pointer-events: auto; white-space: nowrap; }
+.layer[data-mode="inactive"] .controls { display: none; }
+.controls button, .replay { min-height: 36px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); cursor: pointer; font-size: 11px; }
+.controls kbd { margin-left: 10px; font-size: 10px; color: var(--fg-muted); }
+.controls a { font-size: 10px; color: var(--fg-secondary); }
+.replay { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); pointer-events: auto; color: var(--fg-secondary); box-shadow: 0 2px 12px #0001; }
+.layer :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) { .layer { display: none; } }
+
+@media (max-width: 600px) { .controls { flex-direction: column; gap: 5px; padding: 6px; } }
+.controls button[hidden], .volumePanel[hidden] { display: none; }
+.music { position: relative; }
+.volumePanel { position: absolute; bottom: calc(100% + 12px); left: 0; width: 190px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); box-shadow: 0 4px 24px #0002; color: var(--fg); font-size: 11px; }
+.volumePanel input { grid-column: 1 / -1; width: 100%; accent-color: var(--accent); }
+.volumePanel button { grid-column: 1 / -1; justify-self: start; }

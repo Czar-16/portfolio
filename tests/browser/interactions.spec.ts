@@ -1,5 +1,9 @@
 import { test, expect, type Page } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => { try { localStorage.setItem('czar-swarm-seen', '2'); } catch { /* Storage-denied cases use the normal site. */ } });
+});
+
 async function trackAudio(page: Page, fail = false) {
   await page.addInitScript(({ fail }) => {
     const state = { starts: 0, contexts: 0, tones: [] as number[][] };
@@ -117,8 +121,8 @@ test('one sound per nested button or link activation, keyboard activation has no
   await expect.poll(async () => (await audioState(page)).starts).toBe(3);
   await expect(page.locator('[data-click-sparks]')).toHaveAttribute('data-active', 'false');
   await page.getByRole('button', { name: 'Close command palette' }).click();
-  await page.getByRole('button', { name: 'Open menu', exact: true }).click();
-  await page.getByRole('navigation', { name: 'Main', exact: true }).getByRole('link', { name: 'Projects', exact: true }).click();
+  await page.getByRole('button', { name: 'Search commands', exact: true }).click();
+  await page.getByRole('dialog', { name: 'Command palette' }).getByRole('option', { name: 'Projects', exact: true }).click();
   await expect(page).toHaveURL('/projects');
   await expect.poll(async () => (await audioState(page)).starts).toBe(6);
   expect((await audioState(page)).contexts).toBe(1);
@@ -130,8 +134,8 @@ test('mute is silent, persists across routes and reloads, and enabling previews 
   await page.getByRole('button', { name: 'Mute click sounds' }).click();
   await expect(page.getByRole('button', { name: 'Enable click sounds' })).toHaveAttribute('aria-pressed', 'false');
   expect((await audioState(page)).starts).toBe(0);
-  await page.getByRole('button', { name: 'Open menu', exact: true }).click();
-  await page.getByRole('navigation', { name: 'Main', exact: true }).getByRole('link', { name: 'Projects', exact: true }).click();
+  await page.getByRole('button', { name: 'Search commands', exact: true }).click();
+  await page.getByRole('dialog', { name: 'Command palette' }).getByRole('option', { name: 'Projects', exact: true }).click();
   await expect(page).toHaveURL('/projects');
   expect((await audioState(page)).starts).toBe(0);
   await page.reload();
@@ -206,9 +210,9 @@ test('mobile taps burst once, swipes do not burst, and navigation fits at 320px'
   await page.touchscreen.tap(8, 300);
   await expect(page.locator('[data-click-sparks]')).toHaveAttribute('data-active', 'true');
   await expect(page.locator('[data-click-sparks]')).toHaveAttribute('data-active', 'false');
-  await page.getByRole('button', { name: 'Open menu', exact: true }).tap();
+  await page.getByRole('button', { name: 'Search commands', exact: true }).tap();
   await expect.poll(async () => (await audioState(page)).starts).toBe(1);
-  await page.getByRole('button', { name: 'Close menu', exact: true }).tap();
+  await page.getByRole('button', { name: 'Close command palette', exact: true }).tap();
   await expect(page.locator('[data-click-sparks]')).toHaveAttribute('data-active', 'false');
   await page.dispatchEvent('main', 'pointerdown', { pointerId: 1, pointerType: 'touch', isPrimary: true, button: 0, clientX: 100, clientY: 400 });
   await page.dispatchEvent('main', 'pointermove', { pointerId: 1, pointerType: 'touch', isPrimary: true, clientX: 100, clientY: 200 });

@@ -13,6 +13,10 @@ const test = base.extend<{ appErrors: string[] }>({
     };
     captureErrors(page);
     context.on('page', captureErrors);
+    // Exercise normal controls here; first-visit playback has its own browser suite.
+    await context.addInitScript(() => {
+      try { localStorage.setItem('czar-swarm-seen', '2'); } catch { /* Storage failure paths keep the normal site. */ }
+    });
     // Keep layout tests independent of third-party uptime. Failure paths are tested below.
     await context.route('https://api.github.com/**', route => route.fulfill({ headers: { "access-control-allow-origin": "*" }, json: route.request().url().includes('/repos?') ? Array.from({ length: 20 }, (_, i) => ({ name: `Repository-${i}`, description: 'Example', html_url: 'https://github.com/Czar-16', stargazers_count: i })) : { public_repos: 20 } }));
     await context.route('https://github-contributions-api.jogruber.de/**', route => route.fulfill({ headers: { "access-control-allow-origin": "*" }, json: { contributions: Array.from({ length: 371 }, (_, i) => ({ date: new Date(Date.UTC(2025, 9, i + 1)).toISOString().slice(0, 10), count: i % 5, level: i % 5 })) } }));
@@ -78,26 +82,19 @@ for (const theme of ['dark', 'light']) {
   }
 }
 
-test('mobile menu navigation, history and resize release scroll lock', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
-  const menu = page.getByRole('button', { name: 'Open menu', exact: true });
-  await menu.click();
-  await expect(page.locator('html')).toHaveCSS('overflow', 'hidden');
-  await page.locator('#mobile-menu').getByRole('link', { name: 'About', exact: true }).click();
-  await expect(page).toHaveURL('/about');
-  await expect(menu).toBeVisible();
-  await expect(page.locator('body')).not.toHaveCSS('overflow', 'hidden');
-  await menu.click();
-  await page.goBack();
-  await expect(menu).toBeVisible();
-  await expect(page.locator('html')).not.toHaveCSS('overflow', 'hidden');
-  await menu.click();
-  await page.setViewportSize({ width: 1280, height: 800 });
-  await expect(page.locator('#mobile-menu')).toHaveCount(0);
-  await expect(page.locator('body')).not.toHaveCSS('overflow', 'hidden');
-  await page.setViewportSize({ width: 390, height: 844 });
-  await expect(menu).toBeVisible();
+test('toolbar omits the hamburger and search navigation releases scroll lock', async ({ page }) => {
+  for (const width of [320, 390, 1280]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await expect(page.getByRole('button', { name: /^(Open|Close) menu$/ })).toHaveCount(0);
+    await page.getByRole('button', { name: 'Search commands', exact: true }).click();
+    await page.getByRole('dialog', { name: 'Command palette' }).getByRole('option', { name: 'About', exact: true }).click();
+    await expect(page).toHaveURL('/about');
+    await expect(page.locator('html')).not.toHaveCSS('overflow', 'hidden');
+    await page.goBack();
+    await expect(page).toHaveURL('/');
+    await noOverflow(page);
+  }
 });
 
 for (const reducedMotion of ['no-preference', 'reduce'] as const) {
@@ -176,10 +173,10 @@ for (const reducedMotion of ['no-preference', 'reduce'] as const) {
   });
 }
 
-test.describe('scrolled mobile navigation', () => {
+test.describe('scrolled mobile search navigation', () => {
   test.use({ hasTouch: true });
 
-  async function tapMenuButton(page: Page, name: 'Open menu' | 'Close menu') {
+  async function tapSearchButton(page: Page, name: 'Search commands' | 'Close command palette') {
     const button = page.getByRole('button', { name, exact: true });
     await expect(button).toBeInViewport();
     const bounds = await button.boundingBox();
@@ -189,11 +186,11 @@ test.describe('scrolled mobile navigation', () => {
   }
 
   for (const reducedMotion of ['no-preference', 'reduce'] as const) {
-    test(`menu stays reachable after scrolling with ${reducedMotion} motion`, async ({ page }) => {
+    test(`search stays reachable after scrolling with ${reducedMotion} motion`, async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 });
       await page.emulateMedia({ reducedMotion });
       await page.goto('/', { waitUntil: 'domcontentloaded' });
-      await expect(page.getByRole('button', { name: 'Open menu', exact: true })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Search commands', exact: true })).toBeVisible();
       await expect(page.locator('[data-page-entry]')).toHaveCSS('opacity', '1');
       await expect(page.getByRole('group', { name: 'GitHub statistics' })).toHaveAttribute('aria-busy', 'false');
       await expect(page.locator('html')).not.toHaveClass(/lenis/);
@@ -202,20 +199,20 @@ test.describe('scrolled mobile navigation', () => {
       const scrollPosition = await page.evaluate(() => scrollY);
 
       for (let attempt = 0; attempt < 2; attempt++) {
-        await tapMenuButton(page, 'Open menu');
-        const close = page.getByRole('button', { name: 'Close menu', exact: true });
+        await tapSearchButton(page, 'Search commands');
+        const close = page.getByRole('button', { name: 'Close command palette', exact: true });
         await expect(close).toBeInViewport();
-        await expect(page.locator('#mobile-menu').getByRole('link', { name: 'Projects', exact: true })).toBeInViewport();
+        await expect(page.getByRole('dialog', { name: 'Command palette' }).getByRole('option', { name: 'Projects', exact: true })).toBeInViewport();
         await expect(page.locator('html')).toHaveCSS('overflow', 'hidden');
         await expect(page.locator('body')).not.toHaveCSS('overflow', 'hidden');
         await expect.poll(() => page.getByRole('banner').evaluate(el => Math.round(el.getBoundingClientRect().top))).toBe(0);
-        await expect(page.locator('#mobile-menu')).toHaveCSS('opacity', '1');
+        await expect(page.getByRole('dialog', { name: 'Command palette' })).toHaveCSS('opacity', '1');
         await page.mouse.move(200, 800);
         await page.mouse.wheel(0, 300);
         await page.waitForTimeout(250);
         await expect.poll(() => page.evaluate(() => scrollY)).toBe(scrollPosition);
-        await tapMenuButton(page, 'Close menu');
-        await expect(page.locator('#mobile-menu')).toHaveCount(0);
+        await tapSearchButton(page, 'Close command palette');
+        await expect(page.getByRole('dialog', { name: 'Command palette' })).toHaveCount(0);
         await expect(page.locator('html')).not.toHaveCSS('overflow', 'hidden');
         await expect(page.locator('html')).not.toHaveClass(/lenis-stopped/);
       }
@@ -225,10 +222,10 @@ test.describe('scrolled mobile navigation', () => {
       for (const [label, route] of [['Projects', '/projects'], ['Stack', '/stack']]) {
         await page.evaluate(() => window.scrollTo({ top: 1200, behavior: 'instant' }));
         await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(200);
-        await tapMenuButton(page, 'Open menu');
-        await page.locator('#mobile-menu').getByRole('link', { name: label, exact: true }).tap();
+        await tapSearchButton(page, 'Search commands');
+        await page.getByRole('dialog', { name: 'Command palette' }).getByRole('option', { name: label, exact: true }).tap();
         await expect(page).toHaveURL(route);
-        await expect(page.locator('#mobile-menu')).toHaveCount(0);
+        await expect(page.getByRole('dialog', { name: 'Command palette' })).toHaveCount(0);
         await expect(page.locator('html')).not.toHaveCSS('overflow', 'hidden');
         await expect(page.locator('html')).not.toHaveClass(/lenis-stopped/);
       }
@@ -236,19 +233,10 @@ test.describe('scrolled mobile navigation', () => {
   }
 });
 
-test('short landscape menus and command search remain reachable', async ({ page }) => {
+test('short landscape command search remains reachable', async ({ page }) => {
   await page.setViewportSize({ width: 667, height: 320 });
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await page.evaluate(() => window.scrollTo({ top: 1200, behavior: 'instant' }));
-  await page.getByRole('button', { name: 'Open menu', exact: true }).click();
-  const menuPanel = page.locator('#mobile-menu');
-  await expect(menuPanel).toBeVisible();
-  await expect.poll(() => menuPanel.evaluate(el => el.clientHeight)).toBeGreaterThan(200);
-  await menuPanel.hover();
-  await page.mouse.wheel(0, 500);
-  await expect.poll(() => menuPanel.evaluate(el => el.scrollTop)).toBeGreaterThan(0);
-  await page.locator('#mobile-menu').getByRole('link', { name: 'Watch', exact: true }).click();
-  await expect(page).toHaveURL('/watch');
   await page.getByRole('button', { name: /Search commands/ }).filter({ visible: true }).click();
   const dialog = page.getByRole('dialog', { name: 'Command palette' });
   const search = dialog.getByRole('combobox');
@@ -332,7 +320,7 @@ test('technology popover supports keyboard dismissal and short viewports', async
   await page.setViewportSize({ width: 667, height: 320 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/projects', { waitUntil: 'domcontentloaded' });
-  await page.getByRole('button', { name: 'Details for MailLoop', exact: true }).click();
+  await page.getByRole('link', { name: 'MailLoop on GitHub', exact: true }).focus();
   const trigger = page.getByRole('button', { name: /more technologies for/ }).first();
   await expect(trigger).toBeVisible();
   await expect(async () => {
@@ -342,6 +330,7 @@ test('technology popover supports keyboard dismissal and short viewports', async
   const panel = page.getByRole('region', { name: /More technologies for/ });
   await expect(panel).toBeVisible();
   await panel.focus();
+  await expect(panel).toBeInViewport({ ratio: 1 });
   const bounds = await panel.boundingBox();
   expect(bounds!.y).toBeGreaterThanOrEqual(0);
   expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(320);
@@ -370,14 +359,14 @@ test('touch controls work at 320px', async ({ browser }) => {
   const errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
   await page.goto('/projects', { waitUntil: 'domcontentloaded' });
-  await page.getByRole('button', { name: 'Open menu', exact: true }).tap();
-  await page.locator('#mobile-menu').getByRole('link', { name: 'Quotes', exact: true }).tap();
+  await page.getByRole('button', { name: 'Search commands', exact: true }).tap();
+  await page.getByRole('dialog', { name: 'Command palette' }).getByRole('option', { name: 'Quotes', exact: true }).tap();
   await expect(page).toHaveURL('/quotes');
   await page.getByRole('group', { name: 'Quote categories' }).getByRole('button').first().tap();
   await page.locator('[data-quote-id]').first().tap();
   await expect(page.locator('[data-revealed="true"]').first()).toBeVisible();
   await page.goto('/projects', { waitUntil: 'domcontentloaded' });
-  await page.getByRole('button', { name: 'Details for MailLoop', exact: true }).click();
+  await page.getByRole('link', { name: 'MailLoop on GitHub', exact: true }).focus();
   const trigger = page.getByRole('button', { name: /more technologies for/ }).first();
   await trigger.tap();
   await expect(trigger).toHaveAttribute('aria-expanded', 'true');
@@ -396,7 +385,7 @@ test('200% desktop zoom reflow keeps navigation and pages usable', async ({ brow
   for (const route of routes) {
     await page.goto(route, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('h1')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Open menu', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Search commands', exact: true })).toBeVisible();
     await noOverflow(page);
   }
   await context.close();
@@ -408,9 +397,9 @@ test('every navigation destination works on mobile and desktop', async ({ page }
     await page.setViewportSize({ width, height: 800 });
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     for (const [label, route] of [['Projects', '/projects'], ['Stack', '/stack'], ['Watch', '/watch'], ['Quotes', '/quotes'], ['About', '/about'], ['Home', '/']]) {
-      await page.getByRole('button', { name: 'Open menu', exact: true }).click();
-      const navigation = page.locator('#mobile-menu');
-      await navigation.getByRole('link', { name: label, exact: true }).click();
+      await page.getByRole('button', { name: 'Search commands', exact: true }).click();
+      const navigation = page.getByRole('dialog', { name: 'Command palette' });
+      await navigation.getByRole('option', { name: label, exact: true }).click();
       await expect(page).toHaveURL(route);
       await expect(page.locator('h1')).toBeVisible();
       await expect(page.locator('body')).not.toHaveCSS('overflow', 'hidden');
@@ -444,11 +433,11 @@ test('loading services time out and empty data remains usable', async ({ page })
 test('normal motion and changing reduced-motion preference preserve controls', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await page.getByRole('button', { name: 'Open menu', exact: true }).click();
-  await expect(page.locator('#mobile-menu')).toBeVisible();
+  await page.getByRole('button', { name: 'Search commands', exact: true }).click();
+  await expect(page.getByRole('dialog', { name: 'Command palette' })).toBeVisible();
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.keyboard.press('Escape');
-  await expect(page.locator('#mobile-menu')).toHaveCount(0);
+  await expect(page.getByRole('dialog', { name: 'Command palette' })).toHaveCount(0);
   await expect(page.locator('html')).not.toHaveClass(/lenis/);
   await page.getByRole('textbox', { name: 'Terminal command' }).fill('help');
   await page.getByRole('textbox', { name: 'Terminal command' }).press('Enter');

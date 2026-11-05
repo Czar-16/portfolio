@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useId, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { useReducedMotion } from "@/components/use-reduced-motion";
@@ -27,20 +27,19 @@ function ProjectLinks({ project }: { project: Project }) {
 
 export function ProjectCard({ project }: { project: Project }) {
   const [hovered, setHovered] = useState(false);
-  const [expanded, setExpanded] = useState(false);
   const [focused, setFocused] = useState(false);
-  const summary = useRef<HTMLButtonElement>(null);
   const detailsId = useId();
-  const open = hovered || expanded || focused;
+  const open = hovered || focused;
+  const destination = project.links.find(link => link.label === "Live" && !link.private)
+    ?? project.links.find(link => link.label === "GitHub")
+    ?? project.links[0];
   const reduce = useReducedMotion();
   const transition = { duration: reduce ? 0 : 0.24, ease: motionEase };
 
   return <article id={project.slug} className="project-card group" data-details-open={open}
     onPointerEnter={event => { if (event.pointerType === "mouse") setHovered(true); }}
     onPointerLeave={event => { if (event.pointerType === "mouse") setHovered(false); }}
-    onFocusCapture={event => {
-      if (event.target !== summary.current || event.target.matches(":focus-visible")) setFocused(true);
-    }}
+    onFocusCapture={() => setFocused(true)}
     onBlurCapture={event => {
       const next = event.relatedTarget;
       if (next instanceof Element && (event.currentTarget.contains(next) ||
@@ -49,12 +48,11 @@ export function ProjectCard({ project }: { project: Project }) {
     }}
   >
     <h2 className="project-summary-heading">
-      <button ref={summary} type="button" className="project-summary" aria-expanded={open} aria-controls={detailsId}
-        aria-label={`Details for ${project.name}`}
-        onClick={() => { setExpanded(value => !value); setFocused(false); }}
-        onKeyDown={event => {
-          if (event.key === "Escape") { setExpanded(false); setFocused(false); setHovered(false); }
-        }}
+      <a href={destination.href} className="project-summary"
+        target={destination.external ? "_blank" : undefined} rel={destination.external ? "noopener noreferrer" : undefined}
+        aria-label={`${project.name}${destination.label === "GitHub" ? " on GitHub" : " live"}`}
+        aria-describedby={detailsId}
+        title={destination.private ? "Private GitHub repository" : undefined}
       >
         <span className="project-preview block">
           <span className="project-preview-image block">
@@ -65,7 +63,7 @@ export function ProjectCard({ project }: { project: Project }) {
           <span className="project-title">{project.name}</span>
           <span className="project-status" data-status={project.status}><span aria-hidden="true" />{project.status}</span>
         </span>
-      </button>
+      </a>
     </h2>
     <motion.p id={detailsId} className={`project-description ${open ? "" : "line-clamp-2"}`}
       initial={false} animate={{ height: open ? "auto" : "3.6em" }}

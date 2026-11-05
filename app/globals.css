@@ -485,9 +485,6 @@ h2 { font-size: 18px; line-height: 1.5; }
 .site-header { position: sticky; top: 0; z-index: 50; height: 49px; background: var(--bg-veil); }
 .compact-toolbar { width: min(100%, 576px); height: 49px; margin-inline: auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; border-inline: 1px dotted var(--line); border-bottom: 1px dotted var(--line); }
 .desktop-index { display: none; }
-#mobile-menu { position: absolute; top: 49px; left: max(0px, calc(50% - 288px)); width: min(100%, 576px); max-height: calc(100dvh - 49px); overflow-y: auto; padding: 12px 16px; border-bottom: 1px dotted var(--line); background: var(--bg); }
-#mobile-menu a { display: block; padding: 12px; border-radius: 4px; color: var(--fg-secondary); }
-#mobile-menu a[aria-current] { background: var(--bg-soft); color: var(--fg); }
 .watch-preview {
   display: grid;
   grid-auto-flow: column;
@@ -600,7 +597,7 @@ h2 { font-size: 18px; line-height: 1.5; }
 .tech-icon:hover .tech-tooltip, .tech-icon:focus .tech-tooltip { display: block; }
 
 /* Compact project cards with an expanding description. */
-.project-card { display: flex; flex-direction: column; min-width: 0; height: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 14px; background: color-mix(in oklab, var(--card) 85%, transparent); transition: border-color 200ms ease, box-shadow 200ms ease; }
+.project-card { position: relative; display: flex; flex-direction: column; min-width: 0; height: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 14px; background: color-mix(in oklab, var(--card) 85%, transparent); transition: border-color 200ms ease, box-shadow 200ms ease; }
 .project-card[data-details-open="true"] { border-color: var(--line-strong); box-shadow: 0 4px 18px -10px color-mix(in oklab, var(--fg) 14%, transparent); }
 .project-preview { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 12px; background: transparent; }
 .project-preview-image { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; }
@@ -638,6 +635,10 @@ h2 { font-size: 18px; line-height: 1.5; }
 
 .project-summary-heading { margin: 0; }
 .project-summary { display: block; width: 100%; padding: 0; text-align: left; cursor: pointer; }
+.project-summary::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: 14px; }
+.project-summary:focus-visible { outline: none; }
+.project-summary:focus-visible::after { outline: 2px solid var(--accent); outline-offset: 3px; }
+.project-footer > * { position: relative; z-index: 2; }
 .project-summary .project-title-row { min-height: 44px; margin-top: 0; padding-block: 10px; }
 .project-summary-heading + .project-description { margin-top: 0; }
 
@@ -648,9 +649,24 @@ h2 { font-size: 18px; line-height: 1.5; }
 .compact-toolbar .icon-btn, .font-menu-control .icon-btn { width: 44px; height: 44px; flex-shrink: 0; }
 .font-menu-control { display: none; }
 @media (max-width: 399px) {
-  .font-toolbar-control { display: none; }
   .font-menu-control { display: block; padding: 4px 12px; }
   .font-menu-control .icon-btn { width: auto; padding-inline: 12px; gap: 10px; }
   .compact-toolbar { padding-inline: 6px; }
   .toolbar-controls { gap: 0; }
 }
+
+/* Swarm reveals real DOM without changing its layout or accessibility tree.
+   Keep Motion wrappers settled for this homepage's lifetime to avoid a second
+   entrance animation when a completed target is revisited. */
+html[data-swarm-reveals] [data-swarm-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+html[data-swarm-active] {
+  overflow-anchor: none;
+  overflow-y: hidden !important;
+  scroll-behavior: auto !important;
+}
+html[data-swarm-active] [data-swarm-pending] { transition: none !important; }
+html[data-swarm-active] [data-cursor-companion] { visibility: hidden !important; }
+html[data-swarm-active] [data-cursor-glow-border]::after { opacity: 0 !important; }

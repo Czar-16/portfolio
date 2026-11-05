@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => { try { localStorage.setItem('czar-swarm-seen', '2'); } catch { /* Storage-denied cases use the normal site. */ } });
+});
+
 const presets = ['clean', 'contrast', 'developer'] as const;
 const names = ['Instrument Sans', 'Public Sans', 'Manrope'];
 
@@ -23,8 +27,8 @@ test('font cycle, keyboard, persistence, navigation and tab synchronization', as
   await expect(page.getByRole('status').filter({ hasText: 'Font preset: Public Sans' })).toHaveCount(1);
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-font', 'contrast');
-  await page.getByRole('button', { name: 'Open menu', exact: true }).click();
-  await page.getByRole('navigation', { name: 'Main', exact: true }).getByRole('link', { name: 'About', exact: true }).click();
+  await page.getByRole('button', { name: 'Search commands', exact: true }).click();
+  await page.getByRole('dialog', { name: 'Command palette' }).getByRole('option', { name: 'About', exact: true }).click();
   await expect(page).toHaveURL('/about');
   await expect(page.locator('html')).toHaveAttribute('data-font', 'contrast');
   const other = await context.newPage();
@@ -55,18 +59,16 @@ test('switching works when storage is unavailable', async ({ page }) => {
   }
 });
 
-test('touch control moves into the menu below 400px and keeps 44px targets', async ({ browser }) => {
+test('font control remains in the toolbar on mobile and keeps 44px targets', async ({ browser }) => {
   const context = await browser.newContext({ hasTouch: true, viewport: { width: 375, height: 667 } });
   const page = await context.newPage();
   await page.goto('/about');
-  await expect(page.getByRole('button', { name: /^Font:/ })).toHaveCount(0);
-  await page.getByRole('button', { name: 'Open menu', exact: true }).tap();
   const button = page.getByRole('button', { name: /^Font:/ });
   await expect(button).toHaveAccessibleName('Font: Instrument Sans. Switch to Public Sans');
   await button.tap();
   await expect(button).toHaveAccessibleName('Font: Public Sans. Switch to Manrope');
   await expect(page.locator('html')).toHaveAttribute('data-font', 'contrast');
-  for (const control of await page.locator('.compact-toolbar button, #mobile-menu button').all()) {
+  for (const control of await page.locator('.compact-toolbar button').all()) {
     if (!await control.isVisible()) continue;
     const box = (await control.boundingBox())!;
     expect(box.width).toBeGreaterThanOrEqual(44);
@@ -74,7 +76,6 @@ test('touch control moves into the menu below 400px and keeps 44px targets', asy
   }
   await page.setViewportSize({ width: 400, height: 320 });
   await expect(page.locator('.font-toolbar-control button')).toBeVisible();
-  await expect(page.locator('.font-menu-control button')).toBeHidden();
   await context.close();
 });
 
@@ -99,7 +100,7 @@ for (const [index, preset] of presets.entries()) {
     await expect(page.locator('.github-stat').nth(0)).toContainText('30');
     await expect(page.locator('.github-stat').nth(1)).toContainText('7');
     await expect(page.locator('.project-description').first()).toHaveCSS('-webkit-line-clamp', '2');
-    await page.getByRole('button', { name: /^Details for/ }).first().click();
+    await page.locator('.project-summary').first().focus();
     await expect(page.locator('.project-card').first()).toHaveAttribute('data-details-open', 'true');
   });
 }

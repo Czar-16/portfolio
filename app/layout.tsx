@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Instrument_Sans, Public_Sans, Manrope, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AmbientBackground } from "@/components/ambient-background";
+import { CursorCompanion } from "@/components/cursor-companion";
 import { Navbar } from "@/components/navbar";
 import { CommandPaletteWrapper } from "@/components/command-palette-wrapper";
 import { SmoothScroll } from "@/components/smooth-scroll";
@@ -43,20 +44,23 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
+      data-background="particles"
       data-scroll-behavior="smooth"
       className={`${instrumentSans.variable} ${publicSans.variable} ${manrope.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <head><script dangerouslySetInnerHTML={{ __html: `(()=>{let t,b,f;try{t=localStorage.getItem('czar-theme');b=localStorage.getItem('czar-background');f=localStorage.getItem('czar-font')}catch{}document.documentElement.dataset.font=['contrast','developer'].includes(f)?f:'clean';document.documentElement.dataset.background=['particles','constellation','bokeh','spotlight'].includes(b)?b:'aurora';document.documentElement.dataset.theme=t==='light'||t==='dark'?t:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'})()` }} /></head>
+      <head><script dangerouslySetInnerHTML={{ __html: `(()=>{let t,b,f;try{t=localStorage.getItem('czar-theme');b=localStorage.getItem('czar-background');f=localStorage.getItem('czar-font')}catch{}document.documentElement.dataset.font=['contrast','developer'].includes(f)?f:'clean';document.documentElement.dataset.background=['aurora','constellation','bokeh','spotlight'].includes(b)?b:'particles';document.documentElement.dataset.theme=t==='light'||t==='dark'?t:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'})()` }} /></head>
       <body className="min-h-dvh flex flex-col">
         <AmbientBackground />
         <MotionProvider>
           <InteractionProvider>
             <VisitorProvider>
               <SmoothScroll />
-              <Navbar />
-              <main id="page-top" tabIndex={-1} className="portfolio-column flex-1 focus:outline-none">{children}</main>
-              <BackToTop />
-              <CommandPaletteWrapper />
+              <CursorCompanion>
+                <Navbar />
+                <main id="page-top" tabIndex={-1} className="portfolio-column flex-1 focus:outline-none">{children}</main>
+                <BackToTop />
+                <CommandPaletteWrapper />
+              </CursorCompanion>
             </VisitorProvider>
           </InteractionProvider>
         </MotionProvider>

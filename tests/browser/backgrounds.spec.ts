@@ -1,18 +1,21 @@
 import { test, expect } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => { try { localStorage.setItem('czar-swarm-seen', '2'); } catch { /* Storage-denied cases use the normal site. */ } });
+});
+
 test('background selection persists and remains independent of theme across navigation', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('html')).toHaveAttribute('data-background', 'aurora');
+  await expect(page.locator('html')).toHaveAttribute('data-background', 'particles');
   const originalTheme = await page.locator('html').getAttribute('data-theme');
-  await page.getByRole('button', { name: 'Switch to particles background' }).click();
   await expect(page.locator('[data-ambient-background] canvas')).toHaveAttribute('data-ready', 'true');
   await expect(page.locator('html')).toHaveAttribute('data-theme', originalTheme!);
   await page.getByRole('button', { name: /Switch to .* mode/ }).click();
   await expect(page.locator('html')).toHaveAttribute('data-background', 'particles');
   await page.reload();
   await expect(page.getByRole('button', { name: 'Switch to constellation background' })).toBeVisible();
-  await page.getByRole('button', { name: 'Open menu', exact: true }).click();
-  await page.getByRole('navigation', { name: 'Main', exact: true }).getByRole('link', { name: 'About', exact: true }).click();
+  await page.getByRole('button', { name: 'Search commands', exact: true }).click();
+  await page.getByRole('dialog', { name: 'Command palette' }).getByRole('option', { name: 'About', exact: true }).click();
   await expect(page).toHaveURL('/about');
   await expect(page.locator('html')).toHaveAttribute('data-background', 'particles');
   await page.getByRole('button', { name: 'Switch to constellation background' }).focus();
@@ -41,7 +44,6 @@ for (const failure of ['null', 'throw']) {
       });
     }, failure);
     await page.goto('/about');
-    await page.getByRole('button', { name: 'Switch to particles background' }).click();
     await expect(page.locator('html')).toHaveAttribute('data-background', 'particles');
     const fallback = page.locator('[data-ambient-background] canvas').locator('..');
     expect(await fallback.evaluate(el => getComputedStyle(el, '::before').display)).not.toBe('none');
@@ -58,6 +60,7 @@ for (const failure of ['null', 'throw']) {
 
 for (const style of ['particles', 'constellation']) {
   test(`${style} stops for reduced motion and hidden documents and resumes when visible`, async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('czar-background', 'aurora'));
     await page.goto('/about');
     const ambient = page.locator('[data-ambient-background]');
     const wash = ambient.locator('> div').first().locator('> div').first();
@@ -101,8 +104,8 @@ for (const theme of ['dark', 'light'] as const) {
       await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' });
       await page.setViewportSize({ width, height: 900 });
       await page.goto('/');
-      for (const background of ['aurora', 'particles', 'constellation', 'bokeh', 'spotlight'] as const) {
-        if (background !== 'aurora') await page.getByRole('button', { name: `Switch to ${background} background` }).click();
+      for (const background of ['particles', 'constellation', 'bokeh', 'spotlight', 'aurora'] as const) {
+        if (background !== 'particles') await page.getByRole('button', { name: `Switch to ${background} background` }).click();
         await expect(page.locator('html')).toHaveAttribute('data-background', background);
         const measurements = await page.evaluate(() => {
           const column = document.querySelector('main')!.getBoundingClientRect();
@@ -127,20 +130,20 @@ for (const theme of ['dark', 'light'] as const) {
   }
 }
 
-for (const background of ['aurora', 'particles', 'constellation', 'bokeh', 'spotlight', 'waves', 'invalid']) {
-  test(`saved ${background} initializes before hydration`, async ({ browser }) => {
+for (const background of ['aurora', 'particles', 'constellation', 'bokeh', 'spotlight', 'waves', 'invalid', '']) {
+  test(`saved ${background || 'missing'} initializes before hydration`, async ({ browser }) => {
     // Seed storage, then block hydration bundles to isolate the inline initialization.
     const seed = await browser.newContext();
     const setup = await seed.newPage();
     await setup.goto('/about');
-    await setup.evaluate(value => localStorage.setItem('czar-background', value), background);
+    await setup.evaluate(value => value ? localStorage.setItem('czar-background', value) : localStorage.removeItem('czar-background'), background);
     const state = await seed.storageState();
     await seed.close();
     const stored = await browser.newContext({ storageState: state });
     const page = await stored.newPage();
     await page.route('**/*.js*', route => route.abort());
     await page.goto('/about');
-    await expect(page.locator('html')).toHaveAttribute('data-background', ['waves', 'invalid'].includes(background) ? 'aurora' : background);
+    await expect(page.locator('html')).toHaveAttribute('data-background', ['waves', 'invalid', ''].includes(background) ? 'particles' : background);
     await stored.close();
   });
 }
@@ -149,16 +152,16 @@ test('new selections synchronize across tabs, including preference removal', asy
   await page.goto('/about');
   const other = await context.newPage();
   await other.goto('/about');
-  for (const background of ['particles', 'constellation', 'bokeh', 'spotlight', 'aurora']) {
+  for (const background of ['constellation', 'bokeh', 'spotlight', 'aurora', 'particles']) {
     await other.getByRole('button', { name: `Switch to ${background} background` }).click();
     await expect(page.locator('html')).toHaveAttribute('data-background', background);
   }
   await other.evaluate(() => localStorage.setItem('czar-background', 'waves'));
-  await expect(page.locator('html')).toHaveAttribute('data-background', 'aurora');
+  await expect(page.locator('html')).toHaveAttribute('data-background', 'particles');
   await other.evaluate(() => localStorage.setItem('czar-background', 'bokeh'));
   await expect(page.locator('html')).toHaveAttribute('data-background', 'bokeh');
   await other.evaluate(() => localStorage.removeItem('czar-background'));
-  await expect(page.locator('html')).toHaveAttribute('data-background', 'aurora');
+  await expect(page.locator('html')).toHaveAttribute('data-background', 'particles');
 });
 
 for (const background of ['bokeh', 'spotlight']) {
@@ -199,7 +202,6 @@ for (const theme of ['dark', 'light'] as const) {
       await page.setViewportSize({ width, height: 900 });
       await page.goto('/about');
       await page.clock.install();
-      await page.getByRole('button', { name: 'Switch to particles background' }).click();
       for (const background of ['constellation', 'bokeh', 'spotlight']) {
         await page.getByRole('button', { name: `Switch to ${background} background` }).click();
         if (background === 'constellation') await expect(page.locator('[data-point-background] canvas')).toHaveAttribute('data-ready', 'true');

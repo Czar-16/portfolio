@@ -8,7 +8,7 @@ import styles from "./ambient-background.module.css";
 type Background = "aurora" | "particles" | "constellation" | "bokeh" | "spotlight";
 
 function normalizeBackground(value: string | null | undefined): Background {
-  return value === "particles" || value === "constellation" || value === "bokeh" || value === "spotlight" ? value : "aurora";
+  return value === "aurora" || value === "constellation" || value === "bokeh" || value === "spotlight" ? value : "particles";
 }
 
 function subscribe(notify: () => void) {
@@ -24,7 +24,7 @@ function subscribe(notify: () => void) {
 }
 
 function useBackground() {
-  return useSyncExternalStore<Background>(subscribe, () => normalizeBackground(document.documentElement.dataset.background), () => "aurora");
+  return useSyncExternalStore<Background>(subscribe, () => normalizeBackground(document.documentElement.dataset.background), () => "particles");
 }
 
 export function BackgroundToggle() {

@@ -1,3 +1,4 @@
+import { SwarmTour } from "@/components/swarm-tour";
 import { Hero } from "@/components/hero";
 import { FeaturedProjects } from "@/components/featured-projects";
 import { DashboardSection } from "@/components/dashboard-section";
@@ -11,7 +12,8 @@ import { TerminalCard } from "@/components/TerminalCard";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1">
+    <div className="flex flex-col flex-1" data-swarm-home>
+      <SwarmTour />
       <Hero />
       <FeaturedProjects />
       <DashboardSection />
