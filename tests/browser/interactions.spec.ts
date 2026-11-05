@@ -2,7 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 
 async function trackAudio(page: Page, fail = false) {
   await page.addInitScript(({ fail }) => {
-    const state = { starts: 0, contexts: 0 };
+    const state = { starts: 0, contexts: 0, tones: [] as number[][] };
     Object.assign(window, { interactionAudio: state });
     const OriginalAudioContext = window.AudioContext;
     if (!OriginalAudioContext) return;
@@ -21,12 +21,32 @@ async function trackAudio(page: Page, fail = false) {
         };
         return source;
       }
+      createOscillator() {
+        const oscillator = super.createOscillator();
+        const frequencies: number[] = [];
+        const set = oscillator.frequency.setValueAtTime.bind(oscillator.frequency);
+        const ramp = oscillator.frequency.exponentialRampToValueAtTime.bind(oscillator.frequency);
+        oscillator.frequency.setValueAtTime = (value, time) => {
+          frequencies.push(value);
+          return set(value, time);
+        };
+        oscillator.frequency.exponentialRampToValueAtTime = (value, time) => {
+          frequencies.push(value);
+          return ramp(value, time);
+        };
+        const start = oscillator.start.bind(oscillator);
+        oscillator.start = (...args: Parameters<typeof oscillator.start>) => {
+          state.tones.push(frequencies);
+          return start(...args);
+        };
+        return oscillator;
+      }
     };
   }, { fail });
 }
 
 const audioState = (page: Page) => page.evaluate(() =>
-  (window as unknown as { interactionAudio: { starts: number; contexts: number } }).interactionAudio);
+  (window as unknown as { interactionAudio: { starts: number; contexts: number; tones: number[][] } }).interactionAudio);
 
 async function openPortfolio(page: Page) {
   await page.setViewportSize({ width: 1366, height: 900 });
@@ -34,6 +54,35 @@ async function openPortfolio(page: Page) {
   await expect(page.getByRole('button', { name: 'Mute click sounds' })).toBeVisible();
   await expect(page.locator('[data-click-sparks]')).toHaveAttribute('width', '1366');
 }
+
+test('theme changes play directional tones, respect mute, and leave clicks unchanged', async ({ page }) => {
+  await trackAudio(page);
+  await page.addInitScript(() => localStorage.setItem('czar-theme', 'dark'));
+  await openPortfolio(page);
+  expect((await audioState(page)).contexts).toBe(0);
+  await page.getByRole('button', { name: 'Switch to light mode', exact: true }).click();
+  await expect.poll(async () => (await audioState(page)).tones).toEqual([[420, 620]]);
+  await page.getByRole('button', { name: 'Switch to dark mode', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  await expect.poll(async () => (await audioState(page)).tones).toEqual([[420, 620], [620, 420]]);
+  expect((await audioState(page)).starts).toBe(0);
+
+  await page.getByRole('button', { name: /^Font:/ }).click();
+  await expect.poll(async () => (await audioState(page)).starts).toBe(1);
+  await page.getByRole('button', { name: 'Mute click sounds', exact: true }).click();
+  await page.getByRole('button', { name: 'Switch to light mode', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  expect((await audioState(page)).tones).toHaveLength(2);
+  expect((await audioState(page)).starts).toBe(1);
+
+  await page.getByRole('button', { name: 'Enable click sounds', exact: true }).click();
+  await expect.poll(async () => (await audioState(page)).starts).toBe(2);
+  await page.getByRole('button', { name: 'Switch to dark mode', exact: true }).click();
+  await expect.poll(async () => (await audioState(page)).tones).toHaveLength(3);
+  await page.reload();
+  await expect(page.locator('[data-click-sparks]')).toHaveAttribute('width', '1366');
+  expect((await audioState(page)).contexts).toBe(0);
+});
 
 test('sparks cover blank space, expire, and respect motion preferences', async ({ page }) => {
   await trackAudio(page);
@@ -93,12 +142,16 @@ test('mute is silent, persists across routes and reloads, and enabling previews 
 });
 
 test('actionable cards and nested controls sound once; disabled controls stay silent', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await trackAudio(page);
   await page.goto('/quotes');
   await expect(page.locator('[data-click-sparks]')).toHaveAttribute('width', '1280');
   await page.getByRole('group', { name: 'Quote categories' }).getByRole('button').first().click();
   await expect.poll(async () => (await audioState(page)).starts).toBe(1);
   const card = page.locator('[data-quote-id]').first();
+  await card.hover();
+  await expect(card).toHaveAttribute('data-revealed', 'true');
+  await card.scrollIntoViewIfNeeded();
   await card.click({ position: { x: 25, y: 150 } });
   await expect.poll(async () => (await audioState(page)).starts).toBe(2);
   await card.getByRole('button', { name: /Revealed quote/ }).click();
@@ -126,6 +179,10 @@ test('audio failure and unavailable storage do not block controls', async ({ pag
     Storage.prototype.setItem = () => { throw new Error('Storage unavailable'); };
   });
   await openPortfolio(page);
+  const themeToggle = page.getByRole('button', { name: /^Switch to .* mode$/ });
+  const nextTheme = (await themeToggle.getAttribute('aria-label'))!.includes('dark') ? 'dark' : 'light';
+  await themeToggle.click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', nextTheme);
   await page.getByRole('button', { name: 'Search commands' }).click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.keyboard.press('Escape');

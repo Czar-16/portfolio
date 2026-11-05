@@ -501,6 +501,36 @@ h2 { font-size: 18px; line-height: 1.5; }
   padding: 4px 2px 10px;
 }
 .watch-preview > a { scroll-snap-align: start; }
+.watch-preview-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background-color: var(--card);
+}
+.watch-preview-card > :first-child { border: 0; border-bottom: 1px solid var(--line); }
+.watch-card.watch-card {
+  transition: border-color 200ms ease, background-color 200ms ease,
+    box-shadow 200ms ease, translate 200ms var(--ease-premium);
+}
+.watch-card:focus-visible {
+  border-color: var(--line-strong);
+  background-color: var(--card-elevated);
+}
+@media (hover: hover) and (pointer: fine) {
+  .watch-card:hover {
+    border-color: var(--line-strong);
+    background-color: var(--card-elevated);
+    box-shadow: 0 4px 14px -8px color-mix(in oklab, var(--fg) 25%, transparent);
+  }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .watch-card:hover { translate: 0 -2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .watch-card.watch-card { transition: none; }
+}
 .featured-projects .mt-10 { margin-top: 20px; }
 .featured-projects .shadow-card { padding: 16px; border-radius: 6px; }
 .featured-projects .shadow-card .bg-accent { color: var(--accent-contrast); box-shadow: none; padding: 8px 12px; }

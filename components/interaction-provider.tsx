@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import { ClickSound } from "@/lib/click-sound";
+import { ThemeSound } from "@/lib/theme-sound";
 
 const STORAGE_KEY = "czar-sound";
 const CHANGE_EVENT = "czar-sound-change";
@@ -26,7 +27,12 @@ function subscribe(callback: () => void) {
   };
 }
 
-const InteractionContext = createContext({ enabled: true, toggle: () => {}, playClick: () => {} });
+const InteractionContext = createContext<{
+  enabled: boolean;
+  toggle: () => void;
+  playClick: () => void;
+  playTheme: (theme: "light" | "dark") => void;
+}>({ enabled: true, toggle: () => {}, playClick: () => {}, playTheme: () => {} });
 export const useInteraction = () => useContext(InteractionContext);
 
 type Burst = { x: number; y: number; start: number };
@@ -135,11 +141,18 @@ function InteractionEffects({ playClick }: { playClick: () => void }) {
 export function InteractionProvider({ children }: { children: React.ReactNode }) {
   const enabled = useSyncExternalStore(subscribe, getEnabled, () => true);
   const audio = useRef<ClickSound | null>(null);
+  const themeAudio = useRef<ThemeSound | null>(null);
   const playClick = useCallback(() => {
     if (!getEnabled() || document.hidden) return;
     audio.current ??= new ClickSound();
     audio.current.enable();
     void audio.current.play();
+  }, []);
+
+  const playTheme = useCallback((theme: "light" | "dark") => {
+    if (!getEnabled() || document.hidden) return;
+    themeAudio.current ??= new ThemeSound();
+    void themeAudio.current.play(theme);
   }, []);
 
   const toggle = useCallback(() => {
@@ -148,17 +161,22 @@ export function InteractionProvider({ children }: { children: React.ReactNode })
     try { localStorage.setItem(STORAGE_KEY, next ? "on" : "off"); } catch { storageUnavailable = true; }
     window.dispatchEvent(new Event(CHANGE_EVENT));
     if (next) playClick();
-    else audio.current?.stop();
+    else {
+      audio.current?.stop();
+      themeAudio.current?.stop();
+    }
   }, [playClick]);
 
   useEffect(() => {
     return () => {
       audio.current?.dispose();
       audio.current = null;
+      themeAudio.current?.dispose();
+      themeAudio.current = null;
     };
   }, []);
 
-  const value = useMemo(() => ({ enabled, toggle, playClick }), [enabled, toggle, playClick]);
+  const value = useMemo(() => ({ enabled, toggle, playClick, playTheme }), [enabled, toggle, playClick, playTheme]);
   return <InteractionContext.Provider value={value}>{children}<InteractionEffects playClick={playClick} /></InteractionContext.Provider>;
 }
 
