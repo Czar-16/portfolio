@@ -22,7 +22,7 @@ type Cell = {
 const WEEKS = 53;
 const DAYS = 7;
 
-const COLORS = ["#27272a", "#52525b", "#71717a", "#d4d4d8", "#f4f4f5"];
+const COLORS = Array.from({ length: 5 }, (_, level) => `var(--heat-${level})`);
 
 function buildCalendar(contributions: Contribution[]): Cell[][] {
   const sorted = [...contributions].sort((a, b) =>
@@ -173,7 +173,7 @@ export function GitHubHeatmap() {
               }).map((_, day) => (
                 <div
                   key={day}
-                  className="h-[11px] w-[11px] rounded-[2px] bg-[#27272a]"
+                  className="h-[11px] w-[11px] rounded-[2px] bg-[var(--heat-0)]"
                 />
               ))}
             </div>
@@ -226,10 +226,10 @@ export function GitHubHeatmap() {
           </div>
         </div>
       </div>
-      <div className="mt-3 flex items-center justify-end gap-1.5 text-[10px] text-fg-muted" aria-label="Contribution intensity, from less active to more active">
-        <span className="mr-1">Less active</span>
+      <div className="heatmap-legend" aria-label="Contribution intensity, from less active to more active">
+        <span className="mr-1">Less</span>
         {colors.map((color, level) => <span key={color} className="contribution-cell size-2.5" style={{ backgroundColor: color }} title={`Activity level ${level}`} />)}
-        <span className="ml-1">More active</span>
+        <span className="ml-1">More</span>
       </div>
     </div>
   );

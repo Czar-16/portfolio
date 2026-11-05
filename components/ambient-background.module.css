@@ -1,0 +1,112 @@
+.background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--bg);
+}
+
+.aurora { position: absolute; inset: 0; overflow: hidden; }
+.aurora > div {
+  position: absolute;
+  width: min(1000px, 130vw);
+  height: min(900px, 110vh);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, var(--ambient-blue), transparent 68%);
+  animation: drift 28s ease-in-out infinite alternate;
+}
+.aurora > div:nth-child(1) { left: -30%; top: -30%; }
+.aurora > div:nth-child(2) {
+  right: -30%; top: 8%;
+  background: radial-gradient(ellipse, var(--ambient-violet), transparent 68%);
+  animation-duration: 34s;
+  animation-delay: -12s;
+}
+.aurora > div:nth-child(3) { left: 5%; bottom: -65%; animation-duration: 40s; animation-delay: -20s; }
+
+.points, .bokeh, .spotlight { display: none; position: absolute; inset: 0; }
+.points::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .3;
+  background-image: radial-gradient(circle, var(--ambient-particle) 1px, transparent 1.5px), radial-gradient(circle, var(--ambient-particle) .7px, transparent 1.2px);
+  background-size: 113px 151px, 197px 173px;
+  background-position: 23px 41px, 79px 17px;
+}
+:global([data-background="constellation"]) .points::before {
+  background-image: radial-gradient(circle, var(--constellation-point) 1.2px, transparent 1.8px),
+    linear-gradient(28deg, transparent 49.7%, color-mix(in srgb, var(--constellation-point) 35%, transparent) 50%, transparent 50.3%);
+  background-size: 137px 157px, 137px 157px;
+}
+.points:has(canvas[data-ready="true"])::before { display: none; }
+.points canvas { display: block; width: 100%; height: 100%; }
+
+.bokeh > div {
+  position: absolute;
+  width: clamp(120px, 23vw, 340px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--bokeh-blue) 0%, var(--bokeh-blue) 25%, transparent 70%);
+  filter: blur(18px);
+  animation: float 28s ease-in-out infinite alternate paused;
+}
+.bokeh > div:nth-child(1) { left: -8%; top: 5%; }
+.bokeh > div:nth-child(2) { right: -7%; top: 28%; background: radial-gradient(circle, var(--bokeh-violet), transparent 70%); animation-duration: 34s; animation-delay: -12s; }
+.bokeh > div:nth-child(3) { left: 8%; bottom: -4%; background: radial-gradient(circle, var(--bokeh-highlight), transparent 70%); animation-duration: 40s; animation-delay: -20s; }
+.bokeh > div:nth-child(4) { left: 24%; top: -16%; width: 180px; animation-duration: 24s; animation-delay: -8s; }
+.bokeh > div:nth-child(5) { right: 6%; bottom: -8%; width: 240px; background: radial-gradient(circle, var(--bokeh-highlight), transparent 70%); animation-duration: 36s; animation-delay: -18s; }
+.bokeh > div:nth-child(6) { left: -6%; top: 50%; width: 160px; background: radial-gradient(circle, var(--bokeh-violet), transparent 70%); animation-duration: 32s; animation-delay: -24s; }
+
+.spotlight > div {
+  position: absolute;
+  left: -48%;
+  top: -40%;
+  width: 85%;
+  height: 180%;
+  transform-origin: 50% 10%;
+  background: radial-gradient(ellipse at 50% 40%, var(--spotlight-blue), transparent 66%);
+  filter: blur(35px);
+  animation: sweep 36s ease-in-out infinite alternate paused;
+}
+.spotlight > div:nth-child(2) {
+  left: auto;
+  right: -48%;
+  background: radial-gradient(ellipse at 50% 60%, var(--spotlight-highlight), transparent 66%);
+  animation-duration: 40s;
+  animation-delay: -20s;
+}
+
+:global([data-background="particles"]) .aurora,
+:global([data-background="constellation"]) .aurora,
+:global([data-background="bokeh"]) .aurora,
+:global([data-background="spotlight"]) .aurora { display: none; }
+:global([data-background="particles"]) .points,
+:global([data-background="constellation"]) .points,
+:global([data-background="bokeh"]) .bokeh,
+:global([data-background="spotlight"]) .spotlight { display: block; }
+.aurora > div { animation-play-state: paused; }
+:global([data-background="aurora"]) .aurora > div,
+:global([data-background="bokeh"]) .bokeh > div,
+:global([data-background="spotlight"]) .spotlight > div { animation-play-state: running; }
+.background[data-paused="true"] > div > div { animation-play-state: paused; }
+
+@keyframes drift {
+  from { transform: translate3d(-3%, -2%, 0) rotate(-12deg) scale(.9); opacity: .7; }
+  to { transform: translate3d(12%, 8%, 0) rotate(12deg) scale(1.12); opacity: 1; }
+}
+@keyframes float {
+  from { transform: translate3d(-12%, -8%, 0) scale(.85); opacity: .65; }
+  to { transform: translate3d(18%, 14%, 0) scale(1.15); opacity: 1; }
+}
+@keyframes sweep {
+  from { transform: rotate(-9deg); opacity: .65; }
+  to { transform: rotate(9deg); opacity: 1; }
+}
+@media (max-width: 639px) {
+  .bokeh > div:nth-child(n+4) { display: none; animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aurora > div, .bokeh > div, .spotlight > div { animation: none; }
+}

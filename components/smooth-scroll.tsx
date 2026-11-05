@@ -11,26 +11,7 @@ export function SmoothScroll() {
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const desktopPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-    let frame = 0;
-
-    const tick = (time: number) => {
-      frame = 0;
-      const lenis = lenisRef.current;
-      if (!lenis) return;
-      lenis.raf(time);
-      if (lenis.isScrolling === "smooth") frame = requestAnimationFrame(tick);
-    };
-
-    const wake = () => {
-      if (frame || document.hidden || !lenisRef.current) return;
-      // Do not count time spent idle as an animation step on the next gesture.
-      lenisRef.current.time = 0;
-      frame = requestAnimationFrame(tick);
-    };
-
     const dispose = () => {
-      cancelAnimationFrame(frame);
-      frame = 0;
       // Settle native-scroll state before destruction so a pending Lenis velocity
       // timer cannot restore its CSS classes after reduced motion is enabled.
       lenisRef.current?.stop();
@@ -44,7 +25,7 @@ export function SmoothScroll() {
       // Read the explicit lock, not computed overflow from lenis-stopped;
       // otherwise Lenis's own CSS could keep it stopped after unlocking.
       const overflow = document.documentElement.style.overflowY;
-      if (overflow === "hidden" || overflow === "clip") {
+      if (document.hidden || overflow === "hidden" || overflow === "clip") {
         lenis.stop();
       } else if (lenis.isStopped) {
         lenis.start();
@@ -56,18 +37,16 @@ export function SmoothScroll() {
       if (reducedMotion.matches || !desktopPointer.matches) return;
 
       lenisRef.current = new Lenis({
-        autoRaf: false,
+        autoRaf: true,
         smoothWheel: true,
         syncTouch: false,
         // Follow input promptly, with a shorter settling tail.
-        lerp: 0.16,
+        lerp: 0.1,
         wheelMultiplier: 1,
         // Keep menus and dialogs scrollable while the viewport is locked.
         allowNestedScroll: true,
         stopInertiaOnNavigate: true,
       });
-      // Run the scroll clock only during gestures and anchor animations.
-      lenisRef.current.on("virtual-scroll", wake);
       syncScrollLock();
     };
 
@@ -81,13 +60,11 @@ export function SmoothScroll() {
     desktopPointer.addEventListener("change", configure);
     // Cancel inertia before the browser restores a history entry's position.
     const settleScroll = () => {
-      cancelAnimationFrame(frame);
-      frame = 0;
       lenisRef.current?.scrollTo(window.scrollY, { immediate: true });
     };
     window.addEventListener("popstate", settleScroll);
     const visibilityChanged = () => {
-      if (document.hidden) settleScroll();
+      syncScrollLock();
     };
     document.addEventListener("visibilitychange", visibilityChanged);
 
@@ -112,8 +89,14 @@ export function SmoothScroll() {
       event.preventDefault();
       if (url.hash !== location.hash) window.history.pushState(null, "", url.href);
       // Lenis reads the root scroll-padding and target scroll-margin itself.
-      lenis.scrollTo(target, { onComplete: () => target.focus({ preventScroll: true }) });
-      wake();
+      lenis.scrollTo(target, { onComplete: () => {
+        if (!target.hasAttribute("tabindex")) {
+          target.setAttribute("tabindex", "-1");
+          target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true });
+        }
+        target.focus({ preventScroll: true });
+      } });
+
     };
     window.addEventListener("click", scrollToAnchor);
     configure();

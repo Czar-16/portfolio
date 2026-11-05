@@ -1,5 +1,6 @@
 "use client";
 
+import { getProjectTechnologyIcon } from "@/data/project-tech-icons";
 import { AnimatePresence, motion } from "motion/react";
 import { createPortal } from "react-dom";
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
@@ -129,9 +130,13 @@ export function ProjectTechStack({
 
   return (
     <div className={`flex flex-wrap gap-1.5 ${className}`}>
-      {tech.slice(0, 4).map((technology) => (
-        <span key={technology} className="badge max-w-full !h-auto min-h-[26px] !whitespace-normal py-1 leading-relaxed [overflow-wrap:anywhere]">{technology}</span>
-      ))}
+      {tech.slice(0, 4).map(technology => {
+        const icon = getProjectTechnologyIcon(technology);
+        return <button type="button" key={technology} aria-label={technology} className="tech-icon" title={technology} onClick={event => event.currentTarget.focus()}>
+          <svg aria-hidden="true" width="18" height="18" viewBox={icon.viewBox} fill="currentColor"><path d={icon.d} /></svg>
+          <span className="tech-tooltip" role="tooltip">{technology}</span>
+        </button>;
+      })}
       {remaining.length > 0 && (
         <button
           ref={trigger}
@@ -139,7 +144,7 @@ export function ProjectTechStack({
           aria-label={`${remaining.length} more technologies for ${projectName}`}
           aria-expanded={open}
           aria-controls={open ? id : undefined}
-          className="badge min-h-9 min-w-9 justify-center cursor-pointer transition-colors duration-180 hover:border-accent/40 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="badge min-h-11 min-w-11 justify-center cursor-pointer transition-colors duration-180 hover:border-accent/40 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           onPointerEnter={(event) => {
             if (event.pointerType === "touch") return;
             hovering.current = true;
@@ -183,6 +188,7 @@ export function ProjectTechStack({
             >
             <motion.div
               id={id}
+              data-project-tech-panel={projectName}
               role="region"
               tabIndex={0}
               aria-label={`More technologies for ${projectName}`}

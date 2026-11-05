@@ -33,7 +33,7 @@ function ConcealedQuote({ quote }: { quote: Quote }) {
             aria-expanded={revealed}
             aria-controls={`quote-${quote.id}`}
             aria-label={`${revealed ? "Revealed" : "Uncover"} quote ${quote.id}`}
-            className="min-h-9 min-w-11 rounded-lg text-left font-mono text-[11px] tracking-[0.18em] text-fg-muted focus-visible:text-accent"
+            className="min-h-11 min-w-11 rounded-lg text-left font-mono text-[11px] tracking-[0.18em] text-fg-muted focus-visible:text-accent"
           >
             {String(quote.id).padStart(3, "0")}
           </button>
@@ -44,9 +44,9 @@ function ConcealedQuote({ quote }: { quote: Quote }) {
           {revealed ? (
             <motion.blockquote
               className="relative z-1 text-[17px] font-medium leading-[1.7] tracking-[-0.015em] text-fg sm:text-lg"
-              initial={reduce ? false : { opacity: 0, y: 28, scale: 0.94, rotate: -3 }}
-              animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
-              transition={reduce ? { duration: 0 } : { type: "spring", duration: 0.45, bounce: 0.2 }}
+              initial={reduce ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={reduce ? { duration: 0 } : { duration: 0.28, ease: "easeOut" }}
             >
               {quote.text}
             </motion.blockquote>
@@ -60,11 +60,7 @@ function ConcealedQuote({ quote }: { quote: Quote }) {
         </div>
 
         <span className="mt-6 h-px w-8 bg-accent/35" aria-hidden="true" />
-        {revealed && !reduce && (
-          <div className={styles.fragments} aria-hidden="true">
-            {Array.from({ length: 6 }, (_, index) => <span key={index} />)}
-          </div>
-        )}
+
       </figure>
     </li>
   );
@@ -80,7 +76,7 @@ export function QuotesBrowser() {
       <p className="mb-5 text-sm leading-6 text-fg-secondary">
         Pick a category. <span className={styles.mouseHint}>Hover a box</span><span className={styles.touchHint}>Tap a box</span> to uncover a little perspective.
       </p>
-      <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2" role="group" aria-label="Quote categories">
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Quote categories">
         {quoteCategories.map((item) => (
           <button
             key={item.id}
@@ -88,14 +84,14 @@ export function QuotesBrowser() {
             aria-pressed={selected === item.id}
             aria-controls="category-quotes"
             onClick={() => setSelected(item.id)}
-            className={`card card-lift flex min-h-36 flex-col items-start p-5 text-left ${styles.category}`}
+            className={`card flex min-h-11 max-w-full items-center gap-2 px-3 py-2 text-left ${styles.category}`}
           >
-            <span className="mb-5 flex w-full items-center justify-between">
-              <span className="font-mono text-2xl text-accent" aria-hidden="true">{item.symbol}</span>
+            <span className="flex items-center gap-2">
+              <span className="font-mono text-sm text-accent" aria-hidden="true">{item.symbol}</span>
               <span className="font-mono text-[10px] text-fg-muted">{quotes.filter((quote) => quote.category === item.id).length} lines</span>
             </span>
             <span className="text-sm font-semibold leading-5 text-fg">{item.label}</span>
-            <span className="mt-2 text-xs leading-5 text-fg-secondary">{item.description}</span>
+            <span className="sr-only">{item.description}</span>
           </button>
         ))}
       </div>

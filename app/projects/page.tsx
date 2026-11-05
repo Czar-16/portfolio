@@ -1,113 +1,10 @@
-import { GracefulImage } from "@/components/graceful-image";
-import Link from "next/link";
-import { projects, type Project } from "@/data/projects";
+import { ProjectCard } from "@/components/project-card";
+import { projects } from "@/data/projects";
 import { Reveal, StaggerChildren, StaggerItem } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
-import { ProjectTechStack } from "@/components/project-tech-stack";
-import { GithubIcon, ExternalIcon, ArrowRightIcon } from "@/components/icons";
-import { PrivateRepoButton } from "@/components/private-repo-button";
+import { GithubIcon, ArrowRightIcon } from "@/components/icons";
 
 const GITHUB_REPOS_URL = "https://github.com/Czar-16?tab=repositories";
-
-function ProjectLinks({ project }: { project: Project }) {
-  return (
-    <div className="flex flex-wrap items-center gap-2">
-      {project.cli && <span className="badge">CLI / Terminal app</span>}
-      {project.links.map((link) => {
-        if (link.private) {
-          return <PrivateRepoButton key={link.href} projectName={project.name} />;
-        }
-
-        const icon =
-          link.label === "GitHub" ? (
-            <GithubIcon size={14} />
-          ) : link.external ? (
-            <ExternalIcon size={13} />
-          ) : (
-            <ArrowRightIcon size={14} />
-          );
-
-        return link.external ? (
-          <a
-            key={link.href}
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn"
-          >
-            {icon}
-            {link.label}
-          </a>
-        ) : (
-          <Link key={link.href} href={link.href} className="btn">
-            {icon}
-            {link.label}
-          </Link>
-        );
-      })}
-    </div>
-  );
-}
-
-function ProjectCard({ project }: { project: Project }) {
-  return (
-    <article id={project.slug} className="card-lift group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
-      <div className="relative aspect-video shrink-0 overflow-hidden">
-        <GracefulImage
-          src={project.image}
-          alt={project.imageAlt}
-          sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
-          className={`project-image ${project.cli ? "object-contain" : "object-cover object-top"}`}
-        />
-      </div>
-
-      <div className="flex flex-1 flex-col gap-4 p-4">
-        <div className="space-y-2">
-          <div className="flex flex-wrap items-center gap-2.5">
-            <h2 className="text-lg font-semibold tracking-tight text-fg">
-              {project.name}
-            </h2>
-            <span
-              className={`badge ${
-                project.status === "Live"
-                  ? "border-success/40 text-success"
-                  : "text-fg-muted"
-              }`}
-            >
-              {project.status}
-            </span>
-          </div>
-          <p className="font-mono text-[11px] uppercase tracking-wider text-fg-muted">
-            {project.period}
-          </p>
-        </div>
-
-        <p className="line-clamp-3 text-[13px] leading-relaxed text-fg-secondary">
-          {project.description}
-        </p>
-
-        {project.highlights.length > 0 && (
-          <ul aria-label={`${project.name} highlights`} className="space-y-1.5 text-[12px] leading-relaxed text-fg-secondary">
-            {project.highlights.slice(0, 3).map((highlight) => (
-              <li key={highlight} className="flex items-start gap-2">
-                <span aria-hidden="true" className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-accent" />
-                <span>{highlight}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <div className="mt-auto flex flex-col gap-4 pt-2">
-          <ProjectTechStack tech={project.tech} projectName={project.name} />
-
-          <div className="border-t border-line pt-4">
-            <ProjectLinks project={project} />
-          </div>
-        </div>
-      </div>
-    </article>
-  );
-}
 
 function SeeMoreBox() {
   return (
@@ -197,7 +94,7 @@ export default function ProjectsPage() {
         subtitle="Selected products I've designed, built and shipped."
       />
 
-      <StaggerChildren className="mt-10 grid grid-cols-1 gap-6 sm:mt-12 min-[480px]:grid-cols-2">
+      <StaggerChildren className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:mt-12 min-[480px]:grid-cols-2">
         {projects.map((project) => (
           <StaggerItem key={project.slug} className="h-full">
             <ProjectCard project={project} />

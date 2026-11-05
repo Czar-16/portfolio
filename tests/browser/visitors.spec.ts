@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-for (const theme of ['dark']) {
+for (const theme of ['dark', 'light']) {
   test(`homepage counter matches ${theme} theme and fits a narrow screen`, async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 800 });
     await page.addInitScript(value => localStorage.setItem('czar-theme', value), theme);
@@ -14,7 +14,7 @@ for (const theme of ['dark']) {
       filter: getComputedStyle(el).filter,
       animation: getComputedStyle(el.querySelector('g')!).animationName,
     }));
-    expect(box.color).toBe(theme === 'dark' ? 'rgb(229, 229, 229)' : 'rgb(48, 48, 48)');
+    expect(box.color).toBe(theme === 'dark' ? 'rgb(229, 229, 229)' : 'rgb(38, 38, 38)');
     expect(box.filter).toBe('none');
     expect(box.animation).not.toBe('none');
     const blink = await counter.locator('svg g').evaluate(el => {

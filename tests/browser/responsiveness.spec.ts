@@ -1,7 +1,7 @@
 import { test as base, expect, type Page } from '@playwright/test';
 
 const routes = ['/', '/about', '/projects', '/stack', '/quotes', '/watch', '/missing-page'];
-const widths = [320, 375, 379, 380, 381, 390, 639, 640, 641, 767, 768, 769, 1023, 1024, 1025, 1279, 1280, 1281, 1920];
+const widths = process.env.RESPONSIVE_MATRIX === "redesign" ? [320, 375, 480, 768, 1440] : [320, 375, 379, 380, 381, 390, 639, 640, 641, 480, 667, 767, 768, 769, 1023, 1024, 1025, 1279, 1280, 1281, 1440, 1920];
 const test = base.extend<{ appErrors: string[] }>({
   appErrors: [async ({ page, context }, use) => {
     const errors: string[] = [];
@@ -37,7 +37,7 @@ async function noOverflow(page: Page) {
   expect(overflow, 'elements causing horizontal page overflow').toEqual([]);
 }
 
-for (const theme of ['dark']) {
+for (const theme of ['dark', 'light']) {
   for (const width of widths) {
     test(`${theme}: all routes at ${width}px`, async ({ context }) => {
       await context.addInitScript(value => {
@@ -53,7 +53,7 @@ for (const theme of ['dark']) {
         await expect(page.locator('h1')).toBeVisible();
         await expect(page.locator('[data-page-entry]')).toHaveCSS('opacity', '1');
         if (route === '/') {
-          await expect(page.getByRole('list', { name: 'Featured repositories' })).toHaveAttribute('aria-busy', 'false');
+          await expect(page.getByRole('group', { name: 'GitHub statistics' })).toHaveAttribute('aria-busy', 'false');
           await expect(page.locator('article[aria-busy="true"]')).toHaveCount(0);
           await expect(page.getByRole('region', { name: /GitHub contribution calendar/ })).toBeVisible();
         }
@@ -63,7 +63,7 @@ for (const theme of ['dark']) {
         // Reveal content lower down and detect overflow after images/async cards settle.
         await page.locator('main').evaluate(el => el.scrollIntoView({ block: 'end' }));
         await noOverflow(page);
-        if ([320, 768, 1280].includes(width)) {
+        if ([320, 480, 768, 1440].includes(width)) {
           await page.evaluate(() => {
             // Load off-screen assets before a full-page visual review.
             document.querySelectorAll('img').forEach(image => { image.loading = 'eager'; });
@@ -108,7 +108,7 @@ for (const reducedMotion of ['no-preference', 'reduce'] as const) {
     await page.getByRole('region', { name: 'Interactive terminal' }).scrollIntoViewIfNeeded();
     if (reducedMotion === 'no-preference') await page.getByRole('button', { name: 'Skip terminal introduction' }).click();
     await expect(page.getByRole('textbox', { name: 'Terminal command' })).toBeVisible();
-    await expect(page.getByRole('list', { name: 'Featured repositories' })).toHaveAttribute('aria-busy', 'false');
+    await expect(page.getByRole('group', { name: 'GitHub statistics' })).toHaveAttribute('aria-busy', 'false');
 
     // Page gestures are smoothed unless reduced motion is requested; nested
     // lists consume input natively until they reach their scroll boundary.
@@ -131,10 +131,9 @@ for (const reducedMotion of ['no-preference', 'reduce'] as const) {
     for (const width of [390, 1280]) {
       await page.setViewportSize({ width, height: 900 });
       const terminal = page.getByRole('region', { name: 'Interactive terminal' }).locator('[class*="overflow-y-auto"]');
-      const repositories = page.getByRole('list', { name: 'Featured repositories' });
       const calendar = page.getByRole('region', { name: /GitHub contribution calendar/ });
 
-      for (const [label, scroller] of [['terminal', terminal], ['repositories', repositories], ['calendar', calendar]] as const) {
+      for (const [label, scroller] of [['terminal', terminal], ['calendar', calendar]] as const) {
         await scroller.evaluate(element => {
           element.scrollIntoView({ behavior: 'instant', block: 'center' });
           element.scrollTop = element.scrollHeight;
@@ -160,19 +159,6 @@ for (const reducedMotion of ['no-preference', 'reduce'] as const) {
         await expect(page.locator('html')).toHaveAttribute('data-wheel-prevented', String(reducedMotion === 'no-preference'));
         await expect(page.locator('html')).not.toHaveClass(/lenis-scrolling/);
       }
-
-      // The repository list must still scroll internally before its edge.
-      await repositories.evaluate(element => {
-        element.scrollIntoView({ behavior: 'instant', block: 'center' });
-        element.scrollTop = 0;
-      });
-      await repositories.hover();
-      await page.waitForTimeout(600);
-      const before = await page.evaluate(() => scrollY);
-      await page.mouse.wheel(0, 100);
-      await expect.poll(() => repositories.evaluate(element => element.scrollTop)).toBeGreaterThan(0);
-      await expect(page.locator('html')).toHaveAttribute('data-wheel-prevented', 'false');
-      expect(await page.evaluate(() => scrollY)).toBe(before);
 
       await calendar.evaluate(element => {
         element.scrollIntoView({ behavior: 'instant', block: 'center' });
@@ -209,7 +195,7 @@ test.describe('scrolled mobile navigation', () => {
       await page.goto('/', { waitUntil: 'domcontentloaded' });
       await expect(page.getByRole('button', { name: 'Open menu', exact: true })).toBeVisible();
       await expect(page.locator('[data-page-entry]')).toHaveCSS('opacity', '1');
-      await expect(page.getByRole('list', { name: 'Featured repositories' })).toHaveAttribute('aria-busy', 'false');
+      await expect(page.getByRole('group', { name: 'GitHub statistics' })).toHaveAttribute('aria-busy', 'false');
       await expect(page.locator('html')).not.toHaveClass(/lenis/);
       await page.evaluate(() => window.scrollTo({ top: 1200, behavior: 'instant' }));
       await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(500);
@@ -284,6 +270,7 @@ test('short landscape menus and command search remain reachable', async ({ page 
 });
 
 test('palette traps and restores keyboard focus in dark mode', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('czar-theme', 'dark'));
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/about', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
@@ -345,6 +332,7 @@ test('technology popover supports keyboard dismissal and short viewports', async
   await page.setViewportSize({ width: 667, height: 320 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/projects', { waitUntil: 'domcontentloaded' });
+  await page.getByRole('button', { name: 'Details for MailLoop', exact: true }).click();
   const trigger = page.getByRole('button', { name: /more technologies for/ }).first();
   await expect(trigger).toBeVisible();
   await expect(async () => {
@@ -369,7 +357,7 @@ test('external failures and missing images leave usable fallbacks', async ({ pag
   await page.route('**/_next/image?**', route => route.fulfill({ status: 404, body: '' }));
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await expect(page.getByText('GitHub activity unavailable')).toBeVisible();
-  await expect(page.getByText(/Couldn.t load repos right now/)).toBeVisible();
+  await expect(page.getByText('Live GitHub statistics unavailable. Showing fallback totals where needed.')).toHaveCount(1);
   await expect(page.getByRole('article', { name: 'LeetCode problem-solving statistics' })).toHaveAttribute('aria-busy', 'false');
   await page.goto('/projects', { waitUntil: 'domcontentloaded' });
   await expect(page.getByText('Screenshot', { exact: true }).first()).toBeVisible();
@@ -389,6 +377,7 @@ test('touch controls work at 320px', async ({ browser }) => {
   await page.locator('[data-quote-id]').first().tap();
   await expect(page.locator('[data-revealed="true"]').first()).toBeVisible();
   await page.goto('/projects', { waitUntil: 'domcontentloaded' });
+  await page.getByRole('button', { name: 'Details for MailLoop', exact: true }).click();
   const trigger = page.getByRole('button', { name: /more technologies for/ }).first();
   await trigger.tap();
   await expect(trigger).toHaveAttribute('aria-expanded', 'true');
@@ -434,17 +423,20 @@ test('loading services time out and empty data remains usable', async ({ page })
   await page.route('https://api.github.com/**', () => {});
   await page.route('https://github-contributions-api.jogruber.de/**', () => {});
   await page.goto('/', { waitUntil: 'domcontentloaded' });
-  const repositories = page.getByRole('list', { name: 'Featured repositories' });
-  await expect(repositories).toHaveAttribute('aria-busy', 'true');
+  const statistics = page.getByRole('group', { name: 'GitHub statistics' });
+  await expect(statistics).toHaveAttribute('aria-busy', 'true');
   await expect(page.getByRole('status', { name: 'Loading GitHub contributions' })).toBeVisible();
-  await expect(repositories).toHaveAttribute('aria-busy', 'false');
+  await expect(statistics).toHaveAttribute('aria-busy', 'false');
+  await expect(page.getByText('Live GitHub statistics unavailable. Showing fallback totals where needed.')).toHaveCount(1);
   await expect(page.getByText('GitHub activity unavailable')).toBeVisible();
   await page.unroute('https://api.github.com/**');
   await page.unroute('https://github-contributions-api.jogruber.de/**');
   await page.route('https://api.github.com/**', route => route.fulfill({ headers: { "access-control-allow-origin": "*" }, json: route.request().url().includes('/repos?') ? [] : { public_repos: 0 } }));
   await page.route('https://github-contributions-api.jogruber.de/**', route => route.fulfill({ headers: { "access-control-allow-origin": "*" }, json: { contributions: [] } }));
   await page.reload();
-  await expect(page.getByText('No public repositories yet')).toBeVisible();
+  await expect(page.getByRole('group', { name: 'GitHub statistics' })).toHaveAttribute('aria-busy', 'false');
+  await expect(page.locator('.github-stat').first()).toContainText('0');
+  await expect(page.getByText('Featured Repositories')).toHaveCount(0);
   await expect(page.getByText('GitHub activity unavailable')).toBeVisible();
   await noOverflow(page);
 });

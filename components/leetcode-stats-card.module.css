@@ -1,8 +1,8 @@
 .card {
-  --lc-easy: #15803d;
-  --lc-medium: #f2be3e;
-  --lc-medium-label: #966000;
-  --lc-hard: #dc2626;
+  --lc-easy: var(--fg);
+  --lc-medium: var(--fg-secondary);
+  --lc-medium-label: var(--fg-secondary);
+  --lc-hard: var(--fg-muted);
   --mouse-x: 50%;
   --mouse-y: 50%;
   position: relative;
@@ -17,12 +17,6 @@
   border-radius: 1rem;
 }
 
-:global([data-theme="dark"]) .card {
-  --lc-easy: #4ade80;
-  --lc-medium: #ffa116;
-  --lc-medium-label: var(--lc-medium);
-  --lc-hard: #fb7185;
-}
 
 .card::after {
   position: absolute;
@@ -45,13 +39,13 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  gap: 1.5rem;
-  padding-block: 1.5rem;
+  gap: 12px;
+  padding-block: 12px;
 }
 .ringWrap {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 124px;
+  height: 124px;
   margin-inline: auto;
   flex-shrink: 0;
 }
@@ -77,16 +71,16 @@
 .segment[data-difficulty="hard"] { color: var(--lc-hard); }
 .rows {
   display: grid;
-  gap: 0.75rem;
+  gap: 4px;
   min-width: 0;
 }
 .difficultyRow {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.625rem;
-  height: 64px;
-  padding-inline: 0.75rem;
+  gap: 6px;
+  min-height: 44px;
+  padding-inline: 6px;
   border: 1px solid transparent;
   border-radius: 0.75rem;
   transition: background-color 180ms ease-out, border-color 180ms ease-out;
@@ -111,7 +105,7 @@
 }
 .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--difficulty-color); }
 .barTrack {
-  height: 6px;
+  height: 4px;
   overflow: hidden;
   border-radius: 999px;
   background: var(--line);
@@ -136,7 +130,7 @@
   flex-wrap: wrap;
   gap: 0.75rem;
   min-height: 37px;
-  padding-top: 1.25rem;
+  padding-top: 10px;
   border-top: 1px solid var(--line);
 }
 .offline {
@@ -171,8 +165,14 @@
 @media (min-width: 768px) {
   .card { padding: 1.75rem; }
 }
-@container (min-width: 560px) {
-  .body { grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.15fr); gap: 2rem; }
+@container (min-width: 360px) {
+  .body { grid-template-columns: 124px minmax(0, 1fr); gap: 16px; }
+}
+@container (max-width: 359px) {
+  .body { grid-template-columns: 100px minmax(0, 1fr); gap: 6px; }
+  .ringWrap { width: 100px; height: 100px; }
+  .difficultyRow > div:first-child { flex-wrap: wrap; gap: 2px; }
+  .difficultyRow { padding-inline: 2px; }
 }
 @media (hover: hover) and (pointer: fine) {
   :global([data-theme="dark"]) .card:hover::after { opacity: 1; }
@@ -184,3 +184,12 @@
   .profileLink { transition: none; }
   .shimmer { animation: none; }
 }
+
+.ringCenter > p:first-child { font-size: 26px; }
+.ringCenter > p:last-child { font-size: 9px; margin-top: 3px; }
+.difficultyLabel { font-size: 11px; gap: 5px; color: var(--fg-secondary); }
+.difficultyRow > div:first-child { gap: 4px; }
+.difficultyRow > div:first-child > span:last-child { font-size: 10px; }
+.skeletonNumber { width: 48px; height: 26px; }
+.skeletonCaption { width: 65px; height: 9px; }
+.skeletonCount { width: 64px; }

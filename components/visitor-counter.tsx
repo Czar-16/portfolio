@@ -9,7 +9,7 @@ export function VisitorCounter() {
   const visible = useDocumentVisible();
 
   return (
-    <section className="shell flex justify-center pb-12 sm:pb-16" aria-label="Portfolio visitors">
+    <section className="section-frame flex justify-center" aria-label="Portfolio visitors">
       <div className={styles.card}>
         <svg viewBox="0 0 64 40" width="52" height="34" fill="none" aria-hidden="true" className={styles.eye} data-paused={!visible}>
           <g className={styles.lids}>

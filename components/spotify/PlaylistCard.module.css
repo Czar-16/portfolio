@@ -1,0 +1,23 @@
+.card {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background:
+    linear-gradient(125deg, color-mix(in oklab, var(--card) 96%, var(--fg)), var(--card) 65%) padding-box,
+    linear-gradient(125deg, color-mix(in oklab, var(--fg) 38%, transparent), var(--line) 45%, color-mix(in oklab, var(--fg) 22%, transparent)) border-box;
+  box-shadow:
+    0 0 24px -10px color-mix(in oklab, var(--fg) 16%, transparent),
+    0 8px 20px -14px color-mix(in oklab, var(--fg) 12%, transparent);
+  transition: box-shadow 200ms ease;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    box-shadow:
+      0 0 30px -8px color-mix(in oklab, var(--fg) 24%, transparent),
+      0 8px 20px -12px color-mix(in oklab, var(--fg) 14%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+}

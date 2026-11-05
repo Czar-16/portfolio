@@ -214,7 +214,7 @@ export function LeetCodeStatsCard() {
     <article ref={cardRef} className={`card card-lift rounded-2xl ${styles.card}`} data-cursor-glow-border aria-label="LeetCode problem-solving statistics" aria-busy={stats === null}>
       <header className="flex h-7 items-center justify-between gap-4">
         <div className="flex items-center gap-2.5">
-          <svg className="h-6 w-6 text-[#FFA116]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <svg className="h-6 w-6 text-fg-secondary" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="m16 3-9 9a4 4 0 0 0 0 6l3 3a4 4 0 0 0 6 0l2-2" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" />
             <path d="m8 11 3-3a4 4 0 0 1 6 0l2 2M11 16h10" stroke="var(--fg)" strokeWidth="2.3" strokeLinecap="round" />
           </svg>

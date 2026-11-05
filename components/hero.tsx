@@ -10,10 +10,8 @@ export function Hero() {
       cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
     }).catch(() => {});
   }, []);
-  return <>
-    <div className="profile-banner" aria-hidden="true" />
-    <section id="profile" className="profile section-frame">
-      <div className="flex items-center gap-4">
+  return <section id="profile" className="profile section-frame">
+      <div className="profile-intro flex items-center gap-4">
         <Image src="/profile/profile.jpg" alt="Anoop Jha" width={64} height={64} preload className="rounded-md border border-line object-cover" />
         <div><h1>{site.name}</h1><p className="mt-1 text-xs text-fg-secondary">@{site.handle}</p></div>
       </div>
@@ -31,6 +29,5 @@ export function Hero() {
         <a href={socials.x} target="_blank" rel="noopener noreferrer" className="btn"><XIcon size={13} /> Twitter</a>
         <a href={socials.linkedin} target="_blank" rel="noopener noreferrer" className="btn"><LinkedinIcon size={14} /> LinkedIn</a>
       </div>
-    </section>
-  </>;
+    </section>;
 }

@@ -1,13 +1,11 @@
 "use client";
 
-import { GracefulImage } from "@/components/graceful-image";
+import { ProjectCard } from "@/components/project-card";
 import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { projects } from "@/data/projects";
-import { GithubIcon, ExternalIcon, ArrowRightIcon } from "@/components/icons";
+import { ArrowRightIcon } from "@/components/icons";
 import { SectionHeading } from "@/components/section-heading";
-import { ProjectTechStack } from "@/components/project-tech-stack";
-import { PrivateRepoButton } from "@/components/private-repo-button";
 
 export function FeaturedProjects() {
   const featuredOrder = ["mailloop", "purepin", "formpilot"];
@@ -28,72 +26,8 @@ export function FeaturedProjects() {
           action="All projects"
           actionHref="/projects"
         />
-        <div className="mt-5 grid grid-cols-1 gap-4 min-[480px]:grid-cols-2">
-          {featured.map((project) => {
-            const liveLink =
-              project.links.find((l) => l.label === "Live" && !l.private)?.href ||
-              project.links.find((l) => !l.private)?.href;
-            const repoLink = project.links.find(
-              (l) => l.label === "GitHub",
-            );
-
-            return (
-              <Reveal key={project.slug} className="h-full">
-                <div className="card card-lift group flex h-full flex-col overflow-hidden">
-                  <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/5 bg-black/40">
-                    <GracefulImage
-                      src={project.image}
-                      alt={project.imageAlt}
-                      sizes="(min-width: 576px) 260px, 100vw"
-                      className={`project-image ${project.cli ? "object-contain" : "object-cover object-top"}`}
-                    />
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent" />
-                  </div>
-
-                  <div className="flex flex-1 flex-col justify-between p-4">
-                    <div>
-                      <h3 className="text-sm font-semibold">{project.name}</h3>
-                      {project.status === "Still building" && (
-                        <span className="badge mt-2 text-fg-muted">
-                          {project.status}
-                        </span>
-                      )}
-                      <p className="mt-2 text-sm text-fg-secondary">
-                        {project.description}
-                      </p>
-                      <ProjectTechStack tech={project.tech} projectName={project.name} className="mt-4 gap-2" />
-                    </div>
-                    <div className="mt-6 flex flex-wrap gap-3">
-                      {project.cli ? (
-                        <span className="badge self-center">CLI / Terminal app</span>
-                      ) : liveLink && (
-                        <a
-                          href={liveLink}
-                          className="btn btn-primary"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          View <ExternalIcon size={13} />
-                        </a>
-                      )}
-                      {repoLink?.private ? (
-                        <PrivateRepoButton projectName={project.name} />
-                      ) : repoLink && (
-                        <a
-                          href={repoLink.href}
-                          className="btn"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <GithubIcon size={14} /> {project.cli ? "GitHub" : "Code"}
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-            );
-          })}
+        <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 min-[480px]:grid-cols-2">
+          {featured.map(project => <Reveal key={project.slug} className="h-full"><ProjectCard project={project} /></Reveal>)}
         </div>
 
         {projects.length > 6 && (
@@ -118,7 +52,7 @@ export function FeaturedProjects() {
                   projects page.
                 </p>
               </div>
-              <span className="relative inline-flex shrink-0 items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(59,158,255,0.35)] transition-colors group-hover:bg-accent/90">
+              <span className="relative inline-flex shrink-0 items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-accent-contrast transition-colors group-hover:bg-accent/90">
                 See more projects <ArrowRightIcon size={15} className="interaction-arrow" />
               </span>
             </Link>

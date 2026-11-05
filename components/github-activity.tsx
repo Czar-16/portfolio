@@ -3,15 +3,8 @@
 import { useEffect, useState } from "react";
 
 import { github } from "@/data/site";
-import { RepoIcon, StarCountIcon } from "@/components/icons";
+import { GithubIcon } from "@/components/icons";
 import { GitHubHeatmap } from "@/components/github-heatmap";
-
-type RepoRow = {
-  name: string;
-  description: string;
-  href: string;
-  stars: number;
-};
 
 const STATS_FALLBACK = {
   repos: 22,
@@ -19,61 +12,10 @@ const STATS_FALLBACK = {
   contributions: "400+",
 };
 
-const FALLBACK_REPOS: RepoRow[] = [
-  {
-    name: "DesignArena",
-    description: "AI-powered LLD practice platform",
-    href: "https://github.com/Czar-16/DesignArena",
-    stars: 1,
-  },
-  {
-    name: "BuzzLine",
-    description: "Real-time chat platform",
-    href: "https://github.com/Czar-16/BuzzLine",
-    stars: 2,
-  },
-  {
-    name: "PurePin",
-    description: "Pinterest image downloader",
-    href: "https://github.com/Czar-16/PurePin",
-    stars: 0,
-  },
-  {
-    name: "Payloop",
-    description: "Digital wallet application",
-    href: "https://github.com/Czar-16/payloop",
-    stars: 0,
-  },
-  {
-    name: "Corner",
-    description: "Medium-style blogging platform",
-    href: "https://github.com/Czar-16/Corner",
-    stars: 0,
-  },
-  {
-    name: "Blackout",
-    description: "Dark mode extension",
-    href: "https://github.com/Czar-16/Blackout",
-    stars: 0,
-  },
-  {
-    name: "Clixx",
-    description: "YouTube-like application",
-    href: "https://github.com/Czar-16/Clixx",
-    stars: 0,
-  },
-  {
-    name: "EchoNode",
-    description: "Aesthetic web app",
-    href: "https://github.com/Czar-16/EchoNode",
-    stars: 0,
-  },
-];
-
 export function GitHubActivity() {
   const [stats, setStats] = useState(STATS_FALLBACK);
   const [unavailable, setUnavailable] = useState(false);
-  const [repos, setRepos] = useState<RepoRow[] | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -98,68 +40,20 @@ export function GitHubActivity() {
 
         if (cancelled) return;
 
-        let totalRepos = STATS_FALLBACK.repos;
-
-        if (userRes.ok) {
-          const user = (await userRes.json()) as {
-            public_repos?: number;
-          };
-
-          if (typeof user.public_repos === "number") {
-            totalRepos = user.public_repos;
-          }
-        }
-
-        if (reposRes.ok) {
-          const list = (await reposRes.json()) as Array<{
-            name: string;
-            description: string | null;
-            html_url: string;
-            stargazers_count: number;
-          }>;
-
-          const rows: RepoRow[] = list
-            .filter((repo) => !repo.name.startsWith("."))
-            .map((repo) => ({
-              name: repo.name,
-              description: repo.description?.slice(0, 90) ?? "",
-              href: repo.html_url,
-              stars: repo.stargazers_count ?? 0,
-            }));
-
-          const totalStars = list.reduce(
-            (total, repo) => total + (repo.stargazers_count ?? 0),
-            0,
-          );
-
-          setStats({
-            repos: totalRepos,
-            stars: totalStars,
-            contributions: STATS_FALLBACK.contributions,
-          });
-
-          setRepos(rows);
-        } else {
-          setUnavailable(true);
-          const body = await reposRes.text().catch(() => "");
-          const limited = body.toLowerCase().includes("rate limit");
-
-          setStats((current) => ({
-            ...current,
-            repos: totalRepos,
-          }));
-
-          if (limited) {
-            setRepos(FALLBACK_REPOS);
-          } else {
-            setRepos([]);
-          }
-        }
+        if (!userRes.ok || !reposRes.ok) setUnavailable(true);
+        const user = userRes.ok ? await userRes.json() as { public_repos?: number } : null;
+        const list = reposRes.ok ? await reposRes.json() as Array<{ stargazers_count?: number }> : null;
+        if (cancelled) return;
+        setStats({
+          repos: typeof user?.public_repos === "number" ? user.public_repos : STATS_FALLBACK.repos,
+          stars: list ? list.reduce((total, repo) => total + (repo.stargazers_count ?? 0), 0) : STATS_FALLBACK.stars,
+          contributions: STATS_FALLBACK.contributions,
+        });
       } catch {
         if (cancelled) return;
         setUnavailable(true);
-        setRepos((previous) => previous ?? FALLBACK_REPOS);
       } finally {
+        if (!cancelled) setLoading(false);
         window.clearTimeout(timeout);
       }
     })();
@@ -171,9 +65,6 @@ export function GitHubActivity() {
     };
   }, []);
 
-  const visibleRepos = repos ?? [];
-  const isLoading = repos === null;
-
   return (
     <div className="flex h-full min-w-0 flex-col gap-4">
       {/* Section heading */}
@@ -183,10 +74,7 @@ export function GitHubActivity() {
         rel="noopener noreferrer"
         className="flex items-center gap-2"
       >
-        <span
-          className="h-2 w-2 shrink-0 rounded-full bg-accent"
-          aria-hidden="true"
-        />
+        <GithubIcon size={16} className="text-fg-secondary" />
 
         <h3 className="text-sm font-semibold tracking-tight text-fg">
           GitHub Activity
@@ -196,13 +84,13 @@ export function GitHubActivity() {
       {/* Contribution heatmap */}
       <div
         data-heatmap-wrapper
-        className="overflow-hidden rounded-xl border border-line bg-card p-4 dark:border-[#1e293b] dark:bg-[#0d1117]"
+        className="github-calendar-panel"
       >
         <GitHubHeatmap />
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-3">
+      <div className="github-stats" role="group" aria-label="GitHub statistics" aria-busy={loading}>
         {[
           {
             value: String(stats.repos),
@@ -219,87 +107,22 @@ export function GitHubActivity() {
         ].map((stat) => (
           <div
             key={stat.label}
-            className="rounded-lg border border-line bg-card-elevated px-2 py-3 text-center"
+            className="github-stat"
           >
-            <p className="text-lg font-bold leading-none tracking-tight text-fg">
+            <p className="text-sm font-semibold leading-none tracking-tight text-fg">
               {stat.value}
             </p>
 
-            <p className="mt-1 break-words text-[11px] leading-4 text-fg-muted">
+            <p className="text-[10px] leading-4 text-fg-secondary">
               {stat.label}
             </p>
           </div>
         ))}
       </div>
 
-      {/* Featured repositories */}
-      <div className="flex flex-1 flex-col">
-        <p className="text-xs font-semibold text-fg">Featured Repositories</p>
-
-        <ul aria-label="Featured repositories" aria-busy={isLoading} className="mt-2 flex max-h-[320px] flex-col divide-y divide-line overflow-y-auto rounded-lg border border-line bg-card">
-          {isLoading ? (
-            Array.from({ length: 8 }).map((_, index) => (
-              <li key={index} className="flex items-center gap-3 px-3 py-2.5">
-                <span className="h-7 w-7 shrink-0 animate-pulse rounded-md bg-line" />
-
-                <span className="flex-1 space-y-1.5">
-                  <span className="block h-3 w-24 animate-pulse rounded bg-line" />
-
-                  <span className="block h-2.5 w-full max-w-40 animate-pulse rounded bg-line/60" />
-                </span>
-              </li>
-            ))
-          ) : visibleRepos.length === 0 ? (
-            <li className="px-4 py-6 text-center text-sm text-fg-muted">
-              {unavailable ? "Couldn’t load repos right now" : "No public repositories yet"} —{" "}
-              <a
-                href={github.profileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-accent hover:underline"
-              >
-                view on GitHub
-              </a>
-            </li>
-          ) : (
-            visibleRepos.map((repo) => (
-              <li key={repo.name}>
-                <a
-                  href={repo.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 px-3 py-2.5 transition-colors hover:bg-card-elevated"
-                >
-                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-accent/10 text-accent">
-                    <RepoIcon size={13} />
-                  </span>
-
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[13px] font-medium leading-none text-fg">
-                      {repo.name}
-                    </span>
-                  </span>
-
-                  <span className="inline-flex shrink-0 items-center gap-1 text-xs text-fg-muted">
-                    <StarCountIcon size={11} />
-                    {repo.stars}
-                  </span>
-                </a>
-              </li>
-            ))
-          )}
-        </ul>
-
-        {/* GitHub link */}
-        <a
-          href={github.profileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-2 inline-flex text-xs font-medium text-accent hover:underline"
-        >
-          See more on GitHub →
-        </a>
-      </div>
+      <p role="status" className="sr-only">
+        {unavailable ? "Live GitHub statistics unavailable. Showing fallback totals where needed." : ""}
+      </p>
     </div>
   );
 }
