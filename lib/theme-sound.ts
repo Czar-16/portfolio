@@ -22,7 +22,7 @@ export class ThemeSound {
       oscillator.frequency.setValueAtTime(from, now);
       oscillator.frequency.exponentialRampToValueAtTime(to, now + 0.09);
       envelope.gain.setValueAtTime(0.0001, now);
-      envelope.gain.exponentialRampToValueAtTime(0.06, now + 0.015);
+      envelope.gain.exponentialRampToValueAtTime(0.09, now + 0.015);
       envelope.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
       oscillator.connect(envelope);
       envelope.connect(context.destination);

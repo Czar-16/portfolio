@@ -1,22 +1,124 @@
 .card {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --lift-x: 0px;
+  --lift-y: 0px;
+  position: relative;
+  isolation: isolate;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.875rem;
+  gap: 1rem;
   max-width: 100%;
-  min-height: 76px;
-  padding: 1rem 1.5rem;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--card);
-  box-shadow: none;
+  min-height: 112px;
+  padding: 1.5rem 2rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--accent) 22%, var(--line));
+  border-radius: 16px;
+  background: linear-gradient(145deg, color-mix(in oklab, var(--card) 94%, var(--accent)), var(--card) 62%);
+  box-shadow: 0 16px 44px -34px color-mix(in oklab, var(--fg) 65%, transparent), inset 0 1px color-mix(in oklab, white 8%, transparent);
+  transform: perspective(900px) translate3d(var(--lift-x), var(--lift-y), 0) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transition: border-color 240ms ease, box-shadow 240ms ease, transform 120ms ease-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { border-color: color-mix(in oklab, var(--accent) 34%, var(--line)); box-shadow: 0 18px 46px -34px color-mix(in oklab, var(--fg) 58%, transparent), inset 0 1px color-mix(in oklab, white 8%, transparent); }
+  .card:hover .eye { filter: drop-shadow(0 4px 12px color-mix(in oklab, var(--accent) 38%, transparent)); transform: scale(1.06); }
 }
 
+.splashOverlay {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.dropGroup {
+  position: absolute;
+  inset: 0;
+}
+.drop, .splashRing { position: absolute; pointer-events: none; }
+.drop {
+  top: var(--drop-y);
+  left: var(--drop-x);
+  width: 9px;
+  height: 13px;
+  border: 1px solid rgb(238 251 255 / 84%);
+  border-radius: 52% 48% 56% 44% / 38% 42% 58% 62%;
+  background: radial-gradient(ellipse at 33% 27%, rgb(255 255 255 / 94%) 0 7%, transparent 26%), linear-gradient(150deg, #f7fdff 3%, #c5edf4 25%, #84bdcb 58%, #477f90 100%);
+  box-shadow: inset -1.5px -1px 2px rgb(24 70 88 / 36%), inset 1px 1px 1px rgb(255 255 255 / 92%), 0 1px 3px rgb(69 151 177 / 32%);
+  opacity: 0;
+  transform: translate(-50%, -45%) scale(.35, .2);
+  animation: tear-fall 980ms cubic-bezier(.34, .04, .76, .42) both;
+}
+.drop::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 2px;
+  height: 5px;
+  border-radius: 50%;
+  background: linear-gradient(white, rgb(255 255 255 / 28%));
+  filter: blur(.2px);
+}
+.splashRing {
+  top: calc(var(--drop-y) + var(--fall) + 9px);
+  left: var(--drop-x);
+  width: 3px;
+  height: 3px;
+  border: 1px solid rgb(183 231 241 / 90%);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(.25, .4);
+  animation: border-splash 280ms ease-out 850ms both;
+  translate: -50% 0;
+}
+
+.eyeButton {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 52px;
+  width: 52px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.comicText {
+  position: absolute;
+  z-index: 2;
+  top: -13px;
+  right: -20px;
+  padding: 2px 5px;
+  border: 1.5px solid #7f1d1d;
+  border-radius: 5px 7px 4px 6px;
+  background: #fff4dc;
+  color: #c81e1e;
+  font: 900 10px/1.1 var(--font-geist-mono), monospace;
+  letter-spacing: -.4px;
+  opacity: 0;
+  transform: scale(.3) rotate(-12deg);
+  pointer-events: none;
+}
+.eyeButton[data-clicked="true"] .comicText { animation: comic-pop 2.2s cubic-bezier(.2, .8, .25, 1) both; }
+.eyeButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
 .eye {
   --eye-white: #c6d0d6;
   --eye-shadow: #6f818f;
   flex-shrink: 0;
+  overflow: visible;
   color: var(--accent);
+  filter: drop-shadow(0 3px 8px color-mix(in oklab, var(--accent) 24%, transparent));
+  transition: filter 240ms ease, transform 240ms ease;
 }
 :global([data-theme="light"]) .eye {
   --eye-white: #f4f7f9;
@@ -27,6 +129,17 @@
   transform-origin: 32px 20px;
   animation: blink 13s linear infinite;
 }
+.lashes {
+  transform-box: view-box;
+  transform-origin: 32px 20px;
+  animation: blink 13s linear infinite;
+}
+.eyeButton[data-clicked="true"] .lids,
+.eyeButton[data-clicked="true"] .lashes { animation: click-blink 440ms cubic-bezier(.35, 0, .65, 1) both; }
+.eyeButton[data-clicked="true"] .eye { filter: drop-shadow(0 0 7px color-mix(in oklab, var(--accent) 72%, transparent)); }
+.alert { opacity: 0; transform-box: view-box; transform-origin: 56px 8px; pointer-events: none; }
+.eyeButton[data-clicked="true"] .eye { --eye-white: #f3c3c7; --eye-shadow: #cf737d; color: #e04450; }
+.eyeButton[data-clicked="true"] .alert { animation: alert-pop 2.2s ease-out both; }
 .gaze {
   transform: translate(var(--gaze-x, 0px), var(--gaze-y, 0px));
   transition: transform 240ms cubic-bezier(.2, .65, .3, 1);
@@ -39,8 +152,11 @@
 }
 .eye[data-tracking="true"] .idle { animation: none; }
 .eye[data-paused="true"] .lids,
+.eye[data-paused="true"] .lashes,
 .eye[data-paused="true"] .idle,
 .eye[data-paused="true"] .pupil { animation-play-state: paused; }
+.splashOverlay[data-reduced="true"] .drop { animation: reduced-drop 650ms ease-out both; }
+.splashOverlay[data-reduced="true"] .splashRing { display: none; }
 
 .text {
   min-width: 13rem;
@@ -58,7 +174,37 @@
 /* Short, asymmetric closures and an occasional double blink feel less mechanical. */
 @keyframes blink {
   0%, 27%, 29.4%, 59.5%, 61.6%, 63.8%, 94%, 96.4%, 100% { transform: scaleY(1); }
-  28.3%, 60.4%, 62.7%, 95% { transform: scaleY(.035); }
+  28.3%, 60.4%, 62.7%, 95% { transform: scaleY(0); }
+}
+@keyframes click-blink {
+  0%, 100% { transform: scaleY(1); }
+  38%, 62% { transform: scaleY(0); }
+}
+@keyframes tear-fall {
+  0% { opacity: 0; transform: translate(-50%, -45%) scale(.35, .2); }
+  9% { opacity: 1; transform: translate(-50%, -45%) scale(.72, .66); }
+  18% { opacity: 1; transform: translate(-50%, -20%) scale(.88, 1.08); }
+  22% { opacity: 1; transform: translate(-50%, 0) scale(.82, 1.12); }
+  88% { opacity: 1; transform: translate(-50%, calc(var(--fall) * .96)) scale(.9, 1.06); }
+  94% { opacity: 1; transform: translate(-50%, var(--fall)) scale(1.12, .72); }
+  100% { opacity: 0; transform: translate(-50%, var(--fall)) scale(1.22, .42); }
+}
+@keyframes border-splash {
+  0% { opacity: 0; transform: scale(.25, .4); }
+  30% { opacity: .82; transform: scale(3.2, 1.25); }
+  100% { opacity: 0; transform: scale(5.4, .55); }
+}
+@keyframes alert-pop {
+  0% { opacity: 0; transform: translateY(3px) scale(.45); }
+  12% { opacity: 1; transform: translateY(-2px) scale(1.15); }
+  22%, 75% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-5px) scale(.8); }
+}
+@keyframes comic-pop {
+  0% { opacity: 0; transform: scale(.25) rotate(-12deg) translateY(5px); }
+  12% { opacity: 1; transform: scale(1.2) rotate(7deg) translateY(-3px); }
+  22%, 78% { opacity: 1; transform: scale(1) rotate(-4deg) translateY(0); }
+  100% { opacity: 0; transform: scale(.8) rotate(5deg) translateY(-8px); }
 }
 @keyframes look {
   0%, 20%, 42%, 72%, 100% { transform: translate(0, 0); }
@@ -75,10 +221,21 @@
 @media (max-width: 380px) {
   .card { gap: 0.625rem; padding: 0.875rem 1rem; }
   .text { min-width: 0; }
+  .eyeButton { flex-basis: 44px; width: 44px; height: 44px; }
   .eye { width: 44px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lids, .idle, .pupil { animation: none; }
+  .lids, .lashes, .idle, .pupil, .alert, .comicText { animation: none; }
   .gaze { transition: none; transform: none; }
+  .eyeButton[data-clicked="true"] .lids,
+  .eyeButton[data-clicked="true"] .lashes { transform: scaleY(0); }
+  .eyeButton[data-clicked="true"] .alert { opacity: 1; }
+  .eyeButton[data-clicked="true"] .comicText { opacity: 1; transform: rotate(-4deg); }
+  .eyeButton[data-clicked="true"] { background: color-mix(in oklab, var(--accent) 16%, transparent); }
+}
+@keyframes reduced-drop {
+  0% { opacity: 0; transform: translate(-50%, -45%) scale(.45, .3); }
+  18%, 72% { opacity: .9; transform: translate(-50%, -25%) scale(.84, 1); }
+  100% { opacity: 0; }
 }

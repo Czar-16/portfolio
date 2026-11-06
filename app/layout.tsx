@@ -11,6 +11,7 @@ import { CursorGlow } from "@/components/cursor-glow";
 import { InteractionProvider } from "@/components/interaction-provider";
 import { INTRO_BOOTSTRAP } from "@/components/intro-preferences";
 import { VisitorProvider } from "@/components/visitor-provider";
+import { CursorWetTrail } from "@/components/cursor-wet-trail";
 
 const instrumentSans = Instrument_Sans({
   variable: "--font-instrument-sans",
@@ -64,6 +65,7 @@ export default function RootLayout({
           </InteractionProvider>
         </MotionProvider>
         <CursorGlow />
+        <CursorWetTrail />
       </body>
     </html>
   );

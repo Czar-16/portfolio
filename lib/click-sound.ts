@@ -1,4 +1,4 @@
-const CLICK_GAIN = 0.7;
+const CLICK_GAIN = 0.82;
 
 /** Short filtered noise click, matching ramx.in's Web Audio timbre. */
 export class ClickSound {

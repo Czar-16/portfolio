@@ -112,6 +112,11 @@ export const projects: Project[] = [
     ],
     links: [
       {
+        label: "Live",
+        href: "https://addons.mozilla.org/en-US/firefox/addon/formpilot-by-czar16/",
+        external: true,
+      },
+      {
         label: "GitHub",
         href: "https://github.com/Czar-16/formpilot",
         external: true,
