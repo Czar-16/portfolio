@@ -15,7 +15,7 @@ export const site = {
     "Full-stack developer building real-world products with TypeScript, Next.js, and scalable backend systems.",
   availability: "Open to Software Engineering opportunities",
   locale: "en_IN",
-  url: "https://czar-16.dev",
+  url: "https://anoopbuilds.in",
 } as const;
 
 export const socials = {

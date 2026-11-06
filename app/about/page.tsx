@@ -3,6 +3,9 @@ import Link from "next/link";
 import { site, socials, contact, resume } from "@/data/site";
 import { Reveal } from "@/components/reveal";
 import { AnimatedName } from "@/components/animated-name";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "About Anoop Jha", description: "Learn about Anoop Jha, a full-stack developer building fast, intuitive products, and find contact and professional links.", alternates: { canonical: "/about" } };
 import { CopyButton } from "@/components/copy-button";
 import {
   GithubIcon,

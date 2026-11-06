@@ -3,6 +3,9 @@ import { projects } from "@/data/projects";
 import { Reveal, StaggerChildren, StaggerItem } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { GithubIcon, ArrowRightIcon } from "@/components/icons";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Projects", description: "Selected products designed, built, and shipped by Anoop Jha, including their technologies, roles, and project details.", alternates: { canonical: "/projects" } };
 
 const GITHUB_REPOS_URL = "https://github.com/Czar-16?tab=repositories";
 

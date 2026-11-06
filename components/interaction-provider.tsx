@@ -32,7 +32,8 @@ const InteractionContext = createContext<{
   toggle: () => void;
   playClick: () => void;
   playTheme: (theme: "light" | "dark") => void;
-}>({ enabled: true, toggle: () => {}, playClick: () => {}, playTheme: () => {} });
+  playCrack: () => void;
+}>({ enabled: true, toggle: () => {}, playClick: () => {}, playTheme: () => {}, playCrack: () => {} });
 export const useInteraction = () => useContext(InteractionContext);
 
 type Burst = { x: number; y: number; start: number };
@@ -145,6 +146,63 @@ export function InteractionProvider({ children }: { children: React.ReactNode })
   const enabled = useSyncExternalStore(subscribe, getEnabled, () => true);
   const audio = useRef<ClickSound | null>(null);
   const themeAudio = useRef<ThemeSound | null>(null);
+  const playCrack = useCallback(() => {
+    if (!getEnabled() || document.hidden) return;
+    try {
+      if (typeof AudioContext === "undefined") return;
+      const context = new AudioContext();
+      if (context.state === "suspended") void context.resume();
+      const now = context.currentTime;
+      const compressor = context.createDynamicsCompressor();
+      const master = context.createGain();
+      compressor.threshold.value = -15;
+      compressor.knee.value = 16;
+      compressor.ratio.value = 5;
+      compressor.attack.value = 0.002;
+      compressor.release.value = 0.22;
+      master.gain.value = 1.15;
+      compressor.connect(master).connect(context.destination);
+
+      // A forceful, noisy impact gives the crack its initial glass-break transient.
+      const length = Math.ceil(context.sampleRate * 0.42);
+      const buffer = context.createBuffer(1, length, context.sampleRate);
+      const samples = buffer.getChannelData(0);
+      for (let i = 0; i < length; i++) {
+        const t = i / context.sampleRate;
+        samples[i] = (Math.random() * 2 - 1) * Math.exp(-t * 19) * (0.72 + 0.28 * Math.sin(t * 2100));
+      }
+      const impact = context.createBufferSource();
+      const lowGlass = context.createBiquadFilter();
+      const impactGain = context.createGain();
+      impact.buffer = buffer;
+      lowGlass.type = "highpass";
+      lowGlass.frequency.value = 420;
+      impactGain.gain.setValueAtTime(0.9, now);
+      impactGain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+      impact.connect(lowGlass).connect(impactGain).connect(compressor);
+      impact.start(now);
+
+      // Staggered inharmonic partials make the impact ring like fractured glass.
+      for (let i = 0; i < 13; i++) {
+        const start = now + Math.random() * 0.09;
+        const oscillator = context.createOscillator();
+        const shardGain = context.createGain();
+        oscillator.type = i % 3 === 0 ? "triangle" : "sine";
+        oscillator.frequency.setValueAtTime(950 + Math.random() * 5200, start);
+        oscillator.detune.value = (Math.random() - 0.5) * 38;
+        const peak = 0.22 + Math.random() * 0.38;
+        shardGain.gain.setValueAtTime(0.0001, start);
+        shardGain.gain.linearRampToValueAtTime(peak, start + 0.003);
+        shardGain.gain.exponentialRampToValueAtTime(0.0001, start + 0.16 + Math.random() * 0.62);
+        oscillator.connect(shardGain).connect(compressor);
+        oscillator.start(start);
+        oscillator.stop(start + 0.85);
+      }
+      window.setTimeout(() => { void context.close().catch(() => {}); }, 1100);
+    } catch {
+      // Sound support must never interrupt the eye interaction.
+    }
+  }, []);
   const playClick = useCallback(() => {
     if (!getEnabled() || document.hidden) return;
     audio.current ??= new ClickSound();
@@ -179,7 +237,7 @@ export function InteractionProvider({ children }: { children: React.ReactNode })
     };
   }, []);
 
-  const value = useMemo(() => ({ enabled, toggle, playClick, playTheme }), [enabled, toggle, playClick, playTheme]);
+  const value = useMemo(() => ({ enabled, toggle, playClick, playTheme, playCrack }), [enabled, toggle, playClick, playTheme, playCrack]);
   return <InteractionContext.Provider value={value}>{children}<InteractionEffects playClick={playClick} /></InteractionContext.Provider>;
 }
 

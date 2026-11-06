@@ -3,6 +3,9 @@ import { Reveal, StaggerChildren, StaggerItem } from "@/components/reveal";
 import { WatchPoster } from "@/components/watch-poster";
 import { FilmIcon } from "@/components/icons";
 import { WatchClosingCard } from "@/components/watch-closing-card";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Movies, Documentaries & Series", description: "Anoop Jha's handpicked collection of movies, documentaries, and series.", alternates: { canonical: "/watch" } };
 
 export default function WatchPage() {
   return (

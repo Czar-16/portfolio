@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import styles from "./visitor-counter.module.css";
 import { useReducedMotion } from "@/components/use-reduced-motion";
+import { useInteraction } from "@/components/interaction-provider";
 
 type Splash = { id: number; x: number; y: number; fall: number };
 type Crack = { id: number; x: number; y: number };
@@ -19,12 +20,14 @@ export function VisitorCounter() {
   const [glitchId, setGlitchId] = useState(0);
   const crackId = useRef(0);
   const reduced = useReducedMotion();
+  const { playCrack } = useInteraction();
 
   useEffect(() => {
     const activate = () => {
       const card = cardRef.current;
       const eye = card?.querySelector<SVGSVGElement>("[data-visitor-eye]");
       if (!card || !eye) return;
+      playCrack();
       if (!reduced) setGlitchId((current) => current + 1);
       const cardBounds = card.getBoundingClientRect();
       const lowerLid = eye.createSVGPoint();
@@ -40,7 +43,7 @@ export function VisitorCounter() {
     };
     window.addEventListener("visitor-eye-tear", activate);
     return () => window.removeEventListener("visitor-eye-tear", activate);
-  }, [reduced]);
+  }, [reduced, playCrack]);
 
   useEffect(() => {
     const card = cardRef.current;
@@ -71,7 +74,7 @@ export function VisitorCounter() {
       <div ref={cardRef} className={styles.card} data-visitor-card>
         <VisitorEye />
         {!reduced && glitchId > 0 && (
-          <div key={glitchId} className={styles.glitch} aria-hidden="true">
+          <div key={`glitch-${glitchId}`} className={styles.glitch} aria-hidden="true">
             <span className={`${styles.glitchLayer} ${styles.glitchRed}`} />
             <span className={`${styles.glitchLayer} ${styles.glitchBlue}`} />
             <span className={styles.glitchScanlines} />
@@ -79,7 +82,7 @@ export function VisitorCounter() {
         )}
         {!reduced && crack && (
           <svg
-            key={crack.id}
+            key={`crack-${crack.id}`}
             className={styles.crack}
             style={{ "--crack-x": `${crack.x}%`, "--crack-y": `${crack.y}%` } as CSSProperties}
             viewBox="0 0 100 100"
@@ -94,7 +97,7 @@ export function VisitorCounter() {
           </svg>
         )}
         {splash && (
-          <div key={splash.id} className={styles.splashOverlay} aria-hidden="true" data-reduced={reduced}>
+          <div key={`splash-${splash.id}`} className={styles.splashOverlay} aria-hidden="true" data-reduced={reduced}>
             <span
               className={styles.dropGroup}
               style={{
@@ -115,7 +118,7 @@ export function VisitorCounter() {
         )}
         <p className={styles.text} aria-live="polite" aria-atomic="true" aria-busy={status === "loading"}>
           {status === "ready" ? (
-            <><span className={styles.number}>{count!.toLocaleString("en-US")}</span> {count === 1 ? "visitor has" : "visitors have"} been here</>
+            <><span className={styles.number}>{count!.toLocaleString("en-US")}</span> {count === 1 ? "curious mind has" : "curious minds have"} stopped by</>
           ) : status === "loading" ? (
             <><span className={styles.number}>—</span> visitors have been here</>
           ) : "Visitor count unavailable"}

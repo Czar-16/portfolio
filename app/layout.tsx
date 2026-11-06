@@ -12,6 +12,7 @@ import { InteractionProvider } from "@/components/interaction-provider";
 import { INTRO_BOOTSTRAP } from "@/components/intro-preferences";
 import { VisitorProvider } from "@/components/visitor-provider";
 import { CursorWetTrail } from "@/components/cursor-wet-trail";
+import { site, socials } from "@/data/site";
 
 const instrumentSans = Instrument_Sans({
   variable: "--font-instrument-sans",
@@ -27,13 +28,31 @@ const publicSans = Public_Sans({ variable: "--font-public-sans", subsets: ["lati
 const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"], preload: false });
 
 export const metadata: Metadata = {
-  title: "Anoop Jha — Full-Stack Developer",
-  description: "Portfolio of Anoop Jha, a full-stack developer.",
+  metadataBase: new URL(site.url),
+  title: site.title,
+  description: site.description,
+  applicationName: site.name,
+  alternates: { canonical: "/" },
+  category: "technology",
+  creator: site.name,
+  publisher: site.name,
   openGraph: {
-    title: "Anoop Jha — Full-Stack Developer",
-    description: "Portfolio of Anoop Jha, a full-stack developer.",
+    title: site.title,
+    description: site.description,
     type: "website",
+    url: site.url,
+    siteName: site.name,
+    locale: site.locale,
+    images: [{ url: "/profile/profile.jpg", width: 600, height: 600, alt: "Anoop Jha" }],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: site.title,
+    description: site.description,
+    images: [{ url: "/profile/profile.jpg", alt: "Anoop Jha" }],
+    creator: "@itsCzar16",
+  },
+  authors: [{ name: site.name, url: site.url }],
 };
 
 export default function RootLayout({
@@ -51,6 +70,13 @@ export default function RootLayout({
     >
       <head><script dangerouslySetInnerHTML={{ __html: `(()=>{let t,b,f;try{t=localStorage.getItem('czar-theme');b=localStorage.getItem('czar-background');f=localStorage.getItem('czar-font')}catch{}document.documentElement.dataset.font=['contrast','developer'].includes(f)?f:'clean';document.documentElement.dataset.background=['aurora','constellation','bokeh','spotlight'].includes(b)?b:'particles';document.documentElement.dataset.theme=t==='light'||t==='dark'?t:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'})()` }} /><script dangerouslySetInnerHTML={{ __html: INTRO_BOOTSTRAP }} /></head>
       <body className="min-h-dvh flex flex-col">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            { "@type": "Person", "@id": `${site.url}/#person`, name: site.name, alternateName: site.handle, url: site.url, image: `${site.url}/profile/profile.jpg`, jobTitle: "Full-Stack Developer", description: site.positioning, sameAs: [socials.github, socials.x, socials.linkedin] },
+            { "@type": "WebSite", "@id": `${site.url}/#website`, name: site.title, url: site.url, description: site.description, inLanguage: site.locale, author: { "@id": `${site.url}/#person` } },
+          ],
+        }).replace(/</g, "\\u003c") }} />
         <AmbientBackground />
         <MotionProvider>
           <InteractionProvider>

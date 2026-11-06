@@ -6,6 +6,9 @@ import { StackCard, StackTile } from "@/components/stack-motion";
 import { ArrowRightIcon, CodeIcon, SparkIcon } from "@/components/icons";
 import styles from "./stack.module.css";
 import { SectionHeading } from "@/components/section-heading";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Technology Stack", description: "The languages, frontend and backend tools, data technologies, and deployment tools Anoop Jha uses to build products.", alternates: { canonical: "/stack" } };
 
 const categoryDetails: Record<string, { description: string; symbol: string }> = {
   languages: { description: "The foundations behind every build.", symbol: "</>" },

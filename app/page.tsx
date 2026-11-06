@@ -9,6 +9,10 @@ import { VisitorCounter } from "@/components/visitor-counter";
 import { CollectionPreviews } from "@/components/collection-previews";
 import { ClosingQuote } from "@/components/closing-quote";
 import { TerminalCard } from "@/components/TerminalCard";
+import type { Metadata } from "next";
+import { site } from "@/data/site";
+
+export const metadata: Metadata = { title: site.title, description: site.description, alternates: { canonical: "/" } };
 
 export default function Home() {
   return (
