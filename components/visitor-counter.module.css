@@ -37,6 +37,22 @@
   inset: 0;
 }
 .drop, .splashRing { position: absolute; pointer-events: none; }
+.scatterDrop {
+  position: absolute;
+  top: calc(var(--drop-y) + var(--fall) + 8px);
+  left: var(--drop-x);
+  width: 4px;
+  height: 6px;
+  border: 1px solid rgb(238 251 255 / 80%);
+  border-radius: 55% 45% 58% 42% / 40% 42% 58% 60%;
+  background: linear-gradient(145deg, #f7fdff, #84bdcb 68%, #477f90);
+  box-shadow: 0 1px 3px rgb(69 151 177 / 28%);
+  opacity: 0;
+  animation: scatter 280ms cubic-bezier(.2, .65, .3, 1) 850ms both;
+}
+.scatterLeft { --scatter-x: -10px; --scatter-y: -7px; }
+.scatterCenter { --scatter-x: 0px; --scatter-y: -11px; width: 3px; height: 5px; animation-delay: 858ms; }
+.scatterRight { --scatter-x: 10px; --scatter-y: -6px; animation-delay: 866ms; }
 .drop {
   top: var(--drop-y);
   left: var(--drop-x);
@@ -90,6 +106,73 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
+.eyeHint {
+  position: absolute;
+  z-index: 3;
+  top: calc(100% + 5px);
+  left: 50%;
+  width: max-content;
+  max-width: min(140px, 70vw);
+  padding: 4px 7px;
+  border: 1.5px solid #fde047;
+  border-radius: 5px 7px 4px 6px;
+  background: #080808;
+  color: #eabf24;
+  font: 900 10px/1.2 var(--font-geist-mono), monospace;
+  letter-spacing: -.4px;
+  text-align: center;
+  box-shadow: 0 0 0 1.5px #000, 1px 2px 0 #000;
+  transform: translateX(-50%) rotate(-3deg);
+  pointer-events: none;
+}
+.glitch {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  animation: glitch-fade 360ms steps(2, end) both;
+}
+.glitch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  backdrop-filter: brightness(1.12);
+  animation: brightness-flicker 360ms steps(2, end) both;
+}
+.glitchLayer, .glitchScanlines { position: absolute; inset: 0; pointer-events: none; }
+.glitchRed, .glitchBlue {
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: screen;
+  animation: glitch-shift 360ms steps(2, end) both;
+}
+.glitchRed { background: repeating-linear-gradient(0deg, transparent 0 12px, rgb(255 48 81 / 36%) 13px 17px, transparent 18px 27px); }
+.glitchBlue { background: repeating-linear-gradient(0deg, transparent 0 8px, rgb(64 220 255 / 32%) 9px 12px, transparent 13px 24px); animation-name: glitch-shift-blue; }
+.glitchScanlines {
+  background: repeating-linear-gradient(transparent 0 3px, rgb(230 246 255 / 34%) 3px 4px);
+  animation: scanline-flicker 360ms steps(2, end) both;
+}
+.crack {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  animation: crack-fade 1500ms ease-out both;
+  transform-origin: var(--crack-x, 50%) var(--crack-y, 50%);
+}
+.crack path { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.crackShadow, .crackHighlight, .crackFine { stroke-dasharray: 999; stroke-dashoffset: 999; animation: crack-draw 260ms ease-out 35ms forwards; }
+.crackShadow { stroke: rgb(2 12 18 / 48%); stroke-width: 2.5px; }
+.crackHighlight { stroke: rgb(238 251 255 / 82%); stroke-width: 1px; }
+.crackFine { stroke: rgb(225 246 251 / 68%); stroke-width: .7px; }
+:global([data-theme="light"]) .crackShadow { stroke: rgb(26 52 61 / 36%); }
+:global([data-theme="light"]) .crackHighlight,
+:global([data-theme="light"]) .crackFine { stroke: rgb(255 255 255 / 96%); }
 .comicText {
   position: absolute;
   z-index: 2;
@@ -194,6 +277,33 @@
   30% { opacity: .82; transform: scale(3.2, 1.25); }
   100% { opacity: 0; transform: scale(5.4, .55); }
 }
+@keyframes scatter {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.2); }
+  24% { opacity: .9; transform: translate(calc(-50% + var(--scatter-x)), calc(-50% + var(--scatter-y))) scale(1); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--scatter-x)), calc(-50% + var(--scatter-y))) scale(.55); }
+}
+@keyframes glitch-fade { 0%, 100% { opacity: 0; } 18%, 72% { opacity: .76; } }
+@keyframes glitch-shift {
+  0%, 100% { opacity: 0; transform: translateX(0); }
+  20% { opacity: .85; transform: translateX(-2px); }
+  46% { opacity: .45; transform: translateX(2px); }
+  68% { opacity: .72; transform: translateX(-1px); }
+}
+@keyframes glitch-shift-blue {
+  0%, 100% { opacity: 0; transform: translateX(0); }
+  20% { opacity: .8; transform: translateX(2px); }
+  46% { opacity: .4; transform: translateX(-2px); }
+  68% { opacity: .66; transform: translateX(1px); }
+}
+@keyframes scanline-flicker { 0%, 100% { opacity: 0; } 28%, 52% { opacity: .7; } 40%, 78% { opacity: .18; } }
+@keyframes crack-fade {
+  0% { opacity: 0; }
+  8% { opacity: 1; }
+  24% { opacity: .92; }
+  100% { opacity: 0; }
+}
+@keyframes crack-draw { to { stroke-dashoffset: 0; } }
+@keyframes brightness-flicker { 0%, 100% { opacity: 0; } 25% { opacity: .8; } 42% { opacity: .12; } 60% { opacity: .64; } }
 @keyframes alert-pop {
   0% { opacity: 0; transform: translateY(3px) scale(.45); }
   12% { opacity: 1; transform: translateY(-2px) scale(1.15); }
@@ -223,10 +333,12 @@
   .text { min-width: 0; }
   .eyeButton { flex-basis: 44px; width: 44px; height: 44px; }
   .eye { width: 44px; }
+  .glitch { opacity: .52; }
+  .crack { transform: scale(1.18); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lids, .lashes, .idle, .pupil, .alert, .comicText { animation: none; }
+  .lids, .lashes, .idle, .pupil, .alert, .comicText, .glitch, .crack { animation: none; }
   .gaze { transition: none; transform: none; }
   .eyeButton[data-clicked="true"] .lids,
   .eyeButton[data-clicked="true"] .lashes { transform: scaleY(0); }

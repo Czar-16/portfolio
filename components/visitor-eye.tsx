@@ -1,12 +1,43 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { useDocumentVisible } from "@/components/use-document-visible";
 import { useReducedMotion } from "@/components/use-reduced-motion";
 import styles from "./visitor-counter.module.css";
 
 const outline = "M4 20C10.5 11.4 18.6 6.9 27.2 5.7c1.6-.2 3.2-.3 4.8-.3s3.2.1 4.8.3C45.4 6.9 53.5 11.4 60 20c-6.5 8.6-14.6 13.1-23.2 14.3-1.6.2-3.2.3-4.8.3s-3.2-.1-4.8-.3C18.6 33.1 10.5 28.6 4 20Z";
 const reactions = ["OUCH!", "YIKES!", "EEK!", "OW!", "ZAP!"];
+const hintStorageKey = "visitor-eye-hint-dismissed";
+const hintChangeEvent = "visitor-eye-hint-change";
+let hintDismissedThisVisit = false;
+
+function subscribeToHint(callback: () => void) {
+  window.addEventListener(hintChangeEvent, callback);
+  window.addEventListener("storage", callback);
+  return () => {
+    window.removeEventListener(hintChangeEvent, callback);
+    window.removeEventListener("storage", callback);
+  };
+}
+
+function getHintSnapshot() {
+  if (hintDismissedThisVisit) return false;
+  try {
+    return window.localStorage.getItem(hintStorageKey) !== "true";
+  } catch {
+    return true;
+  }
+}
+
+function dismissHint() {
+  hintDismissedThisVisit = true;
+  try {
+    window.localStorage.setItem(hintStorageKey, "true");
+  } catch {
+    // The hint still dismisses for this visit when storage is unavailable.
+  }
+  window.dispatchEvent(new Event(hintChangeEvent));
+}
 
 export function VisitorEye() {
   const id = useId();
@@ -14,6 +45,7 @@ export function VisitorEye() {
   const [inView, setInView] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [reaction, setReaction] = useState(0);
+  const showHint = useSyncExternalStore(subscribeToHint, getHintSnapshot, () => false);
   const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const visible = useDocumentVisible();
   const reduced = useReducedMotion();
@@ -24,6 +56,7 @@ export function VisitorEye() {
   }, []);
 
   const blinkOnDemand = () => {
+    dismissHint();
     setReaction(Math.floor(Math.random() * reactions.length));
     window.dispatchEvent(new Event("visitor-eye-tear"));
     if (clickTimer.current) clearTimeout(clickTimer.current);
@@ -84,6 +117,7 @@ export function VisitorEye() {
 
   return (
     <button type="button" className={styles.eyeButton} aria-label="Make the eye blink" onClick={blinkOnDemand} data-clicked={clicked}>
+      {showHint && <span className={styles.eyeHint} aria-hidden="true">Poke the eyeball</span>}
       <span key={reaction} aria-hidden="true" className={styles.comicText}>{reactions[reaction]}</span>
     <svg ref={ref} viewBox="0 0 64 40" width="52" height="34" fill="none" aria-hidden="true" className={styles.eye} data-paused={paused} data-visitor-eye>
       <defs>
