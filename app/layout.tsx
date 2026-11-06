@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Instrument_Sans, Public_Sans, Manrope, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AmbientBackground } from "@/components/ambient-background";
@@ -94,6 +95,7 @@ export default function RootLayout({
         <CursorGlow />
         <CursorWetTrail />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
