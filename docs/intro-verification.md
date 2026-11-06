@@ -6,7 +6,7 @@ Verified against a production build on the local Linux environment on 2026-11-06
 
 The `czar-portfolio-intro-v1` localStorage entry contains `{ completed: true, color, motion }`. Completion is written after an explicit launch's exit finishes. It never expires. Clearing browser storage resets the first-visit behavior; unavailable storage uses memory for the current application lifetime. Music is never saved and defaults on for each new dialog, with playback attempted only after launch.
 
-Returning visits restore the motion choice before first paint and skip the dialog, music, and tour. Replay intro sits beneath the closing quote, restarts the boot sequence, and restores color and motion choices within the dialog. The chosen terminal color does not change website buttons, backgrounds, or theme accents. Each explicit launch preserves pathname, query, and history state, removes the hash, releases the intro lock, and resets native scrolling and Lenis to zero before swarm preparation. Ordinary return visits retain hashes and normal restoration.
+Returning visits restore the motion choice before first paint and skip the dialog, music, and tour. Replay intro sits beneath the closing quote, restarts the boot sequence, and restores color and motion choices within the dialog. The chosen terminal color does not change website buttons, backgrounds, or theme accents. Each explicit launch preserves pathname, query, and history state, removes the hash, releases the intro lock, and resets native scrolling to zero before swarm preparation. Ordinary return visits retain hashes and normal restoration.
 
 ## Checks
 

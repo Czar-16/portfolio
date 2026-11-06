@@ -1,12 +1,5 @@
 @import "tailwindcss";
-@import "lenis/dist/lenis.css";
 @source "../components/TerminalIntro.tsx";
-
-/* Lenis animates native scroll positions; disable the browser's competing
-   smooth-scroll animation while it is active. */
-html.lenis {
-  scroll-behavior: auto !important;
-}
 
 /* ------------------------------------------------------------------ *
  *  Design tokens
@@ -699,3 +692,6 @@ html:is([data-terminal-intro], [data-swarm-active]) [data-intro-replay] { visibi
 .closing-quote:has([data-intro-replay]) { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
 
 html[data-swarm-active] :is(button:not(:disabled), a[href], summary, [role="button"], [role="link"]) { cursor: pointer; }
+
+/* Honor the intro motion preference for native anchor navigation too. */
+html[data-motion="off"] { scroll-behavior: auto; }

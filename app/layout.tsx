@@ -5,7 +5,6 @@ import { AmbientBackground } from "@/components/ambient-background";
 import { CursorCompanion } from "@/components/cursor-companion";
 import { Navbar } from "@/components/navbar";
 import { CommandPaletteWrapper } from "@/components/command-palette-wrapper";
-import { SmoothScroll } from "@/components/smooth-scroll";
 import { MotionProvider } from "@/components/motion-provider";
 import { BackToTop } from "@/components/back-to-top";
 import { CursorGlow } from "@/components/cursor-glow";
@@ -55,7 +54,6 @@ export default function RootLayout({
         <MotionProvider>
           <InteractionProvider>
             <VisitorProvider>
-              <SmoothScroll />
               <CursorCompanion>
                 <Navbar />
                 <main id="page-top" tabIndex={-1} className="portfolio-column flex-1 focus:outline-none">{children}</main>

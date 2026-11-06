@@ -623,7 +623,6 @@ function SwarmExperience() {
       releaseIntro();
       window.history.replaceState(window.history.state, "", location.pathname + location.search);
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-      window.dispatchEvent(new Event("portfolio-scroll-reset"));
       document.getElementById("page-top")?.focus({ preventScroll: true });
       activate();
     };
