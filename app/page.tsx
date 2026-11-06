@@ -4,7 +4,6 @@ import { FeaturedProjects } from "@/components/featured-projects";
 import { DashboardSection } from "@/components/dashboard-section";
 import { AboutContact } from "@/components/about-contact";
 import { PlaylistCard } from "@/components/spotify/PlaylistCard";
-import { VisitorCounter } from "@/components/visitor-counter";
 
 import { CollectionPreviews } from "@/components/collection-previews";
 import { ClosingQuote } from "@/components/closing-quote";
@@ -21,7 +20,6 @@ export default function Home() {
       <CollectionPreviews />
       <section id="terminal" className="section-frame"><h2 className="mb-5">Terminal</h2><TerminalCard /></section>
       <AboutContact />
-      <VisitorCounter />
       <ClosingQuote />
     </div>
   );

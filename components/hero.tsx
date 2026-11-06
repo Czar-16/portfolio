@@ -4,6 +4,7 @@ import { getCalApi } from "@calcom/embed-react";
 import { useEffect } from "react";
 import { GithubIcon, XIcon, LinkedinIcon, MailIcon, DownloadIcon, ArrowRightIcon, CalendarIcon } from "@/components/icons";
 import { contact, resume, site, socials } from "@/data/site";
+import { VisitorCounter } from "@/components/visitor-counter";
 export function Hero() {
   useEffect(() => {
     void getCalApi({ namespace: "30min" }).then(cal => {
@@ -13,7 +14,8 @@ export function Hero() {
   return <section id="profile" className="profile section-frame">
       <div className="profile-intro flex items-center gap-4">
         <Image src="/profile/profile.jpg" alt="Anoop Jha" width={64} height={64} preload className="rounded-md border border-line object-cover" />
-        <div><h1>{site.name}</h1><p className="mt-1 text-xs text-fg-secondary">@{site.handle}</p></div>
+        <div className="min-w-0"><h1>{site.name}</h1><p className="mt-1 text-xs text-fg-secondary">@{site.handle}</p></div>
+        <VisitorCounter />
       </div>
       <p className="availability"><span />{site.availability}</p>
       <p className="mt-5 leading-7">I turn complex ideas into simple, useful products — from the first interaction to the systems behind it.</p>
