@@ -35,6 +35,7 @@ export function ProfileAvatar() {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [burst, setBurst] = useState(false);
+  const [notesEnabled, setNotesEnabled] = useState(true);
   const [quipIndex, setQuipIndex] = useState(0);
   const [shoutIndex, setShoutIndex] = useState(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -55,7 +56,7 @@ export function ProfileAvatar() {
   }, []);
 
   useEffect(() => {
-    if (!touchCycle || burst || isHovering) return;
+    if (!notesEnabled || !touchCycle || burst || isHovering) return;
     let timeout: ReturnType<typeof setTimeout>;
     const schedule = () => {
       timeout = setTimeout(() => {
@@ -68,7 +69,7 @@ export function ProfileAvatar() {
     };
     schedule();
     return () => clearTimeout(timeout);
-  }, [touchCycle, burst, isHovering]);
+  }, [notesEnabled, touchCycle, burst, isHovering]);
 
   useEffect(() => () => {
     if (timer.current) clearTimeout(timer.current);
@@ -93,20 +94,20 @@ export function ProfileAvatar() {
   };
 
   const mode = burst ? "burst" : "hover";
-  const open = burst || isHovering || touchCycle;
+  const open = burst || (notesEnabled && (isHovering || touchCycle));
 
   return (
     <span
       className={styles.avatarWrap}
-      onMouseEnter={() => { showQuip(); setHovered(true); }}
-      onMouseLeave={() => setHovered(false)}
     >
       <button
         type="button"
         className={styles.avatarButton}
         data-click-sound="off"
         onClick={() => { showShout(); if (enabled) void playComicHit(); }}
-        onFocus={() => { showQuip(); setFocused(true); }}
+        onMouseEnter={() => { if (notesEnabled) { showQuip(); setHovered(true); } }}
+        onMouseLeave={() => setHovered(false)}
+        onFocus={() => { if (notesEnabled) showQuip(); setFocused(true); }}
         onBlur={() => setFocused(false)}
         aria-label="Anoop Jha’s profile picture. Hover for a note or activate for a shout."
       >
@@ -118,6 +119,17 @@ export function ProfileAvatar() {
           preload
           className={styles.avatar}
         />
+      </button>
+      <button
+        type="button"
+        className={styles.noteToggle}
+        data-click-sound="off"
+        aria-pressed={notesEnabled}
+        aria-label={notesEnabled ? "Turn profile notes off" : "Turn profile notes on"}
+        title={notesEnabled ? "Turn profile notes off" : "Turn profile notes on"}
+        onClick={() => setNotesEnabled((enabled) => !enabled)}
+      >
+        {notesEnabled ? "ON" : "OFF"}
       </button>
       <span
         className={styles.popup}
