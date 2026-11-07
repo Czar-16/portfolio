@@ -9,16 +9,20 @@ import { useReducedMotion } from "@/components/use-reduced-motion";
 import { useInteraction } from "@/components/interaction-provider";
 
 type Splash = { id: number; x: number; y: number; fall: number };
-type Crack = { id: number; x: number; y: number };
+type Crack = { id: number; x: number; y: number; level: number };
 
 export function VisitorCounter() {
   const { status, count } = useVisitorCount();
   const cardRef = useRef<HTMLDivElement>(null);
   const [splash, setSplash] = useState<Splash | null>(null);
   const [crack, setCrack] = useState<Crack | null>(null);
+  const [recovering, setRecovering] = useState(false);
   const splashId = useRef(0);
   const [glitchId, setGlitchId] = useState(0);
   const crackId = useRef(0);
+  const hits = useRef(0);
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const recoveryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reduced = useReducedMotion();
   const { playCrack } = useInteraction();
 
@@ -27,6 +31,11 @@ export function VisitorCounter() {
       const card = cardRef.current;
       const eye = card?.querySelector<SVGSVGElement>("[data-visitor-eye]");
       if (!card || !eye) return;
+      if (resetTimer.current) clearTimeout(resetTimer.current);
+      if (recoveryTimer.current) clearTimeout(recoveryTimer.current);
+      setRecovering(false);
+      hits.current = Math.min(hits.current + 1, 5);
+      const level = hits.current;
       playCrack();
       if (!reduced) setGlitchId((current) => current + 1);
       const cardBounds = card.getBoundingClientRect();
@@ -37,12 +46,31 @@ export function VisitorCounter() {
       const x = lidPosition.x - cardBounds.left;
       const y = lidPosition.y - cardBounds.top;
       if (!reduced) {
-        setCrack({ id: ++crackId.current, x: (x / cardBounds.width) * 100, y: (y / cardBounds.height) * 100 });
+        setCrack({ id: ++crackId.current, x: (x / cardBounds.width) * 100, y: (y / cardBounds.height) * 100, level });
       }
       setSplash({ id: ++splashId.current, x, y, fall: Math.max(0, cardBounds.height - y - 12) });
+      resetTimer.current = setTimeout(() => {
+        if (level === 5 && !reduced) {
+          setRecovering(true);
+          recoveryTimer.current = setTimeout(() => {
+            hits.current = 0;
+            setCrack(null);
+            setRecovering(false);
+            recoveryTimer.current = null;
+          }, 620);
+        } else {
+          hits.current = 0;
+          setCrack(null);
+        }
+        resetTimer.current = null;
+      }, level === 5 ? 2100 : 6000);
     };
     window.addEventListener("visitor-eye-tear", activate);
-    return () => window.removeEventListener("visitor-eye-tear", activate);
+    return () => {
+      window.removeEventListener("visitor-eye-tear", activate);
+      if (resetTimer.current) clearTimeout(resetTimer.current);
+      if (recoveryTimer.current) clearTimeout(recoveryTimer.current);
+    };
   }, [reduced, playCrack]);
 
   useEffect(() => {
@@ -71,7 +99,7 @@ export function VisitorCounter() {
 
   return (
     <section className="section-frame flex justify-center" aria-label="Portfolio visitors">
-      <div ref={cardRef} className={styles.card} data-visitor-card>
+      <div ref={cardRef} className={styles.card} data-visitor-card data-shattered={crack?.level === 5} data-recovering={recovering}>
         <VisitorEye />
         {!reduced && glitchId > 0 && (
           <div key={`glitch-${glitchId}`} className={styles.glitch} aria-hidden="true">
@@ -84,6 +112,7 @@ export function VisitorCounter() {
           <svg
             key={`crack-${crack.id}`}
             className={styles.crack}
+            data-level={crack.level}
             style={{ "--crack-x": `${crack.x}%`, "--crack-y": `${crack.y}%` } as CSSProperties}
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
@@ -96,6 +125,12 @@ export function VisitorCounter() {
             </g>
           </svg>
         )}
+        {!reduced && crack?.level === 5 && (
+          <div key={`shatter-${crack.id}`} className={styles.shatter} aria-hidden="true">
+            {Array.from({ length: 12 }, (_, index) => <span key={index} className={styles.shard} />)}
+          </div>
+        )}
+        {recovering && <div className={styles.recovery} aria-hidden="true"><span /><span /><span /></div>}
         {splash && (
           <div key={`splash-${splash.id}`} className={styles.splashOverlay} aria-hidden="true" data-reduced={reduced}>
             <span
