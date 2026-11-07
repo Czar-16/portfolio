@@ -35,7 +35,7 @@ export function ProfileAvatar() {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [burst, setBurst] = useState(false);
-  const [notesEnabled, setNotesEnabled] = useState(true);
+  const [notesEnabled, setNotesEnabled] = useState(false);
   const [quipIndex, setQuipIndex] = useState(0);
   const [shoutIndex, setShoutIndex] = useState(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);

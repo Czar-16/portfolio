@@ -7,14 +7,15 @@ import { useReducedMotion } from "@/components/use-reduced-motion";
 import styles from "./cursor-companion.module.css";
 import { Character } from "./companion-sprites";
 
-type Selection = "dog" | "cat" | "ghost" | "robot" | "off";
-const choices = ["dog", "cat", "ghost", "robot", "off"] as const;
-const names = { dog: "Simba", cat: "Billu", ghost: "AAAAA", robot: "Chitti", off: "Off" };
+type Selection = "dog" | "cat" | "ghost" | "robot" | "f1" | "off";
+const choices = ["dog", "cat", "ghost", "robot", "f1", "off"] as const;
+const names = { dog: "Simba", cat: "Billu", ghost: "AAAAA", robot: "Chitti", f1: "Red Bull F1", off: "Off" };
 const quips = {
   dog: ["I work for treats. Equity negotiable.", "Your cursor smells like productivity.", "Sit? In this economy?", "Fetch failed. Returned a stick anyway.", "I put the paw in portfolio.", "BRB, barking at a suspicious pixel."],
   cat: ["I have reviewed your work. Feed me.", "This cursor is on my property.", "I knocked your bugs off the table.", "My availability? Mostly naps.", "You may pet me. Terms may change.", "I am the reason your keyboard is warm."],
   robot: ["Beep boop. Emotion successfully faked.", "My therapist says I need fewer tabs.", "404: motivation not found.", "I run on coffee. Firmware calls it coolant.", "Have you tried turning Monday off?", "Human detected. Deploying small talk."],
   ghost: ["Boo. That is my entire elevator pitch.", "I haunt the bugs you marked as fixed.", "Dead tired. Literally.", "Your code has spirit. I checked.", "I ghost meetings, not people. Mostly.", "Unfinished business? Just my side projects."],
+  f1: ["simply lovely!", "Red Bull gives you wings. DRS gives you speed.", "300 km/h is just a warm-up.", "Box, box! The car is getting hard tyres.", "It's lights out and away we code!", "FP1, FP2, Fp3, Q1, Q2, Q3, RACE"],
 };
 const normalize = (value: string | null): Selection => choices.find(choice => choice === value) ?? "dog";
 let preference: Selection | null = null;
@@ -37,6 +38,7 @@ function subscribe(notify: () => void) {
 }
 const getPreference = () => preference;
 const serverPreference = () => null;
+let lastMousePosition: { x: number; y: number } | null = null;
 const CompanionContext = createContext<{
   selection: Selection; open: boolean; setOpen: (open: boolean) => void; choose: (choice: Selection) => void;
 } | null>(null);
@@ -128,9 +130,10 @@ export function CursorCompanion({ children }: { children: React.ReactNode }) {
   const open = openRoute === pathname;
   const setOpen = useCallback((value: boolean) => setOpenRoute(value ? pathname : null), [pathname]);
   const follower = useRef<HTMLDivElement>(null);
+  const trails = useRef<HTMLCanvasElement>(null);
   const speech = useRef<HTMLSpanElement>(null);
   const speechTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const quipIndex = useRef({ dog: 0, cat: 0, robot: 0, ghost: 0 });
+  const quipIndex = useRef({ dog: 0, cat: 0, robot: 0, ghost: 0, f1: 0 });
   function talk() {
     if (selection === "off" || !speech.current || !follower.current) return;
     const lines = quips[selection];
@@ -145,6 +148,16 @@ export function CursorCompanion({ children }: { children: React.ReactNode }) {
   const visible = useDocumentVisible();
   const reduce = useReducedMotion();
 
+  // Keep the latest mouse point while the picker is open, so a newly selected
+  // companion can appear immediately without waiting for another pointermove.
+  useEffect(() => {
+    function rememberPointer(event: PointerEvent) {
+      if (event.pointerType === "mouse") lastMousePosition = { x: event.clientX, y: event.clientY };
+    }
+    window.addEventListener("pointermove", rememberPointer, { passive: true });
+    return () => window.removeEventListener("pointermove", rememberPointer);
+  }, []);
+
   useEffect(() => {
     const element = follower.current;
     if (!element || stored === null || selection === "off" || open || !visible || reduce) return;
@@ -154,12 +167,15 @@ export function CursorCompanion({ children }: { children: React.ReactNode }) {
     let active = false;
     let blocked = false;
     let x = 0, y = 0, targetX = 0, targetY = 0;
+    const history: { x: number; y: number; angle: number; time: number }[] = [];
 
     const clamp = (value: number, size: number) => Math.max(8, Math.min(value, size - 48));
     function hide() {
       if (speechTimer.current) clearTimeout(speechTimer.current);
       element!.removeAttribute("data-chatting");
       cancelAnimationFrame(frame); frame = 0; last = null; active = false;
+      history.length = 0;
+      trails.current?.getContext("2d")?.clearRect(0, 0, trails.current.width, trails.current.height);
       if (!element!.hidden) element!.hidden = true;
       element!.dataset.moving = "false";
       element!.dataset.step = "0";
@@ -172,7 +188,34 @@ export function CursorCompanion({ children }: { children: React.ReactNode }) {
     function render() {
       position.current = { x, y };
       element!.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
+      if (selection !== "f1") element!.style.setProperty("--heading", `${gait.current.direction * 45}deg`);
       element!.dataset.direction = directions[gait.current.direction];
+      if (selection === "f1" && trails.current) {
+        const canvas = trails.current;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const width = document.documentElement.clientWidth, height = document.documentElement.clientHeight;
+        if (canvas.width !== Math.round(width * dpr) || canvas.height !== Math.round(height * dpr)) {
+          canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
+          canvas.style.width = `${width}px`; canvas.style.height = `${height}px`;
+        }
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, width, height);
+          const now = performance.now();
+          for (let i = 1; i < history.length; i++) {
+            const a = history[i - 1], b = history[i], opacity = Math.max(0, 1 - (now - b.time) / 1050);
+            const dx = Math.cos(b.angle), dy = Math.sin(b.angle), px = -dy * 4, py = dx * 4;
+            const darkTheme = document.documentElement.dataset.theme === "dark";
+            ctx.lineCap = "round"; ctx.lineWidth = 1.15; ctx.strokeStyle = darkTheme ? `rgba(255,255,255,${opacity * .3})` : `rgba(20,24,31,${opacity * .3})`;
+            for (const sign of [-1, 1]) {
+              ctx.beginPath(); ctx.moveTo(a.x + px * sign, a.y + py * sign); ctx.lineTo(b.x + px * sign, b.y + py * sign); ctx.stroke();
+            }
+            ctx.fillStyle = darkTheme ? `rgba(225,231,241,${opacity * .14})` : `rgba(42,47,56,${opacity * .12})`;
+            ctx.beginPath(); ctx.arc(b.x - dx * 17, b.y - dy * 17, 2 + (1 - opacity) * 2.5, 0, Math.PI * 2); ctx.fill();
+          }
+          while (history.length && now - history[0].time > 1050) history.shift();
+        }
+      }
       if (element!.dataset.chatting && speech.current) placeSpeech(element!, speech.current);
     }
     type State = "walk" | "alert" | "idle" | "look" | "groom" | "tired" | "sleep";
@@ -186,6 +229,34 @@ export function CursorCompanion({ children }: { children: React.ReactNode }) {
     }
     function paint(time: number) {
       frame = 0;
+      if (selection === "f1") {
+        const elapsed = last === null ? 16 : Math.min(32, time - last);
+        last = time;
+        const dx = targetX - (x + 26), dy = targetY - (y + 20);
+        const distance = Math.hypot(dx, dy);
+        // The movement step stops at a 7px cursor buffer; use the same threshold
+        // for the wheel state so the tyres stop as soon as the car arrives.
+        const moving = distance > 7;
+        if (moving) {
+          const desired = Math.atan2(dy, dx) * 180 / Math.PI;
+          let heading = Number.parseFloat(element!.style.getPropertyValue("--heading")) || 0;
+          const delta = ((desired - heading + 540) % 360) - 180;
+          heading += Math.max(-9, Math.min(9, delta * Math.min(1, elapsed / 70)));
+          element!.style.setProperty("--heading", `${heading}deg`);
+          const turnBrake = Math.max(0.3, 1 - Math.abs(delta) / 150);
+          const speed = Math.min(0.26 * elapsed * turnBrake, Math.max(0, distance - 7));
+          x = clamp(x + Math.cos(heading * Math.PI / 180) * speed, innerWidth);
+          y = clamp(y + Math.sin(heading * Math.PI / 180) * speed, innerHeight);
+          history.push({ x: x + 26, y: y + 20, angle: heading * Math.PI / 180, time });
+          gait.current.step = (gait.current.step + elapsed / 80) % 2;
+          element!.dataset.step = String(Math.floor(gait.current.step));
+        }
+        element!.dataset.moving = String(moving);
+        element!.dataset.direction = "e";
+        render();
+        frame = requestAnimationFrame(paint);
+        return;
+      }
       // One logical tick at most, even after a suspended or stalled frame.
       if (last === null) last = time;
       if (time - last >= 100) {
@@ -231,6 +302,7 @@ export function CursorCompanion({ children }: { children: React.ReactNode }) {
       if (!active) {
         x = clamp(position.current?.x ?? (event.clientX < innerWidth / 2 ? 8 : innerWidth - 48), innerWidth);
         y = clamp(position.current?.y ?? (innerHeight - 48), innerHeight);
+        if (selection === "f1") element!.style.setProperty("--heading", "0deg");
         active = true;
         resting = 0; alertTicks = 0;
         setState("idle");
@@ -258,6 +330,17 @@ export function CursorCompanion({ children }: { children: React.ReactNode }) {
     window.addEventListener("popstate", hide);
     document.addEventListener("click", navigation, true);
     media.addEventListener("change", hide);
+    if (selection !== "f1" && lastMousePosition && media.matches && !blocked) {
+      targetX = lastMousePosition.x;
+      targetY = lastMousePosition.y;
+      x = clamp(lastMousePosition.x - 110, innerWidth);
+      y = clamp(lastMousePosition.y - 40, innerHeight);
+      active = true;
+      setState("walk");
+      element!.hidden = false;
+      render();
+      frame = requestAnimationFrame(paint);
+    }
     return () => {
       hide(); observer.disconnect(); rootObserver.disconnect();
       window.removeEventListener("pointermove", move);
@@ -275,8 +358,9 @@ export function CursorCompanion({ children }: { children: React.ReactNode }) {
     try { localStorage.setItem("czar-pet", choice); } catch { /* In-memory selection remains usable. */ }
   } }}>
     {children}
+    <canvas ref={trails} className={styles.trails} aria-hidden="true" />
     <div ref={follower} className={styles.follower} hidden data-cursor-companion={selection}>
-      {selection !== "off" && <button type="button" className={styles.companionButton} aria-label={`Talk to ${names[selection]}`} onClick={talk}><Character kind={selection} /></button>}
+    {selection !== "off" && <button type="button" className={styles.companionButton} aria-label={`Talk to ${names[selection]}`} onClick={talk}><Character kind={selection} /></button>}
       <span ref={speech} className={styles.speech} role="status" aria-live="polite" aria-atomic="true" />
     </div>
   </CompanionContext>;

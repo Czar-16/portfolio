@@ -13,6 +13,12 @@
 .character { display: block; overflow: visible; image-rendering: pixelated; }
 .follower { position: fixed; top: 0; left: 0; width: 40px; height: 40px; pointer-events: none; user-select: none; z-index: 60; contain: layout style; }
 .follower[hidden] { display: none; }
+.trails { position: fixed; inset: 0; z-index: 59; pointer-events: none; }
+.follower[data-cursor-companion="f1"] .companionButton .character { transform: rotate(var(--heading, 0deg)); transform-origin: 50% 50%; }
+.follower[data-cursor-companion="f1"] .companionButton .character { width: 60px; height: 31px; }
+.carWheel { transform-box: fill-box; transform-origin: center; }
+.follower[data-cursor-companion="f1"][data-moving="true"] .carWheel { animation: wheel-roll 180ms linear infinite; }
+@keyframes wheel-roll { to { rotate: 360deg; } }
 .view, .pose { display: none; }
 .view[data-view="side"], .pose[data-pose="idle"] { display: inline; }
 .follower[data-direction] .view { display: none; }
@@ -47,7 +53,7 @@
 }
 
 
-.companionButton { display: block; width: 40px; height: 40px; padding: 0; border: 0; background: transparent; cursor: pointer; pointer-events: auto; touch-action: manipulation; }
+.companionButton { display: grid; place-items: center; width: 52px; height: 40px; padding: 0; border: 0; background: transparent; cursor: pointer; pointer-events: auto; touch-action: manipulation; }
 .companionButton:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 .speech { display: none; position: absolute; bottom: 48px; left: 0; width: max-content; max-width: min(210px, calc(100vw - 56px)); padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 12px 12px 12px 3px; background: var(--card); color: var(--fg); box-shadow: var(--sh-pop); font-size: 12px; line-height: 1.45; text-align: left; }
 .follower[data-chatting="true"] .speech { display: block; }
