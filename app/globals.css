@@ -527,7 +527,40 @@ h2 { font-size: 18px; line-height: 1.5; }
 .featured-projects .shadow-card { padding: 16px; border-radius: 6px; }
 .featured-projects .shadow-card .bg-accent { color: var(--accent-contrast); box-shadow: none; padding: 8px 12px; }
 .dashboard .section-frame > .card { border: 0; padding: 0; background: transparent; border-radius: 0; }
-.contact-section .blur-3xl { display: none; }
+.contact-section .section-heading h2 { font-size: clamp(22px, 3vw, 28px); line-height: 1.25; letter-spacing: -.035em; }
+.contact-section .section-heading p { max-width: 680px; }
+.contact-links::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: radial-gradient(circle, var(--section-dot) .85px, transparent 1px) left center / 6px 2px repeat-x;
+}
+.contact-social.icon-btn { position: relative; overflow: hidden; width: 40px; height: 40px; min-width: 40px; min-height: 40px; }
+.contact-social::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 25%, rgb(255 255 255 / 18%) 50%, transparent 75%);
+  transform: translateX(-120%);
+  transition: transform 850ms ease-in-out;
+  pointer-events: none;
+}
+.contact-social:hover::before, .contact-social:focus-visible::before { transform: translateX(120%); }
+.contact-social svg { position: relative; }
+@media (prefers-reduced-motion: reduce) { .contact-social::before { display: none; } }
+@media (pointer: coarse) { .contact-social.icon-btn { width: 44px; height: 44px; min-width: 44px; min-height: 44px; } }
+.contact-availability-dot {
+  background: #4ade80;
+  box-shadow: 0 0 0 3px rgb(74 222 128 / 10%);
+  animation: contact-status-pulse 1.8s ease-in-out infinite;
+}
+@keyframes contact-status-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .3; }
+}
+@media (prefers-reduced-motion: reduce) { .contact-availability-dot { animation: none; } }
+html:is([data-terminal-intro], [data-swarm-active]) .contact-availability-dot { animation-play-state: paused; }
 .closing-quote { padding-block: 40px; text-align: center; }
 .closing-quote blockquote { max-width: 400px; min-height: 84px; margin-inline: auto; font-size: 16px; font-style: italic; line-height: 1.8; color: var(--fg-secondary); animation: quote-arrive 400ms ease both; }
 .closing-quote > p { margin-top: 16px; font-size: 10px; letter-spacing: 2px; color: var(--fg-muted); }
