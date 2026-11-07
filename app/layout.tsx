@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Instrument_Sans, Public_Sans, Manrope, Geist_Mono } from "next/font/google";
+import { Instrument_Sans, Public_Sans, Manrope, Geist_Mono, Bangers } from "next/font/google";
 import "./globals.css";
 import { AmbientBackground } from "@/components/ambient-background";
 import { CursorCompanion } from "@/components/cursor-companion";
@@ -24,6 +24,13 @@ const instrumentSans = Instrument_Sans({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const bangers = Bangers({
+  variable: "--font-bangers",
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 const publicSans = Public_Sans({ variable: "--font-public-sans", subsets: ["latin"], preload: false });
@@ -68,9 +75,9 @@ export default function RootLayout({
       suppressHydrationWarning
       data-background="particles"
       data-scroll-behavior="smooth"
-      className={`${instrumentSans.variable} ${publicSans.variable} ${manrope.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${instrumentSans.variable} ${publicSans.variable} ${manrope.variable} ${geistMono.variable} ${bangers.variable} h-full antialiased`}
     >
-      <head><script dangerouslySetInnerHTML={{ __html: `(()=>{let t,b,f;try{t=localStorage.getItem('czar-theme');b=localStorage.getItem('czar-background');f=localStorage.getItem('czar-font')}catch{}document.documentElement.dataset.font=['contrast','developer'].includes(f)?f:'clean';document.documentElement.dataset.background=['aurora','constellation','bokeh','spotlight'].includes(b)?b:'particles';document.documentElement.dataset.theme=t==='light'||t==='dark'?t:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'})()` }} /><script dangerouslySetInnerHTML={{ __html: INTRO_BOOTSTRAP }} /></head>
+      <head><script dangerouslySetInnerHTML={{ __html: `(()=>{let t,b,f;try{t=localStorage.getItem('czar-theme');b=localStorage.getItem('czar-background');f=localStorage.getItem('czar-font')}catch{}document.documentElement.dataset.font=['contrast','developer'].includes(f)?f:'clean';document.documentElement.dataset.background=['aurora','constellation','bokeh','spotlight'].includes(b)?b:'particles';document.documentElement.dataset.theme=t==='light'||t==='dark'?t:'dark'})()` }} /><script dangerouslySetInnerHTML={{ __html: INTRO_BOOTSTRAP }} /></head>
       <body className="min-h-dvh flex flex-col">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",

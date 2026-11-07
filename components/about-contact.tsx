@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Signature from "@/components/Signature";
 import { ArrowRightIcon, GithubIcon, XIcon, LinkedinIcon, MailIcon } from "@/components/icons";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
@@ -24,20 +25,23 @@ export function AboutContact() {
                 title={contact.heading}
                 subtitle={contact.subheading}
               />
-              <div className="flex min-w-0 flex-col items-start gap-4">
-                <p className="inline-flex items-center gap-2.5 text-xs leading-relaxed text-fg-secondary">
-                  <span aria-hidden="true" className="contact-availability-dot size-2 shrink-0 rounded-full" />
-                  {site.availability}
-                </p>
-                <p className="max-w-full break-all font-mono text-xs text-fg-secondary">{contact.email}</p>
-                <div className="flex flex-wrap gap-3">
-                  <a href={contact.mailto} className="btn btn-primary group h-11 px-5">
-                    <MailIcon size={16} />
-                    Email me
-                    <ArrowRightIcon size={15} className="interaction-arrow" />
-                  </a>
-                  <CopyButton text={contact.email} label="Copy email" />
+              <div className="contact-action-row flex min-w-0 items-center justify-between gap-8">
+                <div className="flex min-w-0 flex-col items-start gap-4">
+                  <p className="inline-flex items-center gap-2.5 text-xs leading-relaxed text-fg-secondary">
+                    <span aria-hidden="true" className="contact-availability-dot size-2 shrink-0 rounded-full" />
+                    {site.availability}
+                  </p>
+                  <p className="max-w-full break-all font-mono text-xs text-fg-secondary">{contact.email}</p>
+                  <div className="flex flex-wrap gap-3">
+                    <a href={contact.mailto} className="btn btn-primary group h-11 px-5">
+                      <MailIcon size={16} />
+                      Email me
+                      <ArrowRightIcon size={15} className="interaction-arrow" />
+                    </a>
+                    <CopyButton text={contact.email} label="Copy email" />
+                  </div>
                 </div>
+                <Signature className="w-full max-w-[140px]" />
               </div>
             </div>
             <div className="contact-links relative mt-9 flex flex-wrap items-center justify-between gap-x-6 gap-y-4 pt-6">

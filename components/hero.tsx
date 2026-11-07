@@ -1,8 +1,8 @@
 "use client";
-import Image from "next/image";
 import { getCalApi } from "@calcom/embed-react";
 import { useEffect } from "react";
 import { GithubIcon, XIcon, LinkedinIcon, MailIcon, DownloadIcon, ArrowRightIcon, CalendarIcon } from "@/components/icons";
+import { ProfileAvatar } from "@/components/profile-avatar";
 import { contact, resume, site, socials } from "@/data/site";
 export function Hero() {
   useEffect(() => {
@@ -12,7 +12,7 @@ export function Hero() {
   }, []);
   return <section id="profile" className="profile section-frame">
       <div className="profile-intro flex items-center gap-4">
-        <Image src="/profile/profile.jpg" alt="Anoop Jha" width={64} height={64} preload className="rounded-md border border-line object-cover" />
+        <ProfileAvatar />
         <div><h1>{site.name}</h1><p className="mt-1 text-xs text-fg-secondary">@{site.handle}</p></div>
       </div>
       <p className="availability"><span />{site.availability}</p>

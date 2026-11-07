@@ -28,18 +28,19 @@ function ProjectLinks({ project }: { project: Project }) {
 export function ProjectCard({ project }: { project: Project }) {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const detailsId = useId();
   const open = hovered || focused;
   const destination = project.links.find(link => link.label === "Live" && !link.private)
     ?? project.links.find(link => link.label === "GitHub")
     ?? project.links[0];
   const reduce = useReducedMotion();
-  const transition = { duration: reduce ? 0 : 0.24, ease: motionEase };
+  const transition = { duration: reduce ? 0 : 0.35, ease: motionEase };
 
   return <article id={project.slug} className="project-card group" data-details-open={open}
-    onPointerEnter={event => { if (event.pointerType === "mouse") setHovered(true); }}
+    onPointerEnter={event => { if (event.pointerType === "mouse") { setHovered(true); setDescriptionExpanded(true); } }}
     onPointerLeave={event => { if (event.pointerType === "mouse") setHovered(false); }}
-    onFocusCapture={() => setFocused(true)}
+    onFocusCapture={() => { setFocused(true); setDescriptionExpanded(true); }}
     onBlurCapture={event => {
       const next = event.relatedTarget;
       if (next instanceof Element && (event.currentTarget.contains(next) ||
@@ -65,9 +66,10 @@ export function ProjectCard({ project }: { project: Project }) {
         </span>
       </a>
     </h2>
-    <motion.p id={detailsId} className={`project-description ${open ? "" : "line-clamp-2"}`}
+    <motion.p id={detailsId} className={`project-description ${open || descriptionExpanded ? "" : "line-clamp-2"}`}
       initial={false} animate={{ height: open ? "auto" : "3.6em" }}
       style={{ overflow: "hidden", minHeight: "3.6em" }} transition={transition}
+      onAnimationComplete={() => { if (!open) setDescriptionExpanded(false); }}
     >{project.description}</motion.p>
     <div className="project-footer">
       <ProjectTechStack tech={project.tech} projectName={project.name} />

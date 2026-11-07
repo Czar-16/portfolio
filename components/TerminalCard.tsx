@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import { projects } from "@/data/projects";
 import { contact, resume, site, socials } from "@/data/site";
 import { useReducedMotion } from "@/components/use-reduced-motion";
@@ -75,6 +75,10 @@ export function TerminalCard() {
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [pendingResume, setPendingResume] = useState<ResumeRequest | null>(null);
+  const skipIntro = useCallback(() => {
+    focusRequested.current = true;
+    setSkipped(true);
+  }, []);
   const finished = skipped || reduceMotion || progress.index >= INTRO_LINES.length;
   const current = !finished ? INTRO_LINES[progress.index] : undefined;
   const cursorIndex = finished ? -1 : INTRO_LINES.reduce((last, line, index) =>
@@ -119,10 +123,9 @@ export function TerminalCard() {
 
   useEffect(() => {
     if (!inView || finished) return;
-    const skip = () => setSkipped(true);
-    document.addEventListener("keydown", skip);
-    return () => document.removeEventListener("keydown", skip);
-  }, [inView, finished]);
+    document.addEventListener("keydown", skipIntro);
+    return () => document.removeEventListener("keydown", skipIntro);
+  }, [inView, finished, skipIntro]);
 
   useLayoutEffect(() => {
     const scroll = scrollRef.current;
@@ -206,10 +209,7 @@ export function TerminalCard() {
     if (target instanceof Element && target.closest("a, button")) return;
     if (window.getSelection()?.toString()) return;
     if (finished) inputRef.current?.focus({ preventScroll: true });
-    else {
-      focusRequested.current = true;
-      setSkipped(true);
-    }
+    else skipIntro();
   }
 
   function clear() {
@@ -310,7 +310,7 @@ export function TerminalCard() {
         className={`card-lift ${styles.card} flex h-[280px] w-full min-w-0 flex-col overflow-hidden rounded-xl border border-line bg-bg-soft font-mono text-[12px] leading-[1.65] text-fg-secondary backdrop-blur-md sm:h-[300px] sm:text-[13px] lg:text-[14px]`}
         onClick={(event) => focusTerminal(event.target)}
       >
-        <p className="sr-only">Terminal introduction: {INTRO_LINES.map((line) => line.kind === "command" ? `$ ${line.text}` : line.text).join(". ")}. Type help for commands. Use arrow keys for command history, Tab to complete a partial command, and Control L to clear.</p>
+        <p className="sr-only">{skipped ? "Terminal introduction skipped. Type help for commands." : <>Terminal introduction: {INTRO_LINES.map((line) => line.kind === "command" ? `$ ${line.text}` : line.text).join(". ")}. Type help for commands.</>} Use arrow keys for command history, Tab to complete a partial command, and Control L to clear.</p>
         <div className="relative flex h-10 shrink-0 items-center justify-between border-b border-line px-3.5">
           <div aria-hidden="true" className="flex gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-red-400/75" />
@@ -319,12 +319,12 @@ export function TerminalCard() {
           </div>
           <span className="pointer-events-none absolute inset-x-16 text-center text-[11px] text-fg-secondary">czar16 — zsh</span>
           {!finished ? (
-            <button type="button" onClick={() => setSkipped(true)} className="rounded px-1.5 py-0.5 text-[10px] text-fg-secondary transition-colors hover:text-fg focus-visible:text-fg" aria-label="Skip terminal introduction">skip</button>
+            <button type="button" onClick={skipIntro} className="rounded px-1.5 py-0.5 text-[10px] text-fg-secondary transition-colors hover:text-fg focus-visible:text-fg" aria-label="Skip terminal introduction">skip</button>
           ) : <span aria-hidden="true" className="text-[10px] text-fg-muted">⌨</span>}
         </div>
 
         <div ref={scrollRef} className={`${styles.scroll} min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-3.5 py-3 sm:px-4`}>
-          {showIntro && (
+          {showIntro && !skipped && (
             <div aria-hidden="true" className={styles.intro} data-instant={skipped || reduceMotion}>
               {INTRO_LINES.map((line, index) => {
                 const complete = finished || index < progress.index;

@@ -67,6 +67,7 @@ export function VisitorCounter() {
 
   useEffect(() => {
     const activate = () => {
+      if (!reduced) setGlitchId((current) => current + 1);
       const card = cardRef.current;
       const eye = card?.querySelector<SVGSVGElement>("[data-visitor-eye]");
       if (!card || !eye || hits.current === 5) return;
@@ -76,7 +77,6 @@ export function VisitorCounter() {
       hits.current = Math.min(hits.current + 1, 5);
       const level = hits.current;
       playCrack();
-      if (!reduced) setGlitchId((current) => current + 1);
       const cardBounds = card.getBoundingClientRect();
       const lowerLid = eye.createSVGPoint();
       lowerLid.x = 32;
