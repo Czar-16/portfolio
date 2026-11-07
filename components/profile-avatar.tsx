@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useInteraction } from "@/components/interaction-provider";
+import { playComicHit } from "@/lib/comic-hit-sound";
 import styles from "./profile-avatar.module.css";
 
 const hoverQuips = [
@@ -29,6 +31,7 @@ const shoutLines = [
 ];
 
 export function ProfileAvatar() {
+  const { enabled } = useInteraction();
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [burst, setBurst] = useState(false);
@@ -36,6 +39,36 @@ export function ProfileAvatar() {
   const [shoutIndex, setShoutIndex] = useState(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isHovering = hovered || focused;
+  const [touchCycle, setTouchCycle] = useState(false);
+
+  useEffect(() => {
+    const touch = window.matchMedia("(hover: none), (pointer: coarse)");
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setTouchCycle(touch.matches && !motion.matches);
+    update();
+    touch.addEventListener("change", update);
+    motion.addEventListener("change", update);
+    return () => {
+      touch.removeEventListener("change", update);
+      motion.removeEventListener("change", update);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!touchCycle || burst || isHovering) return;
+    let timeout: ReturnType<typeof setTimeout>;
+    const schedule = () => {
+      timeout = setTimeout(() => {
+        setQuipIndex((index) => {
+          const offset = 1 + Math.floor(Math.random() * (hoverQuips.length - 1));
+          return (index + offset) % hoverQuips.length;
+        });
+        schedule();
+      }, 4000 + Math.random() * 1000);
+    };
+    schedule();
+    return () => clearTimeout(timeout);
+  }, [touchCycle, burst, isHovering]);
 
   useEffect(() => () => {
     if (timer.current) clearTimeout(timer.current);
@@ -60,7 +93,7 @@ export function ProfileAvatar() {
   };
 
   const mode = burst ? "burst" : "hover";
-  const open = burst || isHovering;
+  const open = burst || isHovering || touchCycle;
 
   return (
     <span
@@ -71,7 +104,8 @@ export function ProfileAvatar() {
       <button
         type="button"
         className={styles.avatarButton}
-        onClick={showShout}
+        data-click-sound="off"
+        onClick={() => { showShout(); if (enabled) void playComicHit(); }}
         onFocus={() => { showQuip(); setFocused(true); }}
         onBlur={() => setFocused(false)}
         aria-label="Anoop Jha’s profile picture. Hover for a note or activate for a shout."
