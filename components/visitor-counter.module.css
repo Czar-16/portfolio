@@ -93,6 +93,7 @@
 
 .eyeButton {
   position: relative;
+  z-index: 3;
   display: grid;
   place-items: center;
   flex: 0 0 52px;
@@ -180,54 +181,44 @@
   z-index: 7;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(circle at 28% 48%, rgb(255 255 255 / 70%), transparent 58%);
+  background: radial-gradient(circle at var(--impact-x, 28%) var(--impact-y, 48%), rgb(255 255 255 / 70%), transparent 58%);
   animation: mirror-flash 540ms ease-out both;
 }
 .shatter {
+  --glass-light: rgb(247 253 255 / 76%);
+  --glass-mid: color-mix(in oklab, var(--card) 78%, transparent);
+  --glass-dark: rgb(82 126 145 / 48%);
   position: absolute;
-  z-index: 6;
+  z-index: 2;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  background: radial-gradient(ellipse at 28% 48%, rgb(4 13 20 / 82%), rgb(10 23 31 / 48%) 42%, transparent 78%);
-  animation: broken-surface 2200ms ease-out both;
+  background: radial-gradient(ellipse at var(--impact-x) var(--impact-y), rgb(4 13 20 / 85%), rgb(10 23 31 / 55%) 55%, rgb(4 13 20 / 70%));
+  animation: surface-open 210ms ease-out both;
 }
-.shatter::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-conic-gradient(from 12deg at 28% 48%, transparent 0deg 17deg, rgb(255 255 255 / 35%) 17.3deg 17.7deg, transparent 18deg 37deg);
-  mix-blend-mode: screen;
-  animation: fracture-glint 650ms ease-out both;
+:global([data-theme="light"]) .shatter {
+  --glass-light: rgb(255 255 255 / 90%);
+  --glass-mid: rgb(199 222 231 / 66%);
+  --glass-dark: rgb(93 132 152 / 55%);
 }
-.shard {
-  position: absolute;
-  left: var(--sx);
-  top: var(--sy);
-  width: var(--sw);
-  height: var(--sh);
-  clip-path: var(--shape);
-  background: linear-gradient(var(--shine-angle, 125deg), rgb(255 255 255 / 92%) 0%, rgb(179 215 230 / 65%) 4%, color-mix(in oklab, var(--card) 75%, transparent) 26%, rgb(36 70 88 / 65%) 69%, rgb(244 252 255 / 82%) 96%);
-  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 55%));
-  opacity: 0;
-  animation: glass-fall 1350ms cubic-bezier(.18, .62, .4, 1) both;
-  animation-delay: var(--delay, 0ms);
+.fractureGlass { width: 100%; height: 100%; overflow: visible; }
+.glassPiece {
+  stroke: rgb(234 250 255 / 77%);
+  stroke-width: .42;
+  stroke-linejoin: bevel;
+  paint-order: stroke fill;
+  transform-box: fill-box;
+  transform-origin: center;
+  filter: brightness(1) hue-rotate(var(--facet));
+  animation: glass-separate var(--duration) cubic-bezier(.25, .45, .42, 1) var(--delay) both;
 }
-.shard:nth-child(odd) { --shape: polygon(42% 0, 100% 52%, 75% 100%, 7% 82%, 0 29%); }
-.shard:nth-child(even) { --shape: polygon(12% 16%, 65% 0, 100% 37%, 83% 94%, 35% 100%, 0 68%); --shine-angle: 35deg; }
-.shard:nth-child(3n) { --shape: polygon(56% 0, 100% 28%, 79% 67%, 51% 100%, 0 84%, 15% 34%); --shine-angle: 205deg; }
-.shard:nth-child(1) { --sx: 15%; --sy: 13%; --sw: 15%; --sh: 31%; --dx: -72px; --dy: 38px; --spin: -48deg; }
-.shard:nth-child(2) { --sx: 28%; --sy: 7%; --sw: 11%; --sh: 42%; --dx: -24px; --dy: -18px; --spin: 25deg; --delay: 20ms; }
-.shard:nth-child(3) { --sx: 38%; --sy: 4%; --sw: 18%; --sh: 39%; --dx: 25px; --dy: -29px; --spin: 46deg; --delay: 35ms; }
-.shard:nth-child(4) { --sx: 55%; --sy: 12%; --sw: 13%; --sh: 36%; --dx: 56px; --dy: 2px; --spin: 72deg; --delay: 15ms; }
-.shard:nth-child(5) { --sx: 67%; --sy: 18%; --sw: 16%; --sh: 35%; --dx: 93px; --dy: 37px; --spin: 56deg; --delay: 40ms; }
-.shard:nth-child(6) { --sx: 6%; --sy: 42%; --sw: 17%; --sh: 38%; --dx: -88px; --dy: 82px; --spin: -76deg; --delay: 30ms; }
-.shard:nth-child(7) { --sx: 21%; --sy: 43%; --sw: 15%; --sh: 44%; --dx: -46px; --dy: 96px; --spin: -33deg; --delay: 55ms; }
-.shard:nth-child(8) { --sx: 35%; --sy: 42%; --sw: 13%; --sh: 49%; --dx: -12px; --dy: 105px; --spin: 42deg; --delay: 25ms; }
-.shard:nth-child(9) { --sx: 48%; --sy: 45%; --sw: 16%; --sh: 47%; --dx: 31px; --dy: 112px; --spin: -59deg; --delay: 45ms; }
-.shard:nth-child(10) { --sx: 62%; --sy: 43%; --sw: 13%; --sh: 41%; --dx: 72px; --dy: 86px; --spin: 37deg; --delay: 10ms; }
-.shard:nth-child(11) { --sx: 75%; --sy: 48%; --sw: 18%; --sh: 35%; --dx: 110px; --dy: 89px; --spin: 83deg; --delay: 50ms; }
-.shard:nth-child(12) { --sx: 43%; --sy: 29%; --sw: 12%; --sh: 33%; --dx: 12px; --dy: 48px; --spin: -24deg; --delay: 65ms; }
+.shatter[data-recovering="true"] { animation: surface-repair 620ms steps(1, end) both; }
+.shatter[data-recovering="true"] .glassPiece { opacity: 0; }
+.shatter[data-reduced="true"] { animation: none; }
+.shatter[data-reduced="true"] .glassPiece {
+  animation: none;
+  transform: translate(calc(var(--dx) * .12), calc(var(--dy) * .08)) rotate(calc(var(--spin) * .07));
+}
 .recovery {
   position: absolute;
   z-index: 8;
@@ -327,6 +318,8 @@
 .splashOverlay[data-reduced="true"] .splashRing { display: none; }
 
 .text {
+  position: relative;
+  z-index: 3;
   min-width: 13rem;
   color: var(--fg-secondary);
   font-size: 0.8125rem;
@@ -397,15 +390,19 @@
   10% { opacity: .9; }
   100% { opacity: 0; }
 }
-@keyframes broken-surface {
-  0% { opacity: 0; }
-  8%, 72% { opacity: 1; }
-  100% { opacity: 0; }
+@keyframes surface-open {
+  0%, 24% { opacity: 0; }
+  100% { opacity: 1; }
 }
-@keyframes fracture-glint {
-  0% { opacity: 0; }
-  12% { opacity: .75; }
-  100% { opacity: 0; }
+@keyframes surface-repair {
+  0%, 23%, 52% { opacity: 1; }
+  24%, 51%, 53%, 100% { opacity: 0; }
+}
+@keyframes glass-separate {
+  0%, 8% { opacity: 1; transform: translate(0, 0) rotate(0); }
+  23% { opacity: 1; transform: translate(calc(var(--dx) * .12), calc(var(--dy) * -.08)) rotate(calc(var(--spin) * .1)); }
+  55% { opacity: .95; }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--spin)); }
 }
 @keyframes mirror-reboot {
   0%, 25%, 58% { filter: brightness(.72) contrast(1.25); }
@@ -427,12 +424,6 @@
 @keyframes recovery-slice {
   0%, 30%, 65%, 100% { opacity: 0; transform: translateX(0); }
   12%, 45%, 74% { opacity: 1; transform: translateX(var(--slice-x)); }
-}
-@keyframes glass-fall {
-  0% { opacity: 1; transform: translate(0, 0) rotate(0) scale(1); }
-  12% { opacity: 1; transform: translate(calc(var(--dx) * .2), calc(var(--dy) * -.22)) rotate(calc(var(--spin) * .3)) scale(1); }
-  60% { opacity: .86; }
-  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--spin)) scale(.55); }
 }
 @keyframes crack-draw { to { stroke-dashoffset: 0; } }
 @keyframes brightness-flicker { 0%, 100% { opacity: 0; } 25% { opacity: .8; } 42% { opacity: .12; } 60% { opacity: .64; } }
@@ -471,6 +462,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .lids, .lashes, .idle, .pupil, .alert, .comicText, .glitch, .crack { animation: none; }
+  .card[data-shattered="true"], .card[data-recovering="true"], .card[data-shattered="true"]::after { animation: none; }
+  .card[data-shattered="true"]::after { display: none; }
   .gaze { transition: none; transform: none; }
   .eyeButton[data-clicked="true"] .lids,
   .eyeButton[data-clicked="true"] .lashes { transform: scaleY(0); }
