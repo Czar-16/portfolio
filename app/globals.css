@@ -722,7 +722,7 @@ html[data-terminal-intro] [data-cursor-glow-border]::after { opacity: 0 !importa
 }
 
 html:is([data-terminal-intro], [data-swarm-active]) [data-intro-replay] { visibility: hidden; }
-/* Leave room for the optional floating music controls below Replay intro. */
+/* Leave room for the optional floating music controls below Rebuild. */
 .closing-quote:has([data-intro-replay]) { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
 
 html[data-swarm-active] :is(button:not(:disabled), a[href], summary, [role="button"], [role="link"]) { cursor: pointer; }

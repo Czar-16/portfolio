@@ -39,7 +39,7 @@ async function returnHome(page) {
   await page.getByRole("link", { name: "All projects", exact: true }).first().click();
   await page.waitForURL("**/projects");
   await page.goBack();
-  await page.getByRole("button", { name: "Replay intro" }).waitFor();
+  await page.getByRole("button", { name: "Rebuild" }).waitFor();
 }
 
 test("first visit, focus containment, all launch choices, replay, refresh and new tab", { timeout: 90000 }, async () => {
@@ -76,7 +76,7 @@ test("first visit, focus containment, all launch choices, replay, refresh and ne
     for (const music of [false, true]) {
       for (const motion of [false, true]) {
         if (launches) {
-          await page.getByRole("button", { name: "Replay intro" }).click();
+          await page.getByRole("button", { name: "Rebuild" }).click();
           await ready(page);
           assert.equal(await page.getByRole("switch", { name: "--music" }).getAttribute("aria-checked"), "true");
         }

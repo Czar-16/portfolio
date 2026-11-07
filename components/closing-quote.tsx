@@ -17,6 +17,6 @@ export function ClosingQuote() {
   return <section className="closing-quote section-frame" data-quote-rotating={visible} aria-label="A thought to leave with">
     <blockquote key={quotes[index].id} data-closing-quote={quotes[index].id}>“{quotes[index].text}”</blockquote>
     <p aria-hidden="true">— &nbsp; NOTES TO SELF &nbsp; —</p>
-    <button className={styles.replay} type="button" data-intro-replay data-click-sound="off" onClick={() => window.dispatchEvent(new Event("portfolio-replay-intro"))}>Replay intro</button>
+    <button className={styles.replay} type="button" data-intro-replay data-click-sound="off" onClick={() => window.dispatchEvent(new Event("portfolio-replay-intro"))}>Rebuild</button>
   </section>;
 }
