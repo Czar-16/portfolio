@@ -611,8 +611,23 @@ html:is([data-terminal-intro], [data-swarm-active]) .contact-availability-dot { 
   --heat-0: #e8e8e8; --heat-1: #9b9b9b; --heat-2: #696969; --heat-3: #393939; --heat-4: #111111;
 }
 .theme-moon, [data-theme="light"] .theme-sun { display: none; }
-::view-transition-old(root), ::view-transition-new(root) { animation: none; }
-::view-transition-new(root) { z-index: 1; }
+.theme-revealing::view-transition-old(root), .theme-revealing::view-transition-new(root) { animation: none; }
+.theme-revealing::view-transition-new(root) {
+  z-index: 1;
+  animation-duration: 850ms;
+  animation-timing-function: cubic-bezier(.45, 0, .25, 1);
+  animation-fill-mode: both;
+}
+.theme-reveal-down::view-transition-new(root) { animation-name: theme-reveal-down; }
+.theme-reveal-up::view-transition-new(root) { animation-name: theme-reveal-up; }
+@keyframes theme-reveal-down {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0); }
+}
+@keyframes theme-reveal-up {
+  from { clip-path: inset(100% 0 0 0); }
+  to { clip-path: inset(0); }
+}
 [data-theme="light"] .theme-moon { display: block; }
 .btn, .icon-btn { min-height: 44px; }
 .icon-btn { min-width: 44px; }

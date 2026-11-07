@@ -106,7 +106,7 @@ function InteractionEffects({ playClick }: { playClick: () => void }) {
         const excluded = target.closest('[data-click-sound="off"], [inert], [aria-disabled="true"], :disabled, input, textarea, select, [contenteditable]:not([contenteditable="false"])');
         if (!excluded && target.closest('button, a[href], summary, [role="button"], [role="link"], [role="option"], [data-click-sound="on"]')) playClick();
       }
-      if (!ctx || !valid || event.detail === 0 || reduced.matches || document.hidden || document.documentElement.matches("[data-terminal-intro], [data-swarm-active], [data-motion=off]")) return;
+      if (!ctx || !valid || event.detail === 0 || reduced.matches || document.hidden || document.documentElement.matches("[data-terminal-intro], [data-swarm-active], [data-motion=off]") || (event.target instanceof Element && event.target.closest('[data-click-sparks="off"]'))) return;
       bursts.push({ x: event.clientX, y: event.clientY, start: performance.now() });
       bursts = bursts.slice(-24);
       canvas!.dataset.active = "true";

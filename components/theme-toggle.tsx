@@ -28,22 +28,16 @@ export function ThemeToggle() {
     return () => { system.removeEventListener("change", sync); window.removeEventListener("storage", sync); };
   }, []);
   const next = theme === "light" ? "dark" : "light";
-  return <button type="button" className="icon-btn" data-click-sound="off" aria-label={`Switch to ${next} mode`} title={`Switch to ${next} mode`} onClick={(event) => {
+  return <button type="button" className="icon-btn" data-click-sound="off" data-click-sparks="off" aria-label={`Switch to ${next} mode`} title={`Switch to ${next} mode`} onClick={() => {
     playTheme(next);
     const root = document.documentElement;
     const changeTheme = () => { root.dataset.theme = next; };
     if (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      const bounds = event.currentTarget.getBoundingClientRect();
-      const x = bounds.left + bounds.width / 2;
-      const y = bounds.top + bounds.height / 2;
-      const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+      root.classList.add("theme-revealing", next === "dark" ? "theme-reveal-down" : "theme-reveal-up");
       const transition = document.startViewTransition(changeTheme);
-      void transition.ready.then(() => {
-        root.animate(
-          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
-          { duration: 650, easing: "cubic-bezier(.22, 1, .36, 1)", pseudoElement: "::view-transition-new(root)" },
-        );
-      }).catch(() => {});
+      void transition.finished.finally(() => {
+        root.classList.remove("theme-revealing", "theme-reveal-down", "theme-reveal-up");
+      });
     } else {
       changeTheme();
     }
