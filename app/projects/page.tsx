@@ -38,7 +38,7 @@ function SeeMoreBox() {
             href={GITHUB_REPOS_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-primary mt-2"
+            className="group inline-flex h-11 items-center justify-center rounded-md border border-[color-mix(in_oklab,var(--line)_18%,transparent)] bg-accent px-5 text-accent-contrast font-medium text-[13px] tracking-[-0.005em] hover:bg-[color-mix(in_oklab,var(--accent)_88%,white)] hover:shadow-[0_14px_40px_-14px_color-mix(in_oklab,var(--accent-glow)_85%,transparent)]"
           >
             <GithubIcon size={15} />
             Enter the chaos

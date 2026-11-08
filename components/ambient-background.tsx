@@ -32,7 +32,7 @@ export function BackgroundToggle() {
   const background = useBackground();
   const next = { aurora: "particles", particles: "constellation", constellation: "bokeh", bokeh: "spotlight", spotlight: "aurora" }[background];
   const label = `Switch to ${next} background`;
-  return <button type="button" className="icon-btn" aria-label={label} title={label} onClick={() => {
+  return <button type="button" className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-line bg-card text-fg-secondary transition-colors hover:border-line-strong hover:bg-card-elevated hover:text-fg max-sm:min-h-11 max-sm:min-w-9" aria-label={label} title={label} onClick={() => {
     document.documentElement.dataset.background = next;
     try { localStorage.setItem("czar-background", next); } catch { /* The selection still works for this visit. */ }
   }}>

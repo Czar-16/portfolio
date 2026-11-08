@@ -20,10 +20,10 @@ export function SectionHeading({
   id?: string;
 }) {
   return (
-    <Reveal className="section-heading flex flex-wrap items-center justify-between gap-3">
+    <Reveal className="flex flex-wrap items-center justify-between gap-3">
       <div className="flex flex-col gap-3">
-        <span className="eyebrow">
-          <span className="eyebrow-dot" />
+        <span className="inline-flex items-center gap-2 font-mono text-[11px] font-medium tracking-[0.16em] uppercase text-fg-muted">
+          <span className="size-1.5 rounded-full bg-accent shadow-[0_0_0_3px_color-mix(in_oklab,var(--accent)_18%,transparent)]" />
           {eyebrow}
         </span>
         <Heading id={id} className="font-semibold tracking-tight text-fg">
@@ -43,7 +43,7 @@ export function SectionHeading({
           {action}
           <ArrowRightIcon
             size={14}
-            className="interaction-arrow"
+            className="transition-transform duration-180 ease-premium group-hover:translate-x-[3px]"
           />
         </Link>
       )}

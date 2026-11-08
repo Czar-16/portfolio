@@ -245,7 +245,7 @@ export function SoundToggle() {
   const { enabled, toggle } = useInteraction();
   const label = enabled ? "Mute click sounds" : "Enable click sounds";
   return (
-    <button type="button" onClick={toggle} data-click-sound="off" aria-label={label} title={label} aria-pressed={enabled} className="icon-btn">
+    <button type="button" onClick={toggle} data-click-sound="off" aria-label={label} title={label} aria-pressed={enabled} className="rounded-full p-1.5 bg-[color-mix(in_oklab,var(--card-elevated)_6%,transparent)] border border-[color-mix(in_oklab,var(--line)_18%,transparent)] text-fg-secondary hover:text-fg hover:border-[color-mix(in_oklab,var(--line)_70%,transparent)] hover:bg-[color-mix(in_oklab,var(--card-elevated)_8%,transparent)] focus-visible:outline-2 focus-visible:outline-[color-mix(in_oklab,var(--accent)_50%,transparent)] focus-visible:outline-offset-2">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M11 5 6 9H3v6h3l5 4V5Z" />
         {enabled ? <><path d="M15 8a6 6 0 0 1 0 8" /><path d="M18 5a10 10 0 0 1 0 14" /></> : <path d="m16 9 5 6m0-6-5 6" />}

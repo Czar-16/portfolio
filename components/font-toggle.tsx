@@ -25,7 +25,7 @@ export function FontToggle({ inMenu = false }: { inMenu?: boolean }) {
   const next = presets[(presets.indexOf(preset) + 1) % presets.length];
   const label = `Font: ${names[preset]}. Switch to ${names[next]}`;
   return <><div className={inMenu ? "font-menu-control" : "font-toolbar-control"}>
-    <button type="button" className="icon-btn" aria-label={label} title={label} onClick={() => {
+    <button type="button" className="rounded-full p-1.5 bg-[color-mix(in_oklab,var(--card-elevated)_6%,transparent)] border border-[color-mix(in_oklab,var(--line)_18%,transparent)] text-fg-secondary hover:text-fg hover:border-[color-mix(in_oklab,var(--line)_70%,transparent)] hover:bg-[color-mix(in_oklab,var(--card-elevated)_8%,transparent)] focus-visible:outline-2 focus-visible:outline-[color-mix(in_oklab,var(--accent)_50%,transparent)] focus-visible:outline-offset-2" aria-label={label} title={label} onClick={() => {
       document.documentElement.dataset.font = next;
       try { localStorage.setItem("czar-font", next); } catch {}
     }}><span aria-hidden="true">Aa</span>{inMenu && <span>{names[preset]}</span>}</button>

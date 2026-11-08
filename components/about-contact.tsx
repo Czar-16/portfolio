@@ -33,10 +33,10 @@ export function AboutContact() {
                   </p>
                   <p className="max-w-full break-all font-mono text-xs text-fg-secondary">{contact.email}</p>
                   <div className="flex flex-wrap gap-3">
-                    <a href={contact.mailto} className="btn btn-primary group h-11 px-5">
+                    <a href={contact.mailto} className="group inline-flex h-11 items-center justify-center rounded-md bg-accent px-5 text-accent-contrast font-medium text-[13px] tracking-[-0.005em] hover:bg-[color-mix(in_oklab,var(--accent)_88%,white)] hover:shadow-[0_14px_40px_-14px_color-mix(in_oklab,var(--accent-glow)_85%,transparent)]">
                       <MailIcon size={16} />
                       Email me
-                      <ArrowRightIcon size={15} className="interaction-arrow" />
+                      <ArrowRightIcon size={15} className="transition-transform duration-180 ease-premium group-hover:translate-x-[3px]" />
                     </a>
                     <CopyButton text={contact.email} label="Copy email" />
                   </div>
@@ -47,11 +47,11 @@ export function AboutContact() {
             <div className="contact-links relative mt-9 flex flex-wrap items-center justify-between gap-x-6 gap-y-4 pt-6">
               <Link href="/about" className="interactive group inline-flex min-h-10 items-center gap-2 text-sm font-medium text-fg-secondary hover:text-fg">
                 More about me
-                <ArrowRightIcon size={14} className="interaction-arrow" />
+                <ArrowRightIcon size={14} className="transition-transform duration-180 ease-premium group-hover:translate-x-[3px]" />
               </Link>
               <div className="flex items-center gap-2" aria-label="Social links">
                 {socialLinks.map(({ label, href, icon: Icon }) => (
-                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="icon-btn contact-social" aria-label={`Anoop on ${label}`} title={label}>
+                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="contact-social inline-flex size-10 min-h-10 min-w-10 shrink-0 items-center justify-center rounded-md border border-line bg-card text-fg-secondary hover:border-line-strong hover:bg-card-elevated hover:text-fg max-[640px]:size-11 max-[640px]:min-h-11 max-[640px]:min-w-11" aria-label={`Anoop on ${label}`} title={label}>
                     <Icon size={15} />
                   </a>
                 ))}

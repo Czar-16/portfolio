@@ -26,8 +26,8 @@ export default function WatchPage() {
     <div className="shell py-16 sm:py-20">
       <Reveal>
         <div className="flex flex-col gap-4 border-b border-dashed border-line pb-8">
-          <p className="eyebrow">
-            <span className="eyebrow-dot" aria-hidden="true" />
+          <p className="inline-flex items-center gap-2 font-mono text-[11px] font-medium tracking-[0.16em] uppercase text-fg-muted">
+            <span className="size-1.5 rounded-full bg-accent shadow-[0_0_0_3px_color-mix(in_oklab,var(--accent)_18%,transparent)]" aria-hidden="true" />
             Beyond the code
           </p>
           <h1 className="font-semibold text-[clamp(2.4rem,7vw,3.75rem)] leading-none tracking-[-0.045em] text-balance hyphens-none text-fg">

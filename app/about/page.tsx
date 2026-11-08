@@ -29,7 +29,7 @@ export default function AboutPage() {
         <Reveal>
           <section
             aria-labelledby="about-heading"
-            className="card-lift relative overflow-hidden rounded-3xl border border-line bg-card shadow-card"
+            className="relative overflow-hidden rounded-3xl border border-line bg-card shadow-card transition-transform duration-180 ease-premium hover:-translate-y-2 hover:shadow-pop hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)]"
           >
             <div
               aria-hidden="true"
@@ -38,8 +38,8 @@ export default function AboutPage() {
 
             <div className="relative grid items-center gap-6 p-5">
               <div className="min-w-0">
-                <span className="eyebrow">
-                  <span className="eyebrow-dot" />
+                <span className="inline-flex items-center gap-2 font-mono text-[11px] font-medium tracking-[0.16em] uppercase text-fg-muted">
+                  <span className="size-1.5 rounded-full bg-accent shadow-[0_0_0_3px_color-mix(in_oklab,var(--accent)_18%,transparent)]" />
                   About me
                 </span>
                 <h1
@@ -65,10 +65,10 @@ export default function AboutPage() {
                 </div>
 
                 <div className="mt-6 flex flex-wrap gap-3">
-                  <a href={contact.mailto} className="btn btn-primary group h-11 px-5">
+                  <a href={contact.mailto} className="group inline-flex h-11 items-center justify-center gap-2 rounded-md bg-accent px-5 text-accent-contrast font-medium text-[13px] tracking-[-0.005em] hover:bg-[color-mix(in_oklab,var(--accent)_88%,white)] hover:shadow-[0_14px_40px_-14px_color-mix(in_oklab,var(--accent-glow)_85%,transparent)]">
                     <MailIcon size={15} />
                     Get in touch
-                    <ArrowRightIcon size={14} className="interaction-arrow" />
+                    <ArrowRightIcon size={14} className="transition-transform duration-180 ease-premium group-hover:translate-x-[3px]" />
                   </a>
                   <CopyButton text={contact.email} label="Copy email" />
                   {resume.available && (
@@ -76,7 +76,7 @@ export default function AboutPage() {
                       href={resume.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn h-11 px-5"
+                      className="group inline-flex h-11 items-center justify-center gap-2 rounded-md border border-line bg-[color-mix(in_oklab,var(--card-elevated)_82%,transparent)] px-5 text-fg font-medium text-[13px] tracking-[-0.005em] hover:border-[color-mix(in_oklab,var(--line-strong)] hover:bg-[var(--card-elevated)]"
                     >
                       <DownloadIcon size={15} />
                       Resume
@@ -96,7 +96,7 @@ export default function AboutPage() {
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="icon-btn"
+                      className="rounded-full p-1.5 bg-[color-mix(in_oklab,var(--card-elevated)_6%,transparent)] border border-[color-mix(in_oklab,var(--line)_18%,transparent)] text-fg-secondary hover:text-fg hover:border-[color-mix(in_oklab,var(--line)_70%,transparent)] hover:bg-[color-mix(in_oklab,var(--card-elevated)_8%,transparent)] focus-visible:outline-2 focus-visible:outline-[color-mix(in_oklab,var(--accent)_50%,transparent)] focus-visible:outline-offset-2"
                       aria-label={label}
                       title={label}
                     >
@@ -139,7 +139,7 @@ export default function AboutPage() {
               <Link
                 key={href}
                 href={href}
-                className="card-lift group flex items-center justify-between gap-4 rounded-2xl border border-line bg-card px-6 py-5 shadow-card"
+                className="group flex items-center justify-between gap-4 rounded-2xl border border-line bg-card px-6 py-5 shadow-card transition-transform duration-180 ease-premium hover:-translate-y-2 hover:shadow-pop hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)]"
               >
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-fg-muted">
@@ -148,7 +148,7 @@ export default function AboutPage() {
                   <p className="mt-2 text-sm font-medium text-fg">{title}</p>
                 </div>
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-line bg-bg-soft text-accent">
-                  <ArrowRightIcon size={16} className="interaction-arrow" />
+                  <ArrowRightIcon size={16} className="transition-transform duration-180 ease-premium group-hover:translate-x-[3px]" />
                 </span>
               </Link>
             ))}

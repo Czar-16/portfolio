@@ -206,7 +206,7 @@ export default function CommandPalette() {
                 }}
                 className="min-w-0 flex-1 bg-transparent py-4 text-fg focus:outline-none"
               />
-              <button type="button" onClick={() => setIsOpen(false)} aria-label="Close command palette" className="icon-btn ml-2"><CloseIcon size={16} /></button>
+              <button type="button" onClick={() => setIsOpen(false)} aria-label="Close command palette" className="ml-2 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-line bg-card text-fg-secondary transition-colors hover:border-line-strong hover:bg-card-elevated hover:text-fg max-sm:min-h-11 max-sm:min-w-9"><CloseIcon size={16} /></button>
             </div>
             <div className="min-h-0 max-h-80 overflow-y-auto overscroll-contain p-4">
               <div id={listId} role="listbox" aria-label="Commands" className="space-y-4">

@@ -53,7 +53,7 @@ export function FeaturedProjects() {
                 </p>
               </div>
               <span className="relative inline-flex shrink-0 items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-accent-contrast transition-colors group-hover:bg-accent/90">
-                See more projects <ArrowRightIcon size={15} className="interaction-arrow" />
+                See more projects <ArrowRightIcon size={15} className="transition-transform duration-180 ease-premium group-hover:translate-x-[3px]" />
               </span>
             </Link>
           </div>

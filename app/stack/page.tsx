@@ -79,7 +79,7 @@ export default function StackPage() {
             <p className="mt-1.5 text-[13px] leading-6 text-fg-secondary">The toolkit keeps growing with every project.</p>
           </div>
         </div>
-        <Link href="/projects" className="btn group shrink-0">See what I build<ArrowRightIcon size={14} className="interaction-arrow" /></Link>
+        <Link href="/projects" className="group inline-flex shrink-0 items-center gap-2 rounded-md border border-[color-mix(in_oklab,var(--line)_18%,transparent)] bg-[color-mix(in_oklab,var(--card-elevated)_82%,transparent)] px-5 text-fg font-medium text-[13px] tracking-[-0.005em] hover:border-[color-mix(in_oklab,var(--line-strong)_100%,transparent)] hover:bg-[var(--card-elevated)]">See what I build<ArrowRightIcon size={14} className="transition-transform duration-180 ease-premium group-hover:translate-x-[3px]" /></Link>
       </Reveal>
     </div>
   );

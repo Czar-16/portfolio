@@ -37,7 +37,7 @@ export function CopyButton({ text, label, iconOnly = false }: {
         disabled={busy}
         aria-label={label}
         title={status === "copied" ? "Copied!" : label}
-        className={`${iconOnly ? "icon-btn" : "btn h-11"} ${status === "copied" ? "text-success" : ""} disabled:cursor-wait`}
+        className={`${iconOnly ? "inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-line bg-card text-fg-secondary transition-colors hover:border-line-strong hover:bg-card-elevated hover:text-fg max-sm:min-h-11 max-sm:min-w-9" : "inline-flex h-11 items-center justify-center gap-2 rounded-md border border-line bg-card px-4 text-[13px] font-medium text-fg-secondary hover:border-line-strong hover:bg-card-elevated hover:text-fg"} ${status === "copied" ? "text-success" : ""} disabled:cursor-wait`}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           {status === "copied" ? <path d="m5 12 4 4L19 6" /> : <><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4" /></>}

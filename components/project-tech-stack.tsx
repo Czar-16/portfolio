@@ -144,7 +144,7 @@ export function ProjectTechStack({
           aria-label={`${remaining.length} more technologies for ${projectName}`}
           aria-expanded={open}
           aria-controls={open ? id : undefined}
-          className="badge min-h-11 min-w-11 justify-center cursor-pointer transition-colors duration-180 hover:border-accent/40 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="inline-flex h-11 min-h-11 min-w-11 items-center justify-center rounded-full border border-line bg-card px-3 text-xs font-medium text-fg-secondary cursor-pointer transition-colors duration-180 hover:border-accent/40 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           onPointerEnter={(event) => {
             if (event.pointerType === "touch") return;
             hovering.current = true;
@@ -218,7 +218,7 @@ export function ProjectTechStack({
               <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-fg-muted">More technologies</p>
               <ul className="flex flex-wrap gap-2">
                 {remaining.map((technology) => (
-                  <li key={technology} className="badge max-w-full !h-auto min-h-[26px] !whitespace-normal py-1 leading-relaxed [overflow-wrap:anywhere]">
+                  <li key={technology} className="inline-flex max-w-full min-h-[26px] items-center rounded-full border border-line bg-card px-2.5 py-1 text-xs font-medium text-fg-secondary whitespace-normal leading-relaxed [overflow-wrap:anywhere]">
                     {technology}
                   </li>
                 ))}

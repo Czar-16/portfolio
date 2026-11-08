@@ -28,7 +28,7 @@ export function ThemeToggle() {
     return () => { system.removeEventListener("change", sync); window.removeEventListener("storage", sync); };
   }, []);
   const next = theme === "light" ? "dark" : "light";
-  return <button type="button" className="icon-btn" data-click-sound="off" data-click-sparks="off" aria-label={`Switch to ${next} mode`} title={`Switch to ${next} mode`} onClick={() => {
+  return <button type="button" className="rounded-full p-1.5 bg-[color-mix(in_oklab,var(--card-elevated)_6%,transparent)] border border-[color-mix(in_oklab,var(--line)_18%,transparent)] text-fg-secondary hover:text-fg hover:border-[color-mix(in_oklab,var(--line)_70%,transparent)] hover:bg-[color-mix(in_oklab,var(--card-elevated)_8%,transparent)] focus-visible:outline-2 focus-visible:outline-[color-mix(in_oklab,var(--accent)_50%,transparent)] focus-visible:outline-offset-2" data-click-sound="off" data-click-sparks="off" aria-label={`Switch to ${next} mode`} title={`Switch to ${next} mode`} onClick={() => {
     playTheme(next);
     const root = document.documentElement;
     const changeTheme = () => { root.dataset.theme = next; };
