@@ -1,94 +1,73 @@
-import { watchItems } from "@/data/watch";
-import { Reveal, StaggerChildren, StaggerItem } from "@/components/reveal";
-import { WatchPoster } from "@/components/watch-poster";
-import { FilmIcon } from "@/components/icons";
-import { WatchClosingCard } from "@/components/watch-closing-card";
+import { groupOf, watchItems } from "@/data/watch";
+import { Reveal } from "@/components/reveal";
+import { WatchGrid } from "@/components/watch-grid";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Movies, Documentaries & Series", description: "Anoop Jha's handpicked collection of movies, documentaries, and series.", alternates: { canonical: "/watch" } };
+export const metadata: Metadata = {
+  title: "Movies, Documentaries & Series",
+  description: "Anoop Jha's handpicked collection of movies, documentaries, and series.",
+  alternates: { canonical: "/watch" },
+};
+
+type Stat = { label: string; count: number };
 
 export default function WatchPage() {
+  const counts: Record<string, number> = { Films: 0, Series: 0, Docs: 0 };
+  watchItems.forEach((item) => {
+    counts[groupOf(item.type)] += 1;
+  });
+  const stats: Stat[] = [
+    { label: "Films", count: counts.Films },
+    { label: "Series", count: counts.Series },
+    { label: "Docs", count: counts.Docs },
+  ];
+
   return (
     <div className="shell py-16 sm:py-20">
       <Reveal>
-        <div className="card-lift relative overflow-hidden rounded-2xl border border-line bg-card p-5 shadow-card sm:p-8 lg:p-10">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-20 -top-32 h-96 w-96 rounded-full bg-accent/10 blur-3xl"
-          />
-          <div className="relative flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="min-w-0 max-w-2xl">
-              <span className="eyebrow">
-                <span className="eyebrow-dot" />
-                Beyond the code
-              </span>
-              <h1 className="mt-4 text-[clamp(1.25rem,3vw,2rem)] font-semibold leading-[1.15] tracking-[-0.035em] text-fg">
-                MY RECOMMENDATIONS<span className="text-accent">.</span>
-              </h1>
-              <p className="mt-4 max-w-lg text-sm leading-7 text-fg-secondary sm:text-[15px]">
-                A handpicked collection of movies, documentaries and series — stories
-                that stayed with me long after the credits rolled.
-              </p>
-            </div>
-            <div className="flex shrink-0 items-center gap-3 rounded-xl border border-line bg-elevated/70 px-4 py-3">
-              <FilmIcon size={20} className="text-accent" />
-              <div>
-                <p className="text-xl font-semibold leading-none text-fg">
-                  {watchItems.length}
-                </p>
-                <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-fg-secondary">
-                  Films · Docs · Series
-                </p>
+        <div className="flex flex-col gap-4 border-b border-dashed border-line pb-8">
+          <p className="eyebrow">
+            <span className="eyebrow-dot" aria-hidden="true" />
+            Beyond the code
+          </p>
+          <h1 className="font-semibold text-[clamp(2.4rem,7vw,3.75rem)] leading-none tracking-[-0.045em] text-balance hyphens-none text-fg">
+            My recommendations.
+          </h1>
+          <p className="max-w-[34rem] text-sm leading-7 text-fg-secondary">
+            A handpicked collection of movies, documentaries and series — stories that stayed
+            with me long after the credits rolled.
+          </p>
+          <div className="mt-4 flex w-fit max-w-full rounded-[14px] border border-line bg-card">
+            {stats.map((stat, index) => (
+              <div
+                key={stat.label}
+                className={`flex flex-col gap-1 px-5 py-3 ${index > 0 ? "border-l border-dashed border-line" : ""}`}
+              >
+                <dd className="m-0 text-xl font-semibold tabular-nums leading-none text-fg">
+                  {stat.count}
+                </dd>
+                <dt className="font-mono text-xs uppercase tracking-widest text-fg-muted">
+                  {stat.label}
+                </dt>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </Reveal>
 
-      <Reveal className="mt-9 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-b border-line pb-4 sm:mt-10">
-        <h2 className="text-lg font-semibold tracking-tight text-fg sm:text-xl">
-          The collection
-        </h2>
-        <p className="text-xs leading-relaxed text-fg-secondary sm:text-sm">
-          {watchItems.length} picks · Movies, documentaries and series I loved
-        </p>
-      </Reveal>
+      <WatchGrid items={watchItems} />
 
-      <StaggerChildren className="mt-6 grid grid-cols-2 gap-x-3 gap-y-5 sm:mt-7 sm:grid-cols-3 sm:gap-4">
-        {watchItems.map((movie) => (
-          <StaggerItem key={movie.slug} className="h-full">
-            <article id={movie.slug} className="watch-card card-lift group flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-card shadow-card">
-              <div className="relative overflow-hidden">
-                <WatchPoster
-                  slug={movie.slug}
-                  title={movie.title}
-                  rank={`${movie.type} ${movie.rank}`}
-                  className="aspect-2/3 w-full"
-                />
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/35 via-transparent to-transparent"
-                />
-                <span className="absolute left-2.5 top-2.5 sm:left-3 sm:top-3 rounded-lg border border-white/20 bg-black/60 px-2 py-1 font-mono text-[11px] text-white backdrop-blur-md">
-                  <span className="sr-only">Pick </span>
-                  {String(movie.rank).padStart(2, "0")}
-                </span>
-              </div>
-              <div className="flex flex-1 flex-col gap-1.5 p-3 sm:gap-2 sm:p-4">
-                <p className="font-mono text-[11px] leading-5 tracking-wide text-fg-secondary">
-                  {movie.year} · {movie.type}
-                </p>
-                <h3 className="text-[13px] font-semibold leading-5 text-fg sm:text-[15px] sm:leading-6">
-                  {movie.title}
-                </h3>
-              </div>
-            </article>
-          </StaggerItem>
-        ))}
-        <StaggerItem className="col-span-full h-full xl:col-span-2">
-          <WatchClosingCard count={watchItems.length} />
-        </StaggerItem>
-      </StaggerChildren>
+      <footer className="mt-12 border-t border-dashed border-line pt-6">
+        <p className="mb-3 font-mono text-xs tracking-widest text-fg-secondary">
+          {watchItems.length} / ∞
+        </p>
+        <h2 className="font-semibold tracking-tight text-fg sm:text-xl">
+          That&rsquo;s all my brain gave me.
+        </h2>
+        <p className="mt-3 text-sm leading-6 text-fg-secondary">
+          These {watchItems.length} are just what came to mind while building this route.
+        </p>
+      </footer>
     </div>
   );
 }

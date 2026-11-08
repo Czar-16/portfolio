@@ -7,6 +7,12 @@ type WatchItem = {
   type: "Film" | "Series" | "Documentary" | "Docuseries";
 };
 
+export type { WatchItem };
+
+/** Docuseries / Documentary both land in "Docs". */
+export const groupOf = (type: string): "Films" | "Series" | "Docs" =>
+  /doc/i.test(type) ? "Docs" : /series/i.test(type) ? "Series" : "Films";
+
 export const watchItems: WatchItem[] = [
   { rank: 1, title: "The Social Network", year: 2010, slug: "the-social-network", type: "Film" },
   { rank: 2, title: "October Sky", year: 1999, slug: "october-sky", type: "Film" },

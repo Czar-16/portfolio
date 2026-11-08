@@ -161,6 +161,9 @@ export function CursorCompanion({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const element = follower.current;
     if (!element || stored === null || selection === "off" || open || !visible || reduce) return;
+    // Reset per-companion animation state when the selection (re)attaches.
+    gait.current.step = 0;
+    gait.current.direction = 0;
     const media = window.matchMedia("(hover: hover) and (pointer: fine)");
     let frame = 0;
     let last: number | null = null;
@@ -188,7 +191,10 @@ export function CursorCompanion({ children }: { children: React.ReactNode }) {
     function render() {
       position.current = { x, y };
       element!.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
-      if (selection !== "f1") element!.style.setProperty("--heading", `${gait.current.direction * 45}deg`);
+      if (selection !== "f1") {
+        element!.style.setProperty("--heading", `${gait.current.direction * 45}deg`);
+        element!.dataset.step = String(Math.floor(gait.current.step));
+      }
       element!.dataset.direction = directions[gait.current.direction];
       if (selection === "f1" && trails.current) {
         const canvas = trails.current;
@@ -330,11 +336,12 @@ export function CursorCompanion({ children }: { children: React.ReactNode }) {
     window.addEventListener("popstate", hide);
     document.addEventListener("click", navigation, true);
     media.addEventListener("change", hide);
-    if (selection !== "f1" && lastMousePosition && media.matches && !blocked) {
-      targetX = lastMousePosition.x;
-      targetY = lastMousePosition.y;
-      x = clamp(lastMousePosition.x - 110, innerWidth);
-      y = clamp(lastMousePosition.y - 40, innerHeight);
+    const reference = lastMousePosition ?? { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    if (selection !== "f1" && media.matches && !blocked) {
+      targetX = reference.x;
+      targetY = reference.y;
+      x = clamp(reference.x - 110, innerWidth);
+      y = clamp(reference.y - 40, innerHeight);
       active = true;
       setState("walk");
       element!.hidden = false;

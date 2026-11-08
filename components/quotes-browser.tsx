@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { quotes, quoteCategories, type Quote, type QuoteCategoryId } from "@/data/quotes";
 import { CopyButton } from "@/components/copy-button";
@@ -8,10 +8,45 @@ import { QuoteIcon } from "@/components/icons";
 import { useReducedMotion } from "@/components/use-reduced-motion";
 import styles from "./quotes-browser.module.css";
 
+// Pre-computed spike trajectories: 12 spikes fanning out from the seal center.
+const spikeAnim = Array.from({ length: 12 }).map((_, i) => {
+  const angle = (i / 12) * 360 - 90;
+  const rad = angle * Math.PI / 180;
+  const mid = 60;
+  const far = 110;
+  return {
+    id: i,
+    angle,
+    tx1: Math.cos(rad) * mid,
+    ty1: Math.sin(rad) * mid,
+    tx2: Math.cos(rad) * far,
+    ty2: Math.sin(rad) * far,
+    tx3: Math.cos(rad) * far * 1.15,
+    ty3: Math.sin(rad) * far * 1.15,
+  };
+});
+
 function ConcealedQuote({ quote }: { quote: Quote }) {
   const [revealed, setRevealed] = useState(false);
   const reduce = useReducedMotion();
-  const reveal = () => setRevealed(true);
+  const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const reveal = () => {
+    if (revealed) return;
+    if (reduce) { setRevealed(true); return; }
+    setRevealed(true);
+  };
+
+  const hoverReveal = () => {
+    if (revealed) return;
+    if (reduce) { setRevealed(true); return; }
+    // Let the spike burst play before swapping in the quote text.
+    revealTimer.current = setTimeout(() => setRevealed(true), 700);
+  };
+
+  useEffect(() => () => {
+    if (revealTimer.current) clearTimeout(revealTimer.current);
+  }, []);
 
   return (
     <li>
@@ -21,7 +56,7 @@ function ConcealedQuote({ quote }: { quote: Quote }) {
         data-quote-id={quote.id}
         data-revealed={revealed}
         onPointerEnter={(event) => {
-          if (event.pointerType === "mouse" && window.matchMedia("(hover: hover)").matches) reveal();
+          if (event.pointerType === "mouse" && window.matchMedia("(hover: hover)").matches) hoverReveal();
         }}
         onFocusCapture={reveal}
         onClick={reveal}
@@ -42,17 +77,42 @@ function ConcealedQuote({ quote }: { quote: Quote }) {
 
         <div id={`quote-${quote.id}`} className={styles.quoteBody}>
           {revealed ? (
-            <motion.blockquote
-              className="relative z-1 text-[17px] font-medium leading-[1.7] tracking-[-0.015em] text-fg sm:text-lg"
-              initial={reduce ? false : { opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={reduce ? { duration: 0 } : { duration: 0.28, ease: "easeOut" }}
-            >
-              {quote.text}
-            </motion.blockquote>
+            <>
+              <motion.blockquote
+                className={`${styles.quoteText} relative z-1 text-[17px] font-medium leading-[1.7] tracking-[-0.015em] text-fg sm:text-lg`}
+                initial={reduce ? false : { opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={reduce ? { duration: 0 } : { duration: 0.28, ease: "easeOut" }}
+              >
+                {quote.text}
+              </motion.blockquote>
+              <span className={`${styles.quoteAccentBar} mt-6 h-px w-8 bg-accent/35`} aria-hidden="true" />
+            </>
           ) : (
-            <div className="flex h-full min-h-56 flex-col items-center justify-center gap-4 text-center" aria-hidden="true">
-              <span className={styles.seal}><QuoteIcon size={28} /></span>
+            <div className={styles.concealedWrap} aria-hidden="true">
+              <span className={styles.seal}>
+                <QuoteIcon size={28} />
+                <span className={styles.sealReveal} />
+                <span className={styles.spikeBurst} aria-hidden="true">
+                  {spikeAnim.map((s) => (
+                    <span
+                      key={s.id}
+                      className={styles.spike}
+                      style={
+                        {
+                          '--angle': `${s.angle}deg`,
+                          '--tx1': `${s.tx1}px`,
+                          '--ty1': `${s.ty1}px`,
+                          '--tx2': `${s.tx2}px`,
+                          '--ty2': `${s.ty2}px`,
+                          '--tx3': `${s.tx3}px`,
+                          '--ty3': `${s.ty3}px`,
+                        } as React.CSSProperties
+                      }
+                    />
+                  ))}
+                </span>
+              </span>
               <p className="text-sm font-medium text-fg-secondary">Uncover this quote</p>
               <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-fg-muted">A little perspective inside</span>
             </div>
