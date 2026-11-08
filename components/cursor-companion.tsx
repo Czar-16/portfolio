@@ -106,7 +106,7 @@ export function CompanionPicker() {
   return <div className={styles.picker} onBlur={event => {
     if (event.relatedTarget instanceof Node && !event.currentTarget.contains(event.relatedTarget)) setOpen(false);
   }}>
-    <button ref={trigger} type="button" className={`icon-btn ${styles.trigger}`} aria-label={`Cursor companion: ${names[selection]}`} title={`Cursor companion: ${names[selection]}`} aria-expanded={open} aria-controls={open ? id : undefined} aria-haspopup="dialog" onClick={() => setOpen(!open)}>
+    <button ref={trigger} type="button" className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-line bg-card text-fg-secondary transition-colors hover:border-line-strong hover:bg-card-elevated hover:text-fg max-sm:min-h-11 max-sm:min-w-9 ${styles.trigger}`} aria-label={`Cursor companion: ${names[selection]}`} title={`Cursor companion: ${names[selection]}`} aria-expanded={open} aria-controls={open ? id : undefined} aria-haspopup="dialog" onClick={() => setOpen(!open)}>
       <span className={styles.paw}><Paw /></span>
       <span className={styles.staticPreview}>{selection === "off" ? <Paw /> : <Character kind={selection} />}</span>
     </button>
@@ -250,7 +250,7 @@ export function CursorCompanion({ children }: { children: React.ReactNode }) {
           heading += Math.max(-9, Math.min(9, delta * Math.min(1, elapsed / 70)));
           element!.style.setProperty("--heading", `${heading}deg`);
           const turnBrake = Math.max(0.3, 1 - Math.abs(delta) / 150);
-          const speed = Math.min(0.26 * elapsed * turnBrake, Math.max(0, distance - 7));
+          const speed = Math.min(0.22 * elapsed * turnBrake, Math.max(0, distance - 7));
           x = clamp(x + Math.cos(heading * Math.PI / 180) * speed, innerWidth);
           y = clamp(y + Math.sin(heading * Math.PI / 180) * speed, innerHeight);
           history.push({ x: x + 26, y: y + 20, angle: heading * Math.PI / 180, time });

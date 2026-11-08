@@ -110,7 +110,7 @@
     text-rendering: optimizeLegibility;
   }
 
-  button, input, select, textarea, nav, .btn, .project-link {
+  button, input, select, textarea, nav, .project-link {
     font-family: var(--font-control);
   }
 
@@ -168,128 +168,15 @@
  * ------------------------------------------------------------------ */
 
 @layer components {
-
   .card {
     background-color: var(--card);
     border: 1px solid var(--line);
     border-radius: var(--radius-card);
     box-shadow: var(--sh-card);
   }
-
-  /* Eyebrow: "● Section" */
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--fg-muted);
-  }
-
-  .eyebrow-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 999px;
-    background-color: var(--accent);
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 18%, transparent);
-  }
-
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    height: 26px;
-    padding-inline: 9px;
-    border-radius: 7px;
-    border: 1px solid var(--line);
-    background-color: color-mix(in oklab, var(--card-elevated) 70%, transparent);
-    color: var(--fg-secondary);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    line-height: 1;
-    white-space: nowrap;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    height: 38px;
-    padding-inline: 15px;
-    border-radius: var(--radius-control);
-    border: 1px solid var(--line);
-    background-color: color-mix(in oklab, var(--card-elevated) 82%, transparent);
-    color: var(--fg);
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: -0.005em;
-    white-space: nowrap;
-    transition:
-      translate 0.22s var(--ease-premium),
-      scale 0.16s var(--ease-premium),
-      background-color 0.22s var(--ease-premium),
-      border-color 0.22s var(--ease-premium),
-      box-shadow 0.22s var(--ease-premium),
-      color 0.22s var(--ease-premium);
-  }
-
-  .btn:not(:disabled):hover {
-    border-color: var(--line-strong);
-    background-color: var(--card-elevated);
-  }
-
-  .btn-primary {
-    background-color: var(--accent);
-    border-color: transparent;
-    color: var(--accent-contrast);
-    box-shadow: var(--sh-accent);
-  }
-
-  .btn-primary:not(:disabled):hover {
-    background-color: color-mix(in oklab, var(--accent) 88%, white);
-    border-color: transparent;
-    box-shadow: 0 14px 40px -14px color-mix(in oklab, var(--accent-glow) 85%, transparent);
-  }
-
-  .icon-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-control);
-    border: 1px solid transparent;
-    color: var(--fg-secondary);
-    transition:
-      color 0.2s var(--ease-premium),
-      background-color 0.2s var(--ease-premium),
-      border-color 0.2s var(--ease-premium),
-      translate 0.22s var(--ease-premium),
-      scale 0.16s var(--ease-premium);
-  }
-
-  .icon-btn:hover {
-    color: var(--fg);
-    background-color: color-mix(in oklab, var(--fg) 6%, transparent);
-    border-color: var(--line);
-  }
-
 }
 
 @media (pointer: coarse) {
-  .icon-btn {
-    width: 44px;
-    height: 44px;
-    flex-shrink: 0;
-  }
-
-  .btn {
-    min-height: 44px;
-  }
 }
 
 /* Individual translate/scale properties keep pointer feedback independent
@@ -313,23 +200,13 @@
   transition: opacity 200ms var(--ease-premium), transform 400ms var(--ease-premium);
 }
 
-.interaction-arrow {
-  transition: translate var(--motion-hover) var(--ease-premium);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  :is(.btn, .icon-btn, .interactive, .interactive-card, .card-lift):hover .interaction-arrow {
-    translate: 3px 0;
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
   :where(button, a):not(:disabled):not([aria-disabled="true"]):active, .interactive-card:active {
     scale: 0.97;
   }
 
   @media (hover: hover) and (pointer: fine) {
-    :is(.btn, .icon-btn, .interactive):not(:disabled):hover {
+    .interactive:hover {
       translate: 0 -1px;
     }
 
@@ -340,7 +217,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .interaction-arrow,
   .group:hover .image-reveal,
   .interactive-card,
   .interactive {
@@ -352,11 +228,11 @@
 
 /* Keep the sheen inside its own box so tooltips and focus rings stay visible. */
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  :where(button, .btn) {
+  :where(button) {
     position: relative;
   }
 
-  :where(button, .btn):not(:disabled):not([aria-disabled="true"]):hover::after {
+  :where(button):not(:disabled):not([aria-disabled="true"]):hover::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -481,7 +357,6 @@ h2 { font-size: 18px; line-height: 1.5; }
   pointer-events: none;
 }
 .section-frame .shell { padding-inline: 0; }
-.section-heading .eyebrow { display: none; }
 .section-heading > div { gap: 6px; }
 .section-heading a { font-size: 12px; }
 .profile-intro { animation: profile-bounce 780ms ease-out both; transform-origin: left center; }
@@ -494,10 +369,7 @@ h2 { font-size: 18px; line-height: 1.5; }
 }
 @media (prefers-reduced-motion: reduce) { .profile-intro { animation: none; } }
 .availability { display: flex; align-items: center; gap: 7px; margin-top: 20px; font-size: 11px; color: var(--fg-secondary); }
-.availability span { width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: #22c55e; }
-.btn { min-height: 32px; height: auto; padding: 6px 10px; font-size: 12px; border-radius: 4px; box-shadow: none; }
-.btn-primary { color: var(--accent-contrast); }
-.icon-btn { width: 32px; height: 32px; border-radius: 4px; }
+.availability > span { width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: #22c55e; animation: availability-blink 1.8s ease-in-out infinite; }
 .card-lift.card-lift { border-radius: 6px; box-shadow: none; background-image: none; }
 .card-lift:hover { box-shadow: none; transform: none; }
 .site-header { position: sticky; top: 0; z-index: 50; height: 49px; background: var(--bg-veil); }
@@ -597,7 +469,7 @@ h2 { font-size: 18px; line-height: 1.5; }
   height: 2px;
   background: radial-gradient(circle, var(--section-dot) .85px, transparent 1px) left center / 6px 2px repeat-x;
 }
-.contact-social.icon-btn { position: relative; overflow: hidden; width: 40px; height: 40px; min-width: 40px; min-height: 40px; }
+.contact-social { position: relative; overflow: hidden; }
 .contact-social::before {
   content: "";
   position: absolute;
@@ -610,7 +482,6 @@ h2 { font-size: 18px; line-height: 1.5; }
 .contact-social:hover::before, .contact-social:focus-visible::before { transform: translateX(120%); }
 .contact-social svg { position: relative; }
 @media (prefers-reduced-motion: reduce) { .contact-social::before { display: none; } }
-@media (pointer: coarse) { .contact-social.icon-btn { width: 44px; height: 44px; min-width: 44px; min-height: 44px; } }
 .contact-availability-dot {
   background: #4ade80;
   box-shadow: 0 0 0 3px rgb(74 222 128 / 10%);
@@ -641,7 +512,7 @@ html:is([data-terminal-intro], [data-swarm-active]) .contact-availability-dot { 
 
 .heatmap-calendar { width: 100%; min-width: 360px; padding-block: 2px; }
 .heatmap-months, .heatmap-grid { display: grid; grid-template-columns: repeat(53, minmax(0, 1fr)); gap: 2px; }
-.heatmap-months { height: 18px; font-size: 9px; color: var(--fg-muted); }
+.heatmap-months { height: 18px; font-size: 9px; color: var(--fg-muted); white-space: nowrap; }
 .heatmap-week { display: flex; flex-direction: column; gap: 2px; }
 .heatmap-week .contribution-cell { width: 100%; aspect-ratio: 1; border-radius: 2px; }
 
@@ -690,8 +561,6 @@ html:is([data-terminal-intro], [data-swarm-active]) .contact-availability-dot { 
   to { clip-path: inset(0); }
 }
 [data-theme="light"] .theme-moon { display: block; }
-.btn, .icon-btn { min-height: 44px; }
-.icon-btn { min-width: 44px; }
 .desktop-index a { min-height: 44px; display: flex; align-items: center; }
 .portfolio-column { overflow-wrap: anywhere; }
 .tech-icon { position: relative; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 8px; color: var(--fg-secondary); background: var(--bg-soft); }
@@ -731,15 +600,11 @@ html:is([data-terminal-intro], [data-swarm-active]) .contact-availability-dot { 
 .project-footer > div:first-child { gap: 0; }
 .project-footer .tech-icon { width: 24px; height: 44px; border: 0; border-radius: 4px; background: transparent; }
 .project-footer .tech-icon svg { width: 14px; height: 14px; }
-.project-footer .badge { min-width: 24px; height: 44px; padding: 0 3px; border: 0; background: transparent; font-size: 10px; }
 .project-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0 6px; }
 .project-link { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 44px; font-size: 11px; color: var(--fg-secondary); }
 .project-link:hover { color: var(--fg); }
-.project-links .btn { padding: 0; border: 0; background: transparent; font-size: 11px; }
-.project-links .btn svg { width: 12px; }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) { .project-preview:hover .project-image { transform: scale(1.025); } }
 @media (prefers-reduced-motion: reduce) { .project-image { transition: none; } .project-status[data-status="Still building"] > span, .project-status[data-status="In progress"] > span { animation: none; } }
-@media (pointer: coarse) { .project-footer .tech-icon, .project-footer .badge { min-width: 44px; } }
 
 .github-calendar-panel { padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
 .github-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding-block: 4px; }
@@ -764,11 +629,9 @@ html:is([data-terminal-intro], [data-swarm-active]) .contact-availability-dot { 
 .project-summary, .project-title { font-family: var(--font-heading); }
 .toolbar-controls { display: flex; align-items: center; gap: 2px; }
 .compact-toolbar { padding-inline: 10px; gap: 4px; font-family: var(--font-control); }
-.compact-toolbar .icon-btn, .font-menu-control .icon-btn { width: 44px; height: 44px; flex-shrink: 0; }
 .font-menu-control { display: none; }
 @media (max-width: 399px) {
   .font-menu-control { display: block; padding: 4px 12px; }
-  .font-menu-control .icon-btn { width: auto; padding-inline: 12px; gap: 10px; }
   .compact-toolbar { padding-inline: 6px; }
   .toolbar-controls { gap: 0; }
 }
