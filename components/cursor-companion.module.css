@@ -14,8 +14,9 @@
 .follower { position: fixed; top: 0; left: 0; width: 40px; height: 40px; pointer-events: none; user-select: none; z-index: 60; contain: layout style; }
 .follower[hidden] { display: none; }
 .trails { position: fixed; inset: 0; z-index: 59; pointer-events: none; }
+.follower[data-cursor-companion="f1"] { width: 72px; height: 40px; }
 .follower[data-cursor-companion="f1"] .companionButton .character { transform: rotate(var(--heading, 0deg)); transform-origin: 50% 50%; }
-.follower[data-cursor-companion="f1"] .companionButton .character { width: 60px; height: 31px; }
+.follower[data-cursor-companion="f1"] .companionButton .character { width: 68px; height: 35px; }
 .carWheel { transform-box: fill-box; transform-origin: center; }
 .follower[data-cursor-companion="f1"][data-moving="true"] .carWheel { animation: wheel-roll 180ms linear infinite; }
 @keyframes wheel-roll { to { rotate: 360deg; } }
