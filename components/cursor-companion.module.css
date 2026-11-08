@@ -47,6 +47,7 @@
   .trigger { border: 1px solid var(--line); border-radius: 50%; background: var(--card); box-shadow: var(--sh-pop); }
 }
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .picker { display: none; }
   .paw { display: none; }
   .staticPreview { display: flex; }
   .follower { display: none; }
