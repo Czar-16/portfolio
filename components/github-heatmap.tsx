@@ -131,7 +131,7 @@ export function GitHubHeatmap({ onTotal }: { onTotal?: (total: number) => void }
     async function loadContributions() {
       try {
         const response = await fetch(
-          "https://github-contributions-api.jogruber.de/v4/Czar-16?y=last",
+          "/api/github-contributions",
           {
             cache: "no-store",
             signal: controller.signal,
