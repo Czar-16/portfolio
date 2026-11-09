@@ -9,7 +9,7 @@ import { Character } from "./companion-sprites";
 
 type Selection = "dog" | "cat" | "ghost" | "robot" | "f1" | "off";
 const choices = ["dog", "cat", "ghost", "robot", "f1", "off"] as const;
-const names = { dog: "Simba", cat: "Billu", ghost: "AAAAA", robot: "Chitti", f1: "Red Bull F1", off: "Off" };
+const names = { dog: "Simba", cat: "Billu", ghost: "AAAAA", robot: "Chitti", f1: "F1", off: "Off" };
 const quips = {
   dog: ["I work for treats. Equity negotiable.", "Your cursor smells like productivity.", "Sit? In this economy?", "Fetch failed. Returned a stick anyway.", "I put the paw in portfolio.", "BRB, barking at a suspicious pixel."],
   cat: ["I have reviewed your work. Feed me.", "This cursor is on my property.", "I knocked your bugs off the table.", "My availability? Mostly naps.", "You may pet me. Terms may change.", "I am the reason your keyboard is warm."],

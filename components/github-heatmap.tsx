@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import type { KeyboardEvent } from "react";
 import { useAutoRefresh } from "@/components/use-auto-refresh";
 
 type Contribution = {
@@ -18,6 +19,15 @@ type Cell = {
   date: string;
   count: number;
   level: number;
+};
+
+type DayTooltip = {
+  date: string;
+  count: number;
+  x: number;
+  y: number;
+  below: boolean;
+  pinned: boolean;
 };
 
 const WEEKS = 53;
@@ -40,23 +50,24 @@ function buildCalendar(contributions: Contribution[]): Cell[][] {
     return [];
   }
 
-  const firstDate = new Date(`${latest[0].date}T00:00:00`);
+  const firstDate = new Date(`${latest[0].date}T00:00:00Z`);
 
   /*
    * Move backwards to the Sunday of the first week.
    */
-  firstDate.setDate(firstDate.getDate() - firstDate.getDay());
+  firstDate.setUTCDate(firstDate.getUTCDate() - firstDate.getUTCDay());
 
   const cells: Cell[] = [];
+  const byDate = new Map(sorted.map((item) => [item.date, item]));
 
   for (let i = 0; i < WEEKS * DAYS; i++) {
     const date = new Date(firstDate);
 
-    date.setDate(firstDate.getDate() + i);
+    date.setUTCDate(firstDate.getUTCDate() + i);
 
     const dateString = date.toISOString().slice(0, 10);
 
-    const contribution = sorted.find((item) => item.date === dateString);
+    const contribution = byDate.get(dateString);
 
     cells.push({
       date: dateString,
@@ -76,7 +87,7 @@ function getMonthLabels(weeks: Cell[][]) {
 
     if (!first) return "";
 
-    const date = new Date(`${first.date}T00:00:00`);
+    const date = new Date(`${first.date}T12:00:00`);
 
     /*
      * Only show the month when we're in the first
@@ -97,6 +108,20 @@ export function GitHubHeatmap({ onTotal }: { onTotal?: (total: number) => void }
   const [contributions, setContributions] = useState<Contribution[] | null>(
     null,
   );
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [tooltip, setTooltip] = useState<DayTooltip | null>(null);
+  const showLatestWeek = useCallback((element: HTMLDivElement | null) => {
+    if (element) element.scrollLeft = element.scrollWidth;
+  }, []);
+
+  useEffect(() => {
+    if (!tooltip?.pinned) return;
+    const dismiss = (event: PointerEvent) => {
+      if (!(event.target instanceof Element) || !event.target.closest("[data-contribution-date]")) setTooltip(null);
+    };
+    document.addEventListener("pointerdown", dismiss);
+    return () => document.removeEventListener("pointerdown", dismiss);
+  }, [tooltip?.pinned]);
 
   useEffect(() => {
     let cancelled = false;
@@ -157,6 +182,38 @@ export function GitHubHeatmap({ onTotal }: { onTotal?: (total: number) => void }
   }, [weeks]);
 
   const colors = COLORS;
+  const latestDate = contributions?.reduce((latest, day) => day.date > latest ? day.date : latest, "") ?? "";
+  const days = useMemo(() => weeks.flat().filter((day) => day.date <= latestDate), [weeks, latestDate]);
+  const activeDate = selectedDate && days.some((day) => day.date === selectedDate) ? selectedDate : latestDate;
+
+  function showDay(day: Cell, element: HTMLElement, pinned: boolean) {
+    const rect = element.getBoundingClientRect();
+    setTooltip({
+      date: day.date,
+      count: day.count,
+      x: Math.max(90, Math.min(window.innerWidth - 90, rect.left + rect.width / 2)),
+      y: rect.top < 56 ? rect.bottom + 10 : rect.top - 10,
+      below: rect.top < 56,
+      pinned,
+    });
+  }
+
+  function selectDay(index: number, focus = false) {
+    const day = days[index];
+    if (!day) return;
+    setSelectedDate(day.date);
+    if (focus) {
+      document.querySelector<HTMLButtonElement>(`[data-contribution-date="${day.date}"]`)?.focus();
+    }
+  }
+
+  function handleDayKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+    if (event.key === "Escape") { setTooltip(null); return; }
+    const offset = { ArrowLeft: -7, ArrowRight: 7, ArrowUp: -1, ArrowDown: 1 }[event.key];
+    if (offset === undefined) return;
+    event.preventDefault();
+    selectDay(Math.max(0, Math.min(days.length - 1, index + offset)), true);
+  }
 
   /*
    * Loading state
@@ -202,12 +259,17 @@ export function GitHubHeatmap({ onTotal }: { onTotal?: (total: number) => void }
 
   return (
     <div>
+      <div className="heatmap-heading">
+        <span>Contribution calendar</span>
+        <span>Last 12 months</span>
+      </div>
       <div
         tabIndex={0}
         role="region"
         aria-label="GitHub contribution calendar, scroll horizontally for earlier weeks"
-        ref={(el) => { if (el) el.scrollLeft = el.scrollWidth; }}
+        ref={showLatestWeek}
         className="w-full overflow-x-auto overflow-y-hidden"
+        onScroll={() => setTooltip(null)}
       >
         <div className="heatmap-calendar">
           <div className="heatmap-months" aria-hidden="true">
@@ -217,11 +279,23 @@ export function GitHubHeatmap({ onTotal }: { onTotal?: (total: number) => void }
             {weeks.map((week, weekIndex) => (
               <div key={weekIndex} className="heatmap-week">
                 {week.map((cell, dayIndex) => (
-                  <div
+                  <button
                     key={`${weekIndex}-${dayIndex}`}
+                    type="button"
                     className="contribution-cell"
+                    data-contribution-date={cell.date}
+                    data-selected={cell.date === selectedDate}
+                    tabIndex={cell.date === activeDate ? 0 : -1}
+                    disabled={cell.date > latestDate}
+                    aria-label={`${cell.count} contribution${cell.count === 1 ? "" : "s"} on ${new Date(`${cell.date}T12:00:00`).toLocaleDateString("en-US", { dateStyle: "full" })}`}
+                    aria-pressed={cell.date === selectedDate}
+                    onPointerEnter={(event) => { if (event.pointerType === "mouse") showDay(cell, event.currentTarget, false); }}
+                    onPointerLeave={() => setTooltip(current => current?.pinned ? current : null)}
+                    onFocus={(event) => showDay(cell, event.currentTarget, false)}
+                    onBlur={() => setTooltip(current => current?.pinned ? current : null)}
+                    onClick={(event) => { setSelectedDate(cell.date); showDay(cell, event.currentTarget, true); }}
+                    onKeyDown={(event) => handleDayKeyDown(event, weekIndex * DAYS + dayIndex)}
                     style={{ backgroundColor: colors[Math.min(cell.level, 4)] }}
-                    title={`${cell.count} contribution${cell.count === 1 ? "" : "s"} on ${cell.date}`}
                   />
                 ))}
               </div>
@@ -230,10 +304,13 @@ export function GitHubHeatmap({ onTotal }: { onTotal?: (total: number) => void }
         </div>
       </div>
       <div className="heatmap-legend" aria-label="Contribution intensity, from less active to more active">
-        <span className="mr-1">Less</span>
-        {colors.map((color, level) => <span key={color} className="contribution-cell size-2.5" style={{ backgroundColor: color }} title={`Activity level ${level}`} />)}
-        <span className="ml-1">More</span>
+        <span>Less</span>
+        {colors.map((color, level) => <span key={color} className="contribution-cell" style={{ backgroundColor: color }} title={`Activity level ${level}`} />)}
+        <span>More</span>
       </div>
+      {tooltip && <div className="heatmap-tooltip" data-below={tooltip.below} role="status" style={{ left: tooltip.x, top: tooltip.y }}>
+        {tooltip.count} contribution{tooltip.count === 1 ? "" : "s"} on {new Date(`${tooltip.date}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+      </div>}
     </div>
   );
 }

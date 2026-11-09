@@ -72,19 +72,18 @@ export function GitHubActivity() {
 
   return (
     <div className="flex h-full min-w-0 flex-col gap-4">
-      {/* Section heading */}
-      <a
-        href={github.profileUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center gap-2"
-      >
-        <GithubIcon size={16} className="text-fg-secondary" />
-
-        <h3 className="text-sm font-semibold tracking-tight text-fg">
-          GitHub Activity
-        </h3>
-      </a>
+      <div className="github-activity-header">
+        <div className="github-activity-title">
+          <span className="github-activity-icon"><GithubIcon size={19} /></span>
+          <div>
+            <p>Developer activity</p>
+            <h3>GitHub Activity</h3>
+          </div>
+        </div>
+        <a href={github.profileUrl} target="_blank" rel="noopener noreferrer">
+          View profile <span aria-hidden="true">↗</span>
+        </a>
+      </div>
 
       {/* Contribution heatmap */}
       <div
