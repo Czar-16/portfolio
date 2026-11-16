@@ -33,10 +33,11 @@ export const projects: Project[] = [
       "MailLoop landing page showing personalized Gmail outreach and a batch delivery progress demo",
     period: "2026",
     role: "Design, build, ship",
-    status: "Still building",
+    status: "Live",
     tech: [
       "Next.js",
       "TypeScript",
+      "Docker",
       "PostgreSQL",
       "Prisma",
       "Auth.js",
@@ -54,6 +55,11 @@ export const projects: Project[] = [
       "Manual follow-up reminders",
     ],
     links: [
+      {
+        label: "Live",
+        href: "https://mailloop.in",
+        external: true,
+      },
       {
         label: "GitHub",
         href: "https://github.com/Czar-16/mailloop",
