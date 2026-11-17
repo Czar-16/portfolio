@@ -69,6 +69,78 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "purepin",
+    name: "PurePin",
+    tagline: "Grab the original Pinterest image, not the cached preview.",
+    description:
+      "Pinterest high-resolution image downloader with secure server-side image handling.",
+    image: "/projects/purepin.png",
+    imageAlt:
+      "PurePin downloader interface showing a resolved original-resolution image",
+    period: "2026",
+    role: "Design, build, ship",
+    status: "Live",
+    tech: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Shadcn UI",
+      "Zod",
+      "Vercel Analytics",
+    ],
+    highlights: [
+      "Pinterest CDN handling",
+      "Original image resolution",
+      "Server-side proxy",
+      "CORS handling",
+      "Blob downloads",
+      "Production deployment",
+    ],
+    links: [
+      { label: "Live", href: "https://purepin.site", external: true },
+      {
+        label: "GitHub",
+        href: "https://github.com/Czar-16/PurePin",
+        external: true,
+        private: true,
+      },
+    ],
+  },
+  {
+    slug: "huntdeck",
+    name: "Huntdeck",
+    tagline: "One click for every application.",
+    description:
+      "Local-only job application tracker for Firefox and Chrome with daily goals, streaks, activity charts, and an optional application pipeline.",
+    image: "/projects/huntdeck.png",
+    imageAlt:
+      "Huntdeck dashboard with a daily goal ring, one-click application logging, and weekly activity statistics",
+    period: "2026",
+    role: "Design, build, ship",
+    status: "Live",
+    tech: ["JavaScript", "HTML", "CSS", "Manifest V3", "Browser Extension APIs"],
+    highlights: [
+      "One-click application logging and daily goals",
+      "Streaks, activity charts, and heatmap",
+      "Company and role notes with pipeline tracking",
+      "CSV import and export",
+      "Local browser storage with no accounts or analytics",
+      "Firefox and Chrome support",
+    ],
+    links: [
+      {
+        label: "Live",
+        href: "https://addons.mozilla.org/en-US/firefox/addon/huntdeck/",
+        external: true,
+      },
+      {
+        label: "GitHub",
+        href: "https://github.com/Czar-16/huntdeck",
+        external: true,
+      },
+    ],
+  },
+  {
     slug: "toki",
     name: "Toki",
     tagline: "Study, pause, and take a proportional break in your terminal.",
@@ -211,44 +283,6 @@ export const projects: Project[] = [
         label: "GitHub",
         href: "https://github.com/Czar-16/BuzzLine",
         external: true,
-      },
-    ],
-  },
-  {
-    slug: "purepin",
-    name: "PurePin",
-    tagline: "Grab the original Pinterest image, not the cached preview.",
-    description:
-      "Pinterest high-resolution image downloader with secure server-side image handling.",
-    image: "/projects/purepin.png",
-    imageAlt:
-      "PurePin downloader interface showing a resolved original-resolution image",
-    period: "2026",
-    role: "Design, build, ship",
-    status: "Live",
-    tech: [
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "Shadcn UI",
-      "Zod",
-      "Vercel Analytics",
-    ],
-    highlights: [
-      "Pinterest CDN handling",
-      "Original image resolution",
-      "Server-side proxy",
-      "CORS handling",
-      "Blob downloads",
-      "Production deployment",
-    ],
-    links: [
-      { label: "Live", href: "https://purepin.site", external: true },
-      {
-        label: "GitHub",
-        href: "https://github.com/Czar-16/PurePin",
-        external: true,
-        private: true,
       },
     ],
   },
