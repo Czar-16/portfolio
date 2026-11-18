@@ -69,6 +69,45 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "warroom",
+    name: "Warroom",
+    tagline: "Make room for what matters.",
+    description:
+      "A calm workspace to plan your day, focus on one thing at a time, and make room to rest with guided focus and break sessions.",
+    image: "/projects/warroom.png",
+    imageAlt:
+      "Warroom focus workspace showing a 25-minute timer with focus, rest, and long rest modes",
+    period: "2026",
+    role: "Design, build, ship",
+    status: "Live",
+    tech: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "PostgreSQL",
+      "Prisma",
+      "Auth.js",
+      "TanStack Query",
+      "Zustand",
+      "Zod",
+      "Radix UI",
+    ],
+    highlights: [
+      "Daily planning workspace",
+      "Focus, rest, and long rest sessions",
+      "Guest workspace available without an account",
+    ],
+    links: [
+      { label: "Live", href: "https://www.warroom.site", external: true },
+      {
+        label: "GitHub",
+        href: "https://github.com/Czar-16/warroom",
+        external: true,
+        private: true,
+      },
+    ],
+  },
+  {
     slug: "purepin",
     name: "PurePin",
     tagline: "Grab the original Pinterest image, not the cached preview.",

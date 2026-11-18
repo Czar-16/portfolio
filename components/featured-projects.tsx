@@ -8,7 +8,7 @@ import { ArrowRightIcon } from "@/components/icons";
 import { SectionHeading } from "@/components/section-heading";
 
 export function FeaturedProjects() {
-  const featuredOrder = ["mailloop", "purepin", "huntdeck", "formpilot"];
+  const featuredOrder = ["mailloop", "warroom", "purepin", "huntdeck", "formpilot"];
   const featured = [
     ...featuredOrder.flatMap((slug) =>
       projects.filter((project) => project.slug === slug),

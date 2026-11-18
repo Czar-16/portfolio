@@ -72,7 +72,9 @@ export function ProjectCard({ project }: { project: Project }) {
       onAnimationComplete={() => { if (!open) setDescriptionExpanded(false); }}
     >{project.description}</motion.p>
     <div className="project-footer">
-      <ProjectTechStack tech={project.tech} projectName={project.name} />
+      {project.tech.length > 0 && (
+        <ProjectTechStack tech={project.tech} projectName={project.name} />
+      )}
       <ProjectLinks project={project} />
     </div>
   </article>;
