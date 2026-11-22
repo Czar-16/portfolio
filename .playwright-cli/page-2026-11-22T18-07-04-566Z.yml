@@ -1,0 +1,820 @@
+- generic [active] [ref=f2e1]:
+  - banner [ref=f2e2]:
+    - generic [ref=f2e3]:
+      - link "Czar16." [ref=f2e4] [cursor=pointer]:
+        - /url: /
+      - generic [ref=f2e5]:
+        - button [ref=f2e6]
+        - button "Switch to light mode" [ref=f2e10]
+        - 'button "Font: Instrument Sans. Switch to Public Sans" [ref=f2e16]': Aa
+        - status [ref=f2e17]: "Font preset: Instrument Sans"
+        - button "Switch to constellation background" [ref=f2e18]
+        - button "Mute click sounds" [pressed] [ref=f2e24]
+    - complementary "Page index":
+      - paragraph: INDEX
+      - navigation "Page index":
+        - link "Projects":
+          - /url: "#projects"
+        - link "GitHub":
+          - /url: "#github"
+        - link "Stack":
+          - /url: "#tech-stack"
+        - link "Watch":
+          - /url: "#watch"
+        - link "Contact":
+          - /url: "#contact"
+  - main [ref=f2e29]:
+    - generic [ref=f2e31]:
+      - generic [ref=f2e32]:
+        - generic [ref=f2e33]:
+          - generic [ref=f2e34]:
+            - button "Anoop Jha’s profile picture. Hover for a note or activate for a shout." [ref=f2e35] [cursor=pointer]
+            - button "Turn profile notes on" [ref=f2e36] [cursor=pointer]: "OFF"
+            - status:
+              - generic: Debug. Deploy. Repeat.
+          - generic [ref=f2e37]:
+            - heading "Anoop Jha" [level=1] [ref=f2e38]
+            - paragraph [ref=f2e39]: "@Czar16"
+        - paragraph [ref=f2e40]: Open to Software Engineering opportunities
+        - paragraph [ref=f2e42]: I turn complex ideas into simple, useful products — from the first interaction to the systems behind it.
+        - paragraph [ref=f2e43]: Full-stack developer building real-world products with TypeScript, Next.js, and scalable backend systems.
+        - generic [ref=f2e44]:
+          - button "Book an intro call" [ref=f2e45]
+          - link "Send an email" [ref=f2e51] [cursor=pointer]:
+            - /url: mailto:anoopjha2003@gmail.com
+          - link "Resume" [ref=f2e55] [cursor=pointer]:
+            - /url: https://drive.google.com/file/d/1LJ41gtep_XLedzyaHLE37YPxNbALMRiJ/view?usp=sharing
+        - paragraph [ref=f2e58]: Here are my socials
+        - generic [ref=f2e59]:
+          - link "GitHub" [ref=f2e60] [cursor=pointer]:
+            - /url: https://github.com/Czar-16
+          - link "Twitter" [ref=f2e63] [cursor=pointer]:
+            - /url: https://x.com/itsCzar16
+          - link "LinkedIn" [ref=f2e66] [cursor=pointer]:
+            - /url: https://linkedin.com/in/-anoop-jha-/
+      - generic [ref=f2e70]:
+        - generic [ref=f2e71]:
+          - generic [ref=f2e72]:
+            - generic [ref=f2e73]: Selected work
+            - heading "Featured Projects" [level=2] [ref=f2e75]
+            - paragraph [ref=f2e76]: A selection of products I've built and shipped.
+          - link "All projects" [ref=f2e77] [cursor=pointer]:
+            - /url: /projects
+        - generic [ref=f2e80]:
+          - article [ref=f2e82]:
+            - heading [level=2] [ref=f2e83]:
+              - link "MailLoop live" [ref=f2e84] [cursor=pointer]:
+                - /url: https://mailloop.in
+                - img "MailLoop landing page showing personalized Gmail outreach and a batch delivery progress demo" [ref=f2e87]
+                - generic [ref=f2e88]:
+                  - generic [ref=f2e89]: MailLoop
+                  - generic [ref=f2e90]: Live
+            - paragraph [ref=f2e92]: Gmail outreach app with personalized templates, contact imports, per-recipient previews, resume attachments, and delivery and reply tracking.
+            - generic [ref=f2e93]:
+              - generic [ref=f2e94]:
+                - button "Next.js" [ref=f2e95]
+                - button "TypeScript" [ref=f2e98]
+                - button "Docker" [ref=f2e101]
+                - button "PostgreSQL" [ref=f2e104]
+                - button "6 more technologies for MailLoop" [ref=f2e107] [cursor=pointer]: "+6"
+              - generic [ref=f2e108]:
+                - link "View Project" [ref=f2e109] [cursor=pointer]:
+                  - /url: https://mailloop.in
+                - 'button "MailLoop: Private repo" [disabled] [ref=f2e112]'
+          - article [ref=f2e116]:
+            - heading [level=2] [ref=f2e117]:
+              - link "Warroom live" [ref=f2e118] [cursor=pointer]:
+                - /url: https://www.warroom.site
+                - img "Warroom focus workspace showing a 25-minute timer with focus, rest, and long rest modes" [ref=f2e121]
+                - generic [ref=f2e122]:
+                  - generic [ref=f2e123]: Warroom
+                  - generic [ref=f2e124]: Live
+            - paragraph [ref=f2e126]: A calm workspace to plan your day, focus on one thing at a time, and make room to rest with guided focus and break sessions.
+            - generic [ref=f2e127]:
+              - generic [ref=f2e128]:
+                - button "Next.js" [ref=f2e129]
+                - button "TypeScript" [ref=f2e132]
+                - button "Tailwind CSS" [ref=f2e135]
+                - button "PostgreSQL" [ref=f2e138]
+                - button "6 more technologies for Warroom" [ref=f2e141] [cursor=pointer]: "+6"
+              - generic [ref=f2e142]:
+                - link "View Project" [ref=f2e143] [cursor=pointer]:
+                  - /url: https://www.warroom.site
+                - 'button "Warroom: Private repo" [disabled] [ref=f2e146]'
+          - article [ref=f2e150]:
+            - heading [level=2] [ref=f2e151]:
+              - link "PurePin live" [ref=f2e152] [cursor=pointer]:
+                - /url: https://purepin.site
+                - img "PurePin downloader interface showing a resolved original-resolution image" [ref=f2e155]
+                - generic [ref=f2e156]:
+                  - generic [ref=f2e157]: PurePin
+                  - generic [ref=f2e158]: Live
+            - paragraph [ref=f2e160]: Pinterest high-resolution image downloader with secure server-side image handling.
+            - generic [ref=f2e161]:
+              - generic [ref=f2e162]:
+                - button "Next.js" [ref=f2e163]
+                - button "TypeScript" [ref=f2e166]
+                - button "Tailwind CSS" [ref=f2e169]
+                - button "Shadcn UI" [ref=f2e172]
+                - button "2 more technologies for PurePin" [ref=f2e175] [cursor=pointer]: "+2"
+              - generic [ref=f2e176]:
+                - link "View Project" [ref=f2e177] [cursor=pointer]:
+                  - /url: https://purepin.site
+                - 'button "PurePin: Private repo" [disabled] [ref=f2e180]'
+          - article [ref=f2e184]:
+            - heading [level=2] [ref=f2e185]:
+              - link "Huntdeck live" [ref=f2e186] [cursor=pointer]:
+                - /url: https://addons.mozilla.org/en-US/firefox/addon/huntdeck/
+                - img "Huntdeck dashboard with a daily goal ring, one-click application logging, and weekly activity statistics" [ref=f2e189]
+                - generic [ref=f2e190]:
+                  - generic [ref=f2e191]: Huntdeck
+                  - generic [ref=f2e192]: Live
+            - paragraph [ref=f2e194]: Local-only job application tracker for Firefox and Chrome with daily goals, streaks, activity charts, and an optional application pipeline.
+            - generic [ref=f2e195]:
+              - generic [ref=f2e196]:
+                - button "JavaScript" [ref=f2e197]
+                - button "HTML" [ref=f2e200]
+                - button "CSS" [ref=f2e203]
+                - button "Manifest V3" [ref=f2e206]
+                - button "1 more technologies for Huntdeck" [ref=f2e209] [cursor=pointer]: "+1"
+              - generic [ref=f2e210]:
+                - link "View Project" [ref=f2e211] [cursor=pointer]:
+                  - /url: https://addons.mozilla.org/en-US/firefox/addon/huntdeck/
+                - link "Huntdeck on GitHub" [ref=f2e214] [cursor=pointer]:
+                  - /url: https://github.com/Czar-16/huntdeck
+          - article [ref=f2e218]:
+            - heading [level=2] [ref=f2e219]:
+              - link "FormPilot live" [ref=f2e220] [cursor=pointer]:
+                - /url: https://addons.mozilla.org/en-US/firefox/addon/formpilot-by-czar16/
+                - img "FormPilot side panel with saved profile cards and automatic form-filling controls" [ref=f2e223]
+                - generic [ref=f2e224]:
+                  - generic [ref=f2e225]: FormPilot
+                  - generic [ref=f2e226]: Shipped
+            - paragraph [ref=f2e228]: Chrome and Firefox extension that stores profiles and files locally, fills matching form fields from a side panel, and attaches saved files without submitting forms.
+            - generic [ref=f2e229]:
+              - generic [ref=f2e230]:
+                - button "JavaScript" [ref=f2e231]
+                - button "HTML" [ref=f2e234]
+                - button "CSS" [ref=f2e237]
+                - button "Browser Extension APIs" [ref=f2e240]
+                - button "1 more technologies for FormPilot" [ref=f2e243] [cursor=pointer]: "+1"
+              - generic [ref=f2e244]:
+                - link "View Project" [ref=f2e245] [cursor=pointer]:
+                  - /url: https://addons.mozilla.org/en-US/firefox/addon/formpilot-by-czar16/
+                - link "FormPilot on GitHub" [ref=f2e248] [cursor=pointer]:
+                  - /url: https://github.com/Czar-16/formpilot
+          - article [ref=f2e252]:
+            - heading [level=2] [ref=f2e253]:
+              - link "Toki on GitHub" [ref=f2e254] [cursor=pointer]:
+                - /url: https://github.com/Czar-16/Toki
+                - img "Toki running in a terminal with local study statistics, a countdown progress bar, and pause/resume controls" [ref=f2e257]
+                - generic [ref=f2e258]:
+                  - generic [ref=f2e259]: Toki
+                  - generic [ref=f2e260]: Shipped
+            - paragraph [ref=f2e262]: Local study timer with pause/resume, proportional breaks, and monthly statistics, right in the terminal.
+            - generic [ref=f2e263]:
+              - generic [ref=f2e264]:
+                - button "Python" [ref=f2e265]
+                - button "Fish" [ref=f2e268]
+              - generic [ref=f2e271]:
+                - generic [ref=f2e272]: CLI / Terminal app
+                - link "GitHub" [ref=f2e273] [cursor=pointer]:
+                  - /url: https://github.com/Czar-16/Toki
+        - link [ref=f2e277] [cursor=pointer]:
+          - /url: /projects
+          - generic [ref=f2e278]:
+            - paragraph [ref=f2e279]: Keep exploring
+            - paragraph [ref=f2e280]: More projects hiding in the shadows.
+            - paragraph [ref=f2e281]: All builds, experiments and shipped things live on the projects page.
+          - generic [ref=f2e282]: See more projects
+      - generic [ref=f2e285]:
+        - generic [ref=f2e287]:
+          - generic [ref=f2e288]:
+            - generic [ref=f2e293]:
+              - paragraph [ref=f2e294]: Developer activity
+              - heading "GitHub Activity" [level=3] [ref=f2e295]
+            - link "View profile" [ref=f2e296] [cursor=pointer]:
+              - /url: https://github.com/Czar-16
+              - text: View profile ↗
+          - status "Loading GitHub contributions" [ref=f2e298]
+          - group "GitHub statistics" [ref=f2e725]:
+            - generic [ref=f2e726]:
+              - paragraph [ref=f2e727]: "22"
+              - paragraph [ref=f2e728]: Repositories
+            - generic [ref=f2e729]:
+              - paragraph [ref=f2e730]: "22"
+              - paragraph [ref=f2e731]: Stars
+            - generic [ref=f2e732]:
+              - paragraph [ref=f2e733]: 400+
+              - paragraph [ref=f2e734]: Contributions
+          - status [ref=f2e735]
+        - article "LeetCode problem-solving statistics" [ref=f2e737]:
+          - generic [ref=f2e738]:
+            - heading "LeetCode" [level=3] [ref=f2e743]
+            - link "View Czar16 on LeetCode (opens in a new tab)" [ref=f2e744] [cursor=pointer]:
+              - /url: https://leetcode.com/u/Czar16/
+          - generic [ref=f2e766]:
+            - generic [ref=f2e767]: "@Czar16"
+            - generic [ref=f2e768]: One problem at a time
+          - status [ref=f2e769]: Loading LeetCode statistics
+        - region "Skills & Technologies" [ref=f2e770]:
+          - heading "Skills & Technologies" [level=2] [ref=f2e771]
+          - list "Skills and technologies" [ref=f2e772]:
+            - listitem [ref=f2e773]:
+              - generic [ref=f2e777]: C++
+            - listitem [ref=f2e778]:
+              - generic [ref=f2e782]: TypeScript
+            - listitem [ref=f2e783]:
+              - generic [ref=f2e787]: JavaScript
+            - listitem [ref=f2e788]:
+              - generic [ref=f2e792]: React
+            - listitem [ref=f2e793]:
+              - generic [ref=f2e797]: Next.js
+            - listitem [ref=f2e798]:
+              - generic [ref=f2e802]: Tailwind CSS
+            - listitem [ref=f2e803]:
+              - generic [ref=f2e807]: HTML5
+            - listitem [ref=f2e808]:
+              - generic [ref=f2e812]: CSS3
+            - listitem [ref=f2e813]:
+              - generic [ref=f2e817]: Node.js
+            - listitem [ref=f2e818]:
+              - generic [ref=f2e822]: Express.js
+            - listitem [ref=f2e823]:
+              - generic [ref=f2e827]: Hono
+            - listitem [ref=f2e828]:
+              - generic [ref=f2e832]: Cloudflare Workers
+            - listitem [ref=f2e833]:
+              - generic [ref=f2e837]: Socket.io
+            - listitem [ref=f2e838]:
+              - generic [ref=f2e840]: RA
+              - generic [ref=f2e841]: REST APIs
+            - listitem [ref=f2e842]:
+              - generic [ref=f2e846]: MongoDB
+            - listitem [ref=f2e847]:
+              - generic [ref=f2e851]: PostgreSQL
+            - listitem [ref=f2e852]:
+              - generic [ref=f2e856]: Prisma
+            - listitem [ref=f2e857]:
+              - generic [ref=f2e859]: "N"
+              - generic [ref=f2e860]: NextAuth
+            - listitem [ref=f2e861]:
+              - generic [ref=f2e863]: J
+              - generic [ref=f2e864]: JWT
+            - listitem [ref=f2e865]:
+              - generic [ref=f2e867]: O
+              - generic [ref=f2e868]: OAuth
+            - listitem [ref=f2e869]:
+              - generic [ref=f2e873]: Docker
+            - listitem [ref=f2e874]:
+              - generic [ref=f2e876]: A
+              - generic [ref=f2e877]: AWS
+            - listitem [ref=f2e878]:
+              - generic [ref=f2e882]: Git
+            - listitem [ref=f2e883]:
+              - generic [ref=f2e887]: GitHub
+            - listitem [ref=f2e888]:
+              - generic [ref=f2e892]: Postman
+            - listitem [ref=f2e893]:
+              - generic [ref=f2e897]: Cursor
+            - listitem [ref=f2e898]:
+              - generic [ref=f2e902]: Claude Code
+            - listitem [ref=f2e903]:
+              - generic [ref=f2e905]: D
+              - generic [ref=f2e906]: DSA
+            - listitem [ref=f2e907]:
+              - generic [ref=f2e909]: O
+              - generic [ref=f2e910]: OOP
+            - listitem [ref=f2e911]:
+              - generic [ref=f2e913]: SD
+              - generic [ref=f2e914]: System Design
+            - listitem [ref=f2e915]:
+              - generic [ref=f2e917]: W
+              - generic [ref=f2e918]: WebSockets
+        - article [ref=f2e921]:
+          - generic [ref=f2e922]:
+            - heading "Posts on X" [level=3] [ref=f2e926]
+            - link "View itsCzar16 on X (opens in a new tab)" [ref=f2e927] [cursor=pointer]:
+              - /url: https://x.com/itsCzar16
+              - generic [aria-hidden] [ref=f2e928]: ↗
+          - region "My X posts" [ref=f2e929]
+          - paragraph [ref=f2e942]:
+            - text: For more, visit
+            - link "@itsCzar16 (opens in a new tab)" [ref=f2e943] [cursor=pointer]:
+              - /url: https://x.com/itsCzar16
+              - text: "@itsCzar16 ↗"
+              - generic [ref=f2e944]: (opens in a new tab)
+          - status [ref=f2e945]: Loading X posts
+      - generic [ref=f2e946]:
+        - heading "The soundtrack behind the things I build." [level=2] [ref=f2e947]
+        - paragraph [ref=f2e948]: Listen to the full playlist → Tune in → opens on Spotify.
+        - generic [ref=f2e949]:
+          - img "Reveal the Coding Fuel cover" [ref=f2e951]
+          - generic [ref=f2e952]:
+            - paragraph [ref=f2e953]: PLAYLIST
+            - heading "Reveal the Coding Fuel" [level=3] [ref=f2e954]
+            - paragraph [ref=f2e955]: Czar16 · 100+ tracks
+        - generic [ref=f2e956]:
+          - link "Open playlist on Spotify" [ref=f2e957] [cursor=pointer]:
+            - /url: https://open.spotify.com/playlist/6EkHI31eh6xZwZGmpmoXye
+            - text: ▶ Deploy the vibes ↗
+          - generic [ref=f2e958]: Opens in Spotify
+      - generic [ref=f2e959]:
+        - generic [ref=f2e960]:
+          - generic [ref=f2e961]:
+            - generic [ref=f2e962]: Beyond the code
+            - heading "Watch" [level=2] [ref=f2e964]
+          - link "View all" [ref=f2e965] [cursor=pointer]:
+            - /url: /watch
+        - region "Watch recommendations" [ref=f2e968]:
+          - link "The Social Network poster Film 1 The Social Network 2010 · Film" [ref=f2e969] [cursor=pointer]:
+            - /url: /watch#the-social-network
+            - generic [ref=f2e970]:
+              - img "The Social Network poster" [ref=f2e971]
+              - generic [ref=f2e972]: Film 1
+            - generic [ref=f2e973]:
+              - paragraph [ref=f2e974]: The Social Network
+              - paragraph [ref=f2e975]: 2010 · Film
+          - link "October Sky poster Film 2 October Sky 1999 · Film" [ref=f2e976] [cursor=pointer]:
+            - /url: /watch#october-sky
+            - generic [ref=f2e977]:
+              - img "October Sky poster" [ref=f2e978]
+              - generic [ref=f2e979]: Film 2
+            - generic [ref=f2e980]:
+              - paragraph [ref=f2e981]: October Sky
+              - paragraph [ref=f2e982]: 1999 · Film
+          - link "Tenet poster Film 3 Tenet 2020 · Film" [ref=f2e983] [cursor=pointer]:
+            - /url: /watch#tenet
+            - generic [ref=f2e984]:
+              - img "Tenet poster" [ref=f2e985]
+              - generic [ref=f2e986]: Film 3
+            - generic [ref=f2e987]:
+              - paragraph [ref=f2e988]: Tenet
+              - paragraph [ref=f2e989]: 2020 · Film
+          - link "The Odyssey poster Film 4 The Odyssey 2026 · Film" [ref=f2e990] [cursor=pointer]:
+            - /url: /watch#the-odyssey
+            - generic [ref=f2e991]:
+              - img "The Odyssey poster" [ref=f2e992]
+              - generic [ref=f2e993]: Film 4
+            - generic [ref=f2e994]:
+              - paragraph [ref=f2e995]: The Odyssey
+              - paragraph [ref=f2e996]: 2026 · Film
+          - link "Warrior poster Film 5 Warrior 2011 · Film" [ref=f2e997] [cursor=pointer]:
+            - /url: /watch#warrior
+            - generic [ref=f2e998]:
+              - img "Warrior poster" [ref=f2e999]
+              - generic [ref=f2e1000]: Film 5
+            - generic [ref=f2e1001]:
+              - paragraph [ref=f2e1002]: Warrior
+              - paragraph [ref=f2e1003]: 2011 · Film
+          - link "Tony poster Film 6 Tony 2026 · Film" [ref=f2e1004] [cursor=pointer]:
+            - /url: /watch#tony
+            - generic [ref=f2e1005]:
+              - img "Tony poster" [ref=f2e1006]
+              - generic [ref=f2e1007]: Film 6
+            - generic [ref=f2e1008]:
+              - paragraph [ref=f2e1009]: Tony
+              - paragraph [ref=f2e1010]: 2026 · Film
+          - link "The Pursuit of Happyness poster Film 7 The Pursuit of Happyness 2006 · Film" [ref=f2e1011] [cursor=pointer]:
+            - /url: /watch#the-pursuit-of-happyness
+            - generic [ref=f2e1012]:
+              - img "The Pursuit of Happyness poster" [ref=f2e1013]
+              - generic [ref=f2e1014]: Film 7
+            - generic [ref=f2e1015]:
+              - paragraph [ref=f2e1016]: The Pursuit of Happyness
+              - paragraph [ref=f2e1017]: 2006 · Film
+          - link "Oppenheimer poster Film 8 Oppenheimer 2023 · Film" [ref=f2e1018] [cursor=pointer]:
+            - /url: /watch#oppenheimer
+            - generic [ref=f2e1019]:
+              - img "Oppenheimer poster" [ref=f2e1020]
+              - generic [ref=f2e1021]: Film 8
+            - generic [ref=f2e1022]:
+              - paragraph [ref=f2e1023]: Oppenheimer
+              - paragraph [ref=f2e1024]: 2023 · Film
+          - link "Upgrade poster Film 9 Upgrade 2018 · Film" [ref=f2e1025] [cursor=pointer]:
+            - /url: /watch#upgrade
+            - generic [ref=f2e1026]:
+              - img "Upgrade poster" [ref=f2e1027]
+              - generic [ref=f2e1028]: Film 9
+            - generic [ref=f2e1029]:
+              - paragraph [ref=f2e1030]: Upgrade
+              - paragraph [ref=f2e1031]: 2018 · Film
+          - link "Snatch poster Film 10 Snatch 2000 · Film" [ref=f2e1032] [cursor=pointer]:
+            - /url: /watch#snatch
+            - generic [ref=f2e1033]:
+              - img "Snatch poster" [ref=f2e1034]
+              - generic [ref=f2e1035]: Film 10
+            - generic [ref=f2e1036]:
+              - paragraph [ref=f2e1037]: Snatch
+              - paragraph [ref=f2e1038]: 2000 · Film
+          - link "Marty Supreme poster Film 11 Marty Supreme 2025 · Film" [ref=f2e1039] [cursor=pointer]:
+            - /url: /watch#marty-supreme
+            - generic [ref=f2e1040]:
+              - img "Marty Supreme poster" [ref=f2e1041]
+              - generic [ref=f2e1042]: Film 11
+            - generic [ref=f2e1043]:
+              - paragraph [ref=f2e1044]: Marty Supreme
+              - paragraph [ref=f2e1045]: 2025 · Film
+          - link "Super Pumped poster Series 12 Super Pumped 2022 · Series" [ref=f2e1046] [cursor=pointer]:
+            - /url: /watch#super-pumped
+            - generic [ref=f2e1047]:
+              - img "Super Pumped poster" [ref=f2e1048]
+              - generic [ref=f2e1049]: Series 12
+            - generic [ref=f2e1050]:
+              - paragraph [ref=f2e1051]: Super Pumped
+              - paragraph [ref=f2e1052]: 2022 · Series
+          - link "Pitchers poster Series 13 Pitchers 2015 · Series" [ref=f2e1053] [cursor=pointer]:
+            - /url: /watch#pitchers
+            - generic [ref=f2e1054]:
+              - img "Pitchers poster" [ref=f2e1055]
+              - generic [ref=f2e1056]: Series 13
+            - generic [ref=f2e1057]:
+              - paragraph [ref=f2e1058]: Pitchers
+              - paragraph [ref=f2e1059]: 2015 · Series
+          - link "Silicon Valley poster Series 14 Silicon Valley 2014 · Series" [ref=f2e1060] [cursor=pointer]:
+            - /url: /watch#silicon-valley
+            - generic [ref=f2e1061]:
+              - img "Silicon Valley poster" [ref=f2e1062]
+              - generic [ref=f2e1063]: Series 14
+            - generic [ref=f2e1064]:
+              - paragraph [ref=f2e1065]: Silicon Valley
+              - paragraph [ref=f2e1066]: 2014 · Series
+          - link "Pantheon poster Series 15 Pantheon 2022 · Series" [ref=f2e1067] [cursor=pointer]:
+            - /url: /watch#pantheon
+            - generic [ref=f2e1068]:
+              - img "Pantheon poster" [ref=f2e1069]
+              - generic [ref=f2e1070]: Series 15
+            - generic [ref=f2e1071]:
+              - paragraph [ref=f2e1072]: Pantheon
+              - paragraph [ref=f2e1073]: 2022 · Series
+          - link "Peaky Blinders poster Series 16 Peaky Blinders 2013 · Series" [ref=f2e1074] [cursor=pointer]:
+            - /url: /watch#peaky-blinders
+            - generic [ref=f2e1075]:
+              - img "Peaky Blinders poster" [ref=f2e1076]
+              - generic [ref=f2e1077]: Series 16
+            - generic [ref=f2e1078]:
+              - paragraph [ref=f2e1079]: Peaky Blinders
+              - paragraph [ref=f2e1080]: 2013 · Series
+          - link "Nightcrawler poster Film 17 Nightcrawler 2014 · Film" [ref=f2e1081] [cursor=pointer]:
+            - /url: /watch#nightcrawler
+            - generic [ref=f2e1082]:
+              - img "Nightcrawler poster" [ref=f2e1083]
+              - generic [ref=f2e1084]: Film 17
+            - generic [ref=f2e1085]:
+              - paragraph [ref=f2e1086]: Nightcrawler
+              - paragraph [ref=f2e1087]: 2014 · Film
+          - link "Source Code poster Film 18 Source Code 2011 · Film" [ref=f2e1088] [cursor=pointer]:
+            - /url: /watch#source-code
+            - generic [ref=f2e1089]:
+              - img "Source Code poster" [ref=f2e1090]
+              - generic [ref=f2e1091]: Film 18
+            - generic [ref=f2e1092]:
+              - paragraph [ref=f2e1093]: Source Code
+              - paragraph [ref=f2e1094]: 2011 · Film
+          - link "The Batman poster Film 19 The Batman 2022 · Film" [ref=f2e1095] [cursor=pointer]:
+            - /url: /watch#the-batman
+            - generic [ref=f2e1096]:
+              - img "The Batman poster" [ref=f2e1097]
+              - generic [ref=f2e1098]: Film 19
+            - generic [ref=f2e1099]:
+              - paragraph [ref=f2e1100]: The Batman
+              - paragraph [ref=f2e1101]: 2022 · Film
+          - link "Caught Stealing poster Film 20 Caught Stealing 2025 · Film" [ref=f2e1102] [cursor=pointer]:
+            - /url: /watch#caught-stealing
+            - generic [ref=f2e1103]:
+              - img "Caught Stealing poster" [ref=f2e1104]
+              - generic [ref=f2e1105]: Film 20
+            - generic [ref=f2e1106]:
+              - paragraph [ref=f2e1107]: Caught Stealing
+              - paragraph [ref=f2e1108]: 2025 · Film
+          - link "The Uprising poster Film 21 The Uprising 2026 · Film" [ref=f2e1109] [cursor=pointer]:
+            - /url: /watch#the-uprising
+            - generic [ref=f2e1110]:
+              - img "The Uprising poster" [ref=f2e1111]
+              - generic [ref=f2e1112]: Film 21
+            - generic [ref=f2e1113]:
+              - paragraph [ref=f2e1114]: The Uprising
+              - paragraph [ref=f2e1115]: 2026 · Film
+          - link "The Gentlemen (2019) poster Film 22 The Gentlemen (2019) 2019 · Film" [ref=f2e1116] [cursor=pointer]:
+            - /url: /watch#the-gentlemen
+            - generic [ref=f2e1117]:
+              - img "The Gentlemen (2019) poster" [ref=f2e1118]
+              - generic [ref=f2e1119]: Film 22
+            - generic [ref=f2e1120]:
+              - paragraph [ref=f2e1121]: The Gentlemen (2019)
+              - paragraph [ref=f2e1122]: 2019 · Film
+          - link "Wrath of Man poster Film 23 Wrath of Man 2021 · Film" [ref=f2e1123] [cursor=pointer]:
+            - /url: /watch#wrath-of-man
+            - generic [ref=f2e1124]:
+              - img "Wrath of Man poster" [ref=f2e1125]
+              - generic [ref=f2e1126]: Film 23
+            - generic [ref=f2e1127]:
+              - paragraph [ref=f2e1128]: Wrath of Man
+              - paragraph [ref=f2e1129]: 2021 · Film
+          - link "The Covenant poster Film 24 The Covenant 2023 · Film" [ref=f2e1130] [cursor=pointer]:
+            - /url: /watch#the-covenant
+            - generic [ref=f2e1131]:
+              - img "The Covenant poster" [ref=f2e1132]
+              - generic [ref=f2e1133]: Film 24
+            - generic [ref=f2e1134]:
+              - paragraph [ref=f2e1135]: The Covenant
+              - paragraph [ref=f2e1136]: 2023 · Film
+          - link "The Rip poster Film 25 The Rip 2026 · Film" [ref=f2e1137] [cursor=pointer]:
+            - /url: /watch#the-rip
+            - generic [ref=f2e1138]:
+              - img "The Rip poster" [ref=f2e1139]
+              - generic [ref=f2e1140]: Film 25
+            - generic [ref=f2e1141]:
+              - paragraph [ref=f2e1142]: The Rip
+              - paragraph [ref=f2e1143]: 2026 · Film
+          - link "The Terminal List poster Series 26 The Terminal List 2022 · Series" [ref=f2e1144] [cursor=pointer]:
+            - /url: /watch#the-terminal-list
+            - generic [ref=f2e1145]:
+              - img "The Terminal List poster" [ref=f2e1146]
+              - generic [ref=f2e1147]: Series 26
+            - generic [ref=f2e1148]:
+              - paragraph [ref=f2e1149]: The Terminal List
+              - paragraph [ref=f2e1150]: 2022 · Series
+          - link "The Day of the Jackal poster Series 27 The Day of the Jackal 2024 · Series" [ref=f2e1151] [cursor=pointer]:
+            - /url: /watch#the-day-of-the-jackal
+            - generic [ref=f2e1152]:
+              - img "The Day of the Jackal poster" [ref=f2e1153]
+              - generic [ref=f2e1154]: Series 27
+            - generic [ref=f2e1155]:
+              - paragraph [ref=f2e1156]: The Day of the Jackal
+              - paragraph [ref=f2e1157]: 2024 · Series
+          - link "Rush poster Film 28 Rush 2013 · Film" [ref=f2e1158] [cursor=pointer]:
+            - /url: /watch#rush
+            - generic [ref=f2e1159]:
+              - img "Rush poster" [ref=f2e1160]
+              - generic [ref=f2e1161]: Film 28
+            - generic [ref=f2e1162]:
+              - paragraph [ref=f2e1163]: Rush
+              - paragraph [ref=f2e1164]: 2013 · Film
+          - link "F1 poster Film 29 F1 2025 · Film" [ref=f2e1165] [cursor=pointer]:
+            - /url: /watch#f1
+            - generic [ref=f2e1166]:
+              - img "F1 poster" [ref=f2e1167]
+              - generic [ref=f2e1168]: Film 29
+            - generic [ref=f2e1169]:
+              - paragraph [ref=f2e1170]: F1
+              - paragraph [ref=f2e1171]: 2025 · Film
+          - link "Fight Club poster Film 30 Fight Club 1999 · Film" [ref=f2e1172] [cursor=pointer]:
+            - /url: /watch#fight-club
+            - generic [ref=f2e1173]:
+              - img "Fight Club poster" [ref=f2e1174]
+              - generic [ref=f2e1175]: Film 30
+            - generic [ref=f2e1176]:
+              - paragraph [ref=f2e1177]: Fight Club
+              - paragraph [ref=f2e1178]: 1999 · Film
+          - link "Sicario 2 poster Film 31 Sicario 2 2018 · Film" [ref=f2e1179] [cursor=pointer]:
+            - /url: /watch#sicario-2
+            - generic [ref=f2e1180]:
+              - img "Sicario 2 poster" [ref=f2e1181]
+              - generic [ref=f2e1182]: Film 31
+            - generic [ref=f2e1183]:
+              - paragraph [ref=f2e1184]: Sicario 2
+              - paragraph [ref=f2e1185]: 2018 · Film
+          - link "ZeroZeroZero poster Series 32 ZeroZeroZero 2019 · Series" [ref=f2e1186] [cursor=pointer]:
+            - /url: /watch#zerozerozero
+            - generic [ref=f2e1187]:
+              - img "ZeroZeroZero poster" [ref=f2e1188]
+              - generic [ref=f2e1189]: Series 32
+            - generic [ref=f2e1190]:
+              - paragraph [ref=f2e1191]: ZeroZeroZero
+              - paragraph [ref=f2e1192]: 2019 · Series
+          - link "Death Note poster Series 33 Death Note 2006 · Series" [ref=f2e1193] [cursor=pointer]:
+            - /url: /watch#death-note
+            - generic [ref=f2e1194]:
+              - img "Death Note poster" [ref=f2e1195]
+              - generic [ref=f2e1196]: Series 33
+            - generic [ref=f2e1197]:
+              - paragraph [ref=f2e1198]: Death Note
+              - paragraph [ref=f2e1199]: 2006 · Series
+          - link "Cars poster Film 34 Cars 2006 · Film" [ref=f2e1200] [cursor=pointer]:
+            - /url: /watch#cars
+            - generic [ref=f2e1201]:
+              - img "Cars poster" [ref=f2e1202]
+              - generic [ref=f2e1203]: Film 34
+            - generic [ref=f2e1204]:
+              - paragraph [ref=f2e1205]: Cars
+              - paragraph [ref=f2e1206]: 2006 · Film
+          - link "Breaking Bad poster Series 35 Breaking Bad 2008 · Series" [ref=f2e1207] [cursor=pointer]:
+            - /url: /watch#breaking-bad
+            - generic [ref=f2e1208]:
+              - img "Breaking Bad poster" [ref=f2e1209]
+              - generic [ref=f2e1210]: Series 35
+            - generic [ref=f2e1211]:
+              - paragraph [ref=f2e1212]: Breaking Bad
+              - paragraph [ref=f2e1213]: 2008 · Series
+          - link "Obsession poster Film 36 Obsession 2025 · Film" [ref=f2e1214] [cursor=pointer]:
+            - /url: /watch#obsession
+            - generic [ref=f2e1215]:
+              - img "Obsession poster" [ref=f2e1216]
+              - generic [ref=f2e1217]: Film 36
+            - generic [ref=f2e1218]:
+              - paragraph [ref=f2e1219]: Obsession
+              - paragraph [ref=f2e1220]: 2025 · Film
+          - link "BlackBerry (2023) poster Film 37 BlackBerry (2023) 2023 · Film" [ref=f2e1221] [cursor=pointer]:
+            - /url: /watch#blackberry
+            - generic [ref=f2e1222]:
+              - img "BlackBerry (2023) poster" [ref=f2e1223]
+              - generic [ref=f2e1224]: Film 37
+            - generic [ref=f2e1225]:
+              - paragraph [ref=f2e1226]: BlackBerry (2023)
+              - paragraph [ref=f2e1227]: 2023 · Film
+          - link "Steve Jobs (2015) poster Film 38 Steve Jobs (2015) 2015 · Film" [ref=f2e1228] [cursor=pointer]:
+            - /url: /watch#steve-jobs
+            - generic [ref=f2e1229]:
+              - img "Steve Jobs (2015) poster" [ref=f2e1230]
+              - generic [ref=f2e1231]: Film 38
+            - generic [ref=f2e1232]:
+              - paragraph [ref=f2e1233]: Steve Jobs (2015)
+              - paragraph [ref=f2e1234]: 2015 · Film
+          - link "Halt and Catch Fire poster Series 39 Halt and Catch Fire 2014 · Series" [ref=f2e1235] [cursor=pointer]:
+            - /url: /watch#halt-and-catch-fire
+            - generic [ref=f2e1236]:
+              - img "Halt and Catch Fire poster" [ref=f2e1237]
+              - generic [ref=f2e1238]: Series 39
+            - generic [ref=f2e1239]:
+              - paragraph [ref=f2e1240]: Halt and Catch Fire
+              - paragraph [ref=f2e1241]: 2014 · Series
+          - link "The Wolf of Wall Street poster Film 40 The Wolf of Wall Street 2013 · Film" [ref=f2e1242] [cursor=pointer]:
+            - /url: /watch#the-wolf-of-wall-street
+            - generic [ref=f2e1243]:
+              - img "The Wolf of Wall Street poster" [ref=f2e1244]
+              - generic [ref=f2e1245]: Film 40
+            - generic [ref=f2e1246]:
+              - paragraph [ref=f2e1247]: The Wolf of Wall Street
+              - paragraph [ref=f2e1248]: 2013 · Film
+          - link "Dumb Money poster Film 41 Dumb Money 2023 · Film" [ref=f2e1249] [cursor=pointer]:
+            - /url: /watch#dumb-money
+            - generic [ref=f2e1250]:
+              - img "Dumb Money poster" [ref=f2e1251]
+              - generic [ref=f2e1252]: Film 41
+            - generic [ref=f2e1253]:
+              - paragraph [ref=f2e1254]: Dumb Money
+              - paragraph [ref=f2e1255]: 2023 · Film
+          - link "Bitconned poster Film 42 Bitconned 2024 · Film" [ref=f2e1256] [cursor=pointer]:
+            - /url: /watch#bitconned
+            - generic [ref=f2e1257]:
+              - img "Bitconned poster" [ref=f2e1258]
+              - generic [ref=f2e1259]: Film 42
+            - generic [ref=f2e1260]:
+              - paragraph [ref=f2e1261]: Bitconned
+              - paragraph [ref=f2e1262]: 2024 · Film
+          - link "Scarface poster Film 43 Scarface 1983 · Film" [ref=f2e1263] [cursor=pointer]:
+            - /url: /watch#scarface
+            - generic [ref=f2e1264]:
+              - img "Scarface poster" [ref=f2e1265]
+              - generic [ref=f2e1266]: Film 43
+            - generic [ref=f2e1267]:
+              - paragraph [ref=f2e1268]: Scarface
+              - paragraph [ref=f2e1269]: 1983 · Film
+          - link "The Godfather poster Film 44 The Godfather 1972 · Film" [ref=f2e1270] [cursor=pointer]:
+            - /url: /watch#the-godfather
+            - generic [ref=f2e1271]:
+              - img "The Godfather poster" [ref=f2e1272]
+              - generic [ref=f2e1273]: Film 44
+            - generic [ref=f2e1274]:
+              - paragraph [ref=f2e1275]: The Godfather
+              - paragraph [ref=f2e1276]: 1972 · Film
+          - link "Extraction poster Film 45 Extraction 2020 · Film" [ref=f2e1277] [cursor=pointer]:
+            - /url: /watch#extraction
+            - generic [ref=f2e1278]:
+              - img "Extraction poster" [ref=f2e1279]
+              - generic [ref=f2e1280]: Film 45
+            - generic [ref=f2e1281]:
+              - paragraph [ref=f2e1282]: Extraction
+              - paragraph [ref=f2e1283]: 2020 · Film
+          - link "Narcos poster Series 46 Narcos 2015 · Series" [ref=f2e1284] [cursor=pointer]:
+            - /url: /watch#narcos
+            - generic [ref=f2e1285]:
+              - img "Narcos poster" [ref=f2e1286]
+              - generic [ref=f2e1287]: Series 46
+            - generic [ref=f2e1288]:
+              - paragraph [ref=f2e1289]: Narcos
+              - paragraph [ref=f2e1290]: 2015 · Series
+          - link "Eternal Sunshine of the Spotless Mind poster Film 47 Eternal Sunshine of the Spotless Mind 2004 · Film" [ref=f2e1291] [cursor=pointer]:
+            - /url: /watch#eternal-sunshine-of-the-spotless-mind
+            - generic [ref=f2e1292]:
+              - img "Eternal Sunshine of the Spotless Mind poster" [ref=f2e1293]
+              - generic [ref=f2e1294]: Film 47
+            - generic [ref=f2e1295]:
+              - paragraph [ref=f2e1296]: Eternal Sunshine of the Spotless Mind
+              - paragraph [ref=f2e1297]: 2004 · Film
+          - link "The Art of Racing in the Rain poster Film 48 The Art of Racing in the Rain 2019 · Film" [ref=f2e1298] [cursor=pointer]:
+            - /url: /watch#the-art-of-racing-in-the-rain
+            - generic [ref=f2e1299]:
+              - img "The Art of Racing in the Rain poster" [ref=f2e1300]
+              - generic [ref=f2e1301]: Film 48
+            - generic [ref=f2e1302]:
+              - paragraph [ref=f2e1303]: The Art of Racing in the Rain
+              - paragraph [ref=f2e1304]: 2019 · Film
+          - link "Den of Thieves poster Film 49 Den of Thieves 2018 · Film" [ref=f2e1305] [cursor=pointer]:
+            - /url: /watch#den-of-thieves
+            - generic [ref=f2e1306]:
+              - img "Den of Thieves poster" [ref=f2e1307]
+              - generic [ref=f2e1308]: Film 49
+            - generic [ref=f2e1309]:
+              - paragraph [ref=f2e1310]: Den of Thieves
+              - paragraph [ref=f2e1311]: 2018 · Film
+          - link "The Town poster Film 50 The Town 2010 · Film" [ref=f2e1312] [cursor=pointer]:
+            - /url: /watch#the-town
+            - generic [ref=f2e1313]:
+              - img "The Town poster" [ref=f2e1314]
+              - generic [ref=f2e1315]: Film 50
+            - generic [ref=f2e1316]:
+              - paragraph [ref=f2e1317]: The Town
+              - paragraph [ref=f2e1318]: 2010 · Film
+          - link "Tumse Na Ho Payega poster Film 51 Tumse Na Ho Payega 2023 · Film" [ref=f2e1319] [cursor=pointer]:
+            - /url: /watch#tumse-na-ho-payega
+            - generic [ref=f2e1320]:
+              - img "Tumse Na Ho Payega poster" [ref=f2e1321]
+              - generic [ref=f2e1322]: Film 51
+            - generic [ref=f2e1323]:
+              - paragraph [ref=f2e1324]: Tumse Na Ho Payega
+              - paragraph [ref=f2e1325]: 2023 · Film
+          - 'link "Don''t F**k with Cats: Hunting an Internet Killer poster Docuseries 52 Don''t F**k with Cats: Hunting an Internet Killer 2019 · Docuseries" [ref=f2e1326] [cursor=pointer]':
+            - /url: /watch#dont-fuck-with-cats
+            - generic [ref=f2e1327]:
+              - 'img "Don''t F**k with Cats: Hunting an Internet Killer poster" [ref=f2e1328]'
+              - generic [ref=f2e1329]: Docuseries 52
+            - generic [ref=f2e1330]:
+              - paragraph [ref=f2e1331]: "Don't F**k with Cats: Hunting an Internet Killer"
+              - paragraph [ref=f2e1332]: 2019 · Docuseries
+          - 'link "FYRE: The Greatest Party That Never Happened poster Documentary 53 FYRE: The Greatest Party That Never Happened 2019 · Documentary" [ref=f2e1333] [cursor=pointer]':
+            - /url: /watch#fyre
+            - generic [ref=f2e1334]:
+              - 'img "FYRE: The Greatest Party That Never Happened poster" [ref=f2e1335]'
+              - generic [ref=f2e1336]: Documentary 53
+            - generic [ref=f2e1337]:
+              - paragraph [ref=f2e1338]: "FYRE: The Greatest Party That Never Happened"
+              - paragraph [ref=f2e1339]: 2019 · Documentary
+          - link "MobLand poster Series 54 MobLand 2025 · Series" [ref=f2e1340] [cursor=pointer]:
+            - /url: /watch#mobland
+            - generic [ref=f2e1341]:
+              - img "MobLand poster" [ref=f2e1342]
+              - generic [ref=f2e1343]: Series 54
+            - generic [ref=f2e1344]:
+              - paragraph [ref=f2e1345]: MobLand
+              - paragraph [ref=f2e1346]: 2025 · Series
+          - link "Need for Speed poster Film 55 Need for Speed 2014 · Film" [ref=f2e1347] [cursor=pointer]:
+            - /url: /watch#need-for-speed
+            - generic [ref=f2e1348]:
+              - img "Need for Speed poster" [ref=f2e1349]
+              - generic [ref=f2e1350]: Film 55
+            - generic [ref=f2e1351]:
+              - paragraph [ref=f2e1352]: Need for Speed
+              - paragraph [ref=f2e1353]: 2014 · Film
+      - generic [ref=f2e1354]:
+        - heading "Terminal" [level=2] [ref=f2e1355]
+        - region "Interactive terminal" [ref=f2e1357]:
+          - paragraph [ref=f2e1358]: "Terminal introduction: $ whoami. Anoop Jha — full-stack AI developer. $ cat location.txt. Delhi-NCR · open to remote. $ cat philosophy.txt. black coffee. code. repeat. $ npm run ship. ✓ compiled successfully in 0.4s. ✓ 0 excuses found. $ sudo hire anoop. [sudo] permission granted ✓. → opening resume.pdf .... . Type help for commands. Use arrow keys for command history, Tab to complete a partial command, and Control L to clear."
+          - generic [ref=f2e1359]:
+            - generic: czar16 — zsh
+            - button "Skip terminal introduction" [ref=f2e1364]: skip
+          - generic [ref=f2e1365]: $
+          - paragraph [ref=f2e1371]: Click or press any key to skip.
+      - generic [ref=f2e1373]:
+        - region "Let's build something." [ref=f2e1374]:
+          - generic [ref=f2e1377]:
+            - generic [ref=f2e1378]:
+              - generic [ref=f2e1380]:
+                - generic [ref=f2e1381]: Get in touch
+                - heading "Let's build something." [level=2] [ref=f2e1383]
+                - paragraph [ref=f2e1384]: Have an interesting project, opportunity, or just want to talk engineering?
+              - generic [ref=f2e1385]:
+                - generic [ref=f2e1386]:
+                  - paragraph [ref=f2e1387]: Open to Software Engineering opportunities
+                  - paragraph [ref=f2e1389]: anoopjha2003@gmail.com
+                  - generic [ref=f2e1390]:
+                    - link "Email me" [ref=f2e1391] [cursor=pointer]:
+                      - /url: mailto:anoopjha2003@gmail.com
+                    - generic [ref=f2e1397]:
+                      - button "Copy email" [ref=f2e1398]
+                      - status [ref=f2e1402]
+                - button "Replay Anoop Jha’s handwritten signature" [ref=f2e1404] [cursor=pointer]
+            - generic [ref=f2e1407]:
+              - link "More about me" [ref=f2e1408] [cursor=pointer]:
+                - /url: /about
+              - generic "Social links" [ref=f2e1411]:
+                - link "Anoop on GitHub" [ref=f2e1412] [cursor=pointer]:
+                  - /url: https://github.com/Czar-16
+                - link "Anoop on X" [ref=f2e1415] [cursor=pointer]:
+                  - /url: https://x.com/itsCzar16
+                - link "Anoop on LinkedIn" [ref=f2e1418] [cursor=pointer]:
+                  - /url: https://linkedin.com/in/-anoop-jha-/
+        - region "Portfolio visitors" [ref=f2e1421]:
+          - generic [ref=f2e1422]:
+            - button "Make the eye blink" [ref=f2e1423] [cursor=pointer]:
+              - generic [aria-hidden]: OUCH!
+            - paragraph [ref=f2e1443]: — visitors have been here
+        - region "A thought to leave with" [ref=f2e1444]:
+          - link [ref=f2e1445] [cursor=pointer]:
+            - /url: /quotes
+            - generic [ref=f2e1446]:
+              - blockquote [ref=f2e1447]: “Nobody is coming to save you. Build the life yourself.”
+              - paragraph [aria-hidden] [ref=f2e1448]: — NOTES TO SELF —
+          - button "Rebuild" [ref=f2e1449] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=f2e1455] [cursor=pointer]

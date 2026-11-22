@@ -14,6 +14,7 @@ import { InteractionProvider } from "@/components/interaction-provider";
 import { INTRO_BOOTSTRAP } from "@/components/intro-preferences";
 import { VisitorProvider } from "@/components/visitor-provider";
 import { CursorWetTrail } from "@/components/cursor-wet-trail";
+import { WavePageFooter } from "@/components/wave-page-footer";
 import { site, socials } from "@/data/site";
 
 const instrumentSans = Instrument_Sans({
@@ -93,6 +94,7 @@ export default function RootLayout({
               <CursorCompanion>
                 <Navbar />
                 <main id="page-top" tabIndex={-1} className="portfolio-column flex-1 focus:outline-none">{children}</main>
+                <WavePageFooter />
                 <BackToTop />
                 <CommandPaletteWrapper />
               </CursorCompanion>

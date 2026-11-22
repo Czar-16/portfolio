@@ -41,7 +41,7 @@ export function AboutContact() {
                     <CopyButton text={contact.email} label="Copy email" />
                   </div>
                 </div>
-                <Signature className="w-full max-w-[140px]" />
+                <Signature className="mr-8 w-full max-w-[140px]" />
               </div>
             </div>
             <div className="contact-links relative mt-9 flex flex-wrap items-center justify-between gap-x-6 gap-y-4 pt-6">

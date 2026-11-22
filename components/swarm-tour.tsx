@@ -17,7 +17,7 @@ const PACE = 1.2;
 const CURSOR_FADE_MS = 180;
 const COLORS = ["#f06478", "#9975ed", "#3c9de8", "#20ac9b", "#d49a27", "#ed8054", "#c866c0", "#6ca944", "#e95ca1", "#637ce6", "#00a8bd", "#bc8538", "#af64e5", "#e26450", "#389a70", "#cfad32", "#7788ba", "#df7cb7"];
 const TARGETS = [
-  ".compact-toolbar > a", ".toolbar-controls > *", ".desktop-index nav a",
+  ".compact-toolbar > a", ".toolbar-controls > *", "[data-index-link]",
   "#profile img", "#profile h1", "#profile p", "#profile button", "#profile a",
   "[data-swarm-home] .section-heading", "#projects .project-preview", "#projects .project-title-row",
   "#projects .project-description", "#projects .project-footer", "#projects .interactive-card",
