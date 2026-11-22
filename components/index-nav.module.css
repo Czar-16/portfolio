@@ -141,6 +141,7 @@
 
 @media (max-width: 859px) {
   .indexNav {
+    display: none;
     top: auto;
     right: auto;
     bottom: max(12px, env(safe-area-inset-bottom));
