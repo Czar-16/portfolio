@@ -135,7 +135,6 @@
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
-    border-radius: 4px;
   }
 
   ::selection {
@@ -591,12 +590,11 @@ html:is([data-terminal-intro], [data-swarm-active]) .contact-availability-dot { 
 .project-image { transition: transform 280ms var(--ease-premium); }
 .project-title-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
 .portfolio-column .project-title { font-size: 14px; font-weight: 600; line-height: 1.5; }
-.project-status { display: inline-flex; align-items: center; gap: 5px; padding: 3px 7px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--fg-secondary); font-size: 10px; line-height: 1.3; }
-.project-status > span { width: 5px; height: 5px; border-radius: 50%; background: var(--fg-muted); flex-shrink: 0; }
-.project-status[data-status="Live"] > span { background: #22c55e; }
-.project-status[data-status="Shipped"] > span { background: #3b82f6; }
-.project-status[data-status="Still building"] > span, .project-status[data-status="In progress"] > span { background: #22c55e; animation: project-status-pulse 1.4s ease-in-out infinite; }
-@keyframes project-status-pulse { 50% { opacity: 0.3; box-shadow: 0 0 0 3px rgb(34 197 94 / 22%); } }
+.project-status { --project-status-color: var(--fg-muted); display: inline-flex; align-items: center; gap: 5px; padding: 3px 7px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--fg-secondary); font-size: 10px; line-height: 1.3; }
+.project-status[data-status="Live"], .project-status[data-status="In progress"], .project-status[data-status="Still building"] { --project-status-color: #22c55e; }
+.project-status[data-status="Shipped"] { --project-status-color: #3b82f6; }
+.project-status > span { width: 5px; height: 5px; border-radius: 50%; background: var(--project-status-color); flex-shrink: 0; animation: project-status-pulse 1.4s ease-in-out infinite; }
+@keyframes project-status-pulse { 50% { opacity: 0.3; box-shadow: 0 0 0 3px color-mix(in srgb, var(--project-status-color) 22%, transparent); } }
 .project-description { margin-top: 7px; font-size: 12px; line-height: 1.8; color: var(--fg-secondary); }
 .project-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 10px; margin-top: auto; padding-top: 10px; }
 .project-footer > div:first-child { gap: 0; }
@@ -606,7 +604,7 @@ html:is([data-terminal-intro], [data-swarm-active]) .contact-availability-dot { 
 .project-link { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 44px; font-size: 11px; color: var(--fg-secondary); }
 .project-link:hover { color: var(--fg); }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) { .project-preview:hover .project-image { transform: scale(1.025); } }
-@media (prefers-reduced-motion: reduce) { .project-image { transition: none; } .project-status[data-status="Still building"] > span, .project-status[data-status="In progress"] > span { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .project-image { transition: none; } .project-status > span { animation: none; } }
 
 .github-activity-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .github-activity-title { display: flex; align-items: center; gap: 11px; min-width: 0; }
