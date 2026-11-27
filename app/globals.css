@@ -322,7 +322,7 @@ h1 { font-size: 24px; line-height: 1.3; }
 h2 { font-size: 18px; line-height: 1.5; }
 .portfolio-column h1 { font-size: 24px; }
 .portfolio-column h2 { font-size: 18px; }
-.section-frame { position: relative; padding: 32px 16px; }
+.section-frame { position: relative; padding: 28px 16px; }
 .section-frame::before {
   content: "";
   position: absolute;
@@ -426,7 +426,7 @@ h2 { font-size: 18px; line-height: 1.5; }
 .contact-action-row { width: 100%; }
 @media (max-width: 640px) {
   .shell { padding-inline: 16px; }
-  .section-frame { padding: 26px 16px; }
+  .section-frame { padding: 28px 16px; }
   .contact-action-row { align-items: flex-start; flex-direction: column; gap: 20px; }
   .contact-action-row > :last-child { align-self: flex-end; }
   .hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
